@@ -24,9 +24,15 @@ import com.example.wake_app.data.alarms
 
 @Composable
 fun HomeScreen() {
-    LazyColumn {
-        items(alarms) {
-            AlarmItem(Alarm = it)
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black),
+    ) {
+        LazyColumn {
+            items(alarms) {
+                AlarmItem(Alarm = it)
+            }
         }
     }
 }
@@ -44,6 +50,7 @@ fun AlarmItem(Alarm: Alarm) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(4.dp)
+                .background(Color.Cyan)
         ) {
             AlarmInformation(Alarm.time, Alarm.description)
         }
@@ -56,19 +63,21 @@ fun AlarmInformation(@StringRes AlarmTime: Int, AlarmDescription: Int, modifier:
     Row {
         Text(
             text = stringResource(AlarmTime),
-            fontSize = 35.sp
+            fontSize = 35.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black
         )
         Text(
             text = stringResource(AlarmDescription),
             modifier = modifier.padding(start = 8.dp),
-            fontSize = 20.sp
+            fontSize = 20.sp,
+            color = Color.Black
         )
         Spacer(Modifier.weight(1f).fillMaxHeight())
         Switch(
             checked = checkedState.value,
             onCheckedChange = { checkedState.value = it },
             Modifier.size(55.dp),
-
         )
     }
 }
