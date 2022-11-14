@@ -5,10 +5,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Switch
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,19 +21,38 @@ import androidx.compose.ui.unit.sp
 import com.example.wake_app.data.Alarm
 import com.example.wake_app.data.alarms
 
+val createAlarm = { /* Do something */ }
+
 @Composable
 fun HomeScreen() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black),
-    ) {
-        LazyColumn {
-            items(alarms) {
-                AlarmItem(Alarm = it)
+    Scaffold(
+        topBar = {
+            TopAppBar(title = { Text("Alarms") })
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = createAlarm,
+                backgroundColor = Color.LightGray,
+                content = {
+                        Icon(Icons.Filled.Add,"")
+                },
+                modifier = Modifier.padding(bottom = 50.dp)
+            )
+        },
+        content = {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black),
+            ) {
+                LazyColumn {
+                    items(alarms) {
+                        AlarmItem(Alarm = it)
+                    }
+                }
             }
         }
-    }
+    )
 }
 
 @Composable
