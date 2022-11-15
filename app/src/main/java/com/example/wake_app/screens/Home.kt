@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,6 +22,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.wake_app.BottomBarScreen
 import com.example.wake_app.BottomNavGraph
+import com.example.wake_app.R
 import com.example.wake_app.model.Alarm
 import com.example.wake_app.data.DataSource.alarms
 
@@ -50,7 +52,7 @@ fun HomeScreen(navController: NavHostController) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.Black),
+                    .background(colorResource(R.color.background_light)),
             ) {
                 LazyColumn {
                     items(alarms) {
@@ -75,7 +77,7 @@ fun AlarmItem(Alarm: Alarm) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(4.dp)
-                .background(Color.Cyan)
+                .background(colorResource(R.color.background_dark))
         ) {
             AlarmInformation(Alarm.time, Alarm.description)
         }
@@ -90,15 +92,18 @@ fun AlarmInformation(@StringRes AlarmTime: Int, AlarmDescription: Int, modifier:
             text = stringResource(AlarmTime),
             fontSize = 35.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.Black
+            color = colorResource(R.color.text_color_white)
         )
         Text(
             text = stringResource(AlarmDescription),
             modifier = modifier.padding(start = 8.dp),
             fontSize = 20.sp,
-            color = Color.Black
+            color = colorResource(R.color.text_color_white)
         )
-        Spacer(Modifier.weight(1f).fillMaxHeight())
+        Spacer(
+            Modifier
+                .weight(1f)
+                .fillMaxHeight())
         Switch(
             checked = checkedState.value,
             onCheckedChange = { checkedState.value = it },

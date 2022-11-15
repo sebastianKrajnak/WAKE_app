@@ -36,7 +36,7 @@ fun PageContent(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(colorResource(R.color.background_dark)),
+            .background(colorResource(R.color.background_light)),
     ) {
         DropdownRow(Text = "Language", DropdownItems = languages)
         DropdownRow(Text = "Default alarm sound", DropdownItems = alarmSounds)
@@ -52,7 +52,7 @@ fun DropdownRow(Text: String, @StringRes DropdownItems: List<Int>, modifier: Mod
             modifier = modifier
                 .fillMaxWidth()
                 .padding(8.dp)
-                .background(colorResource(R.color.background_light))
+                .background(colorResource(R.color.background_dark))
                 .height(45.dp)
     ) {
 
@@ -106,14 +106,14 @@ fun SwitcherRow(Text: String, modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .background(Color.Cyan)
+            .background(colorResource(R.color.background_dark))
             .height(45.dp)
     ) {
         Text(
             text = Text,
             modifier = modifier.padding(start = 8.dp),
             fontSize = 30.sp,
-            color = Color.Black,
+            color = colorResource(R.color.text_color_white),
         )
         Spacer(
             modifier
@@ -135,14 +135,14 @@ fun AboutRow(Text: String, modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .background(Color.Cyan)
+            .background(colorResource(R.color.background_dark))
             .height(45.dp)
     ) {
         Text(
             text = Text,
             modifier = modifier.padding(start = 8.dp),
             fontSize = 30.sp,
-            color = Color.Black,
+            color = colorResource(R.color.text_color_white),
         )
         Spacer(
             modifier

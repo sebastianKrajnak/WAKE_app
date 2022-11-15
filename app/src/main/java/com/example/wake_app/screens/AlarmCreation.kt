@@ -69,7 +69,7 @@ fun AlarmCreationScreen(navController: NavHostController) {
             Box (
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color(50, 50, 50))
+                    .background(colorResource(R.color.background_light))
             ) {
 
                 Column(
@@ -89,7 +89,8 @@ fun AlarmCreationScreen(navController: NavHostController) {
                                 top = 0.dp,
                                 end = 0.dp,
                                 bottom = 0.dp
-                            )                            .align(Alignment.Start),
+                            )
+                            .align(Alignment.Start),
                         color = colorResource(R.color.text_color_white)
                     )
 
@@ -124,7 +125,7 @@ fun AlarmCreationScreen(navController: NavHostController) {
                             )
                             .align(Alignment.Start)
                             .clip(RoundedCornerShape(10.dp))
-                            .background(Color(65, 72, 76))
+                            .background(colorResource(R.color.input_field))
                     )
 
                     Text(
@@ -156,7 +157,7 @@ fun AlarmCreationScreen(navController: NavHostController) {
                             )
                             .align(Alignment.Start)
                             .clip(RoundedCornerShape(10.dp))
-                            .background(Color(65, 72, 76))
+                            .background(colorResource(R.color.input_field))
                     )
 
 
@@ -185,7 +186,7 @@ fun AlarmCreationScreen(navController: NavHostController) {
 
                     Button(
                         onClick = {},
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(65,72,76))
+                        colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(R.color.input_field))
                     )
                     {
                         Text("Set alarm",
@@ -195,9 +196,6 @@ fun AlarmCreationScreen(navController: NavHostController) {
 
                 }
             }
-
-
-
         }
     )
 }
@@ -256,7 +254,7 @@ fun GameList(gameList : List<GameButton>) {
 @Composable
 fun GameItem(gameBtn: GameButton) {
     var selected by remember { mutableStateOf(false) }
-    val color = if (selected) Color(45, 192, 157) else Color(152,152,152)
+    val color = if (selected) colorResource(R.color.background_theme) else Color(152,152,152)
     Column (modifier = Modifier
         .padding(
             start = 25.dp,

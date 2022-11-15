@@ -25,8 +25,9 @@ fun GameScreen(game: Game) {
     val navController = rememberNavController()
     var result by remember { mutableStateOf("") }
     Column(
-        Modifier.fillMaxSize()
-            .background(colorResource(R.color.background_dark)),
+        Modifier
+            .fillMaxSize()
+            .background(colorResource(R.color.background_light)),
         horizontalAlignment = Alignment.CenterHorizontally,
 
     ) {
@@ -35,7 +36,7 @@ fun GameScreen(game: Game) {
             modifier = Modifier.padding(16.dp),
             color = colorResource(R.color.text_color_white),
         )
-        Card(backgroundColor = Color.Gray,
+        Card(backgroundColor = colorResource(R.color.background_dark),
             modifier = Modifier
                 .padding(8.dp) // margin
                 .border(2.dp, colorResource(R.color.text_color_white)) // outer border
@@ -52,15 +53,17 @@ fun GameScreen(game: Game) {
         
         Text(text = " ", modifier = Modifier.padding(100.dp))
 
-        OutlinedTextField(
+        TextField(
             value = result,
-
             onValueChange = { result = it },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            label = { Text("Result", color = colorResource(R.color.text_color_white)) }
+            label = { Text("Result", color = colorResource(R.color.text_color_white)) },
+            modifier = Modifier.background(colorResource(R.color.input_field))
         )
+
         Button(onClick = {
             checkResult(result, game.result, navController)
+
         }
         ) {
             Text(text = "Submit")

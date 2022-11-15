@@ -20,10 +20,11 @@ import com.example.wake_app.R
 
 @Composable
 fun StatisticsScreen() {
-    val col = Color(50, 50, 50)
+    val col = colorResource(R.color.background_dark)
     Column(
-        Modifier.fillMaxSize()
-            .background(Color.Black),
+        Modifier
+            .fillMaxSize()
+            .background(colorResource(R.color.background_light)),
 //            .background(colorResource(R.color.background)),
         horizontalAlignment = Alignment.CenterHorizontally,
 
