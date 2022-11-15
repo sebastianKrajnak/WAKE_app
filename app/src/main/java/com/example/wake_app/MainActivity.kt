@@ -10,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.wake_app.screens.AlarmCreationPreview
 import com.example.wake_app.screens.GameScreen
 import com.example.wake_app.screens.GameScreenPreview
 import com.example.wake_app.ui.theme.WAKE_appTheme
@@ -21,7 +22,8 @@ class MainActivity : ComponentActivity() {
             WAKE_appTheme {
                 // A surface container using the 'background' color from the theme
                 MainScreen()
-              //  GameScreenPreview()
+//                GameScreenPreview()
+//                AlarmCreationPreview()
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.example.wake_app.data
+package com.example.wake_app.model
 
 import androidx.annotation.StringRes
 import com.example.wake_app.R

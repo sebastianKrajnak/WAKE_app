@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.wake_app.data.Game
+import com.example.wake_app.model.Game
 
 @Composable
 fun GameScreen(game: Game) {

@@ -1,6 +1,8 @@
 package com.example.wake_app.data
 
 import com.example.wake_app.R
+import com.example.wake_app.model.Alarm
+import com.example.wake_app.model.GameButton
 
 object DataSource {
 
@@ -25,14 +27,22 @@ object DataSource {
         R.string.alarm_sound4,
         R.string.alarm_sound5,
     )
+
+    val gameButtons = listOf(
+        GameButton(R.string.game_connect, R.drawable.connect),
+        GameButton(R.string.game_equation, R.drawable.equation),
+        GameButton(R.string.game_memory, R.drawable.memory),
+        GameButton(R.string.game_sorting, R.drawable.sorting),
+        GameButton(R.string.game_typo, R.drawable.typo)
+    )
 }
 
-import android.app.PendingIntent.getActivity
-import android.database.Cursor
-import android.media.RingtoneManager
-import com.example.wake_app.R
-import com.example.wake_app.model.GameButton
-
+//import android.app.PendingIntent.getActivity
+//import android.database.Cursor
+//import android.media.RingtoneManager
+//import com.example.wake_app.R
+//import com.example.wake_app.model.GameButton
+/*
 
 class Datasource() {
     fun loadGameButtons(): List<GameButton> {
@@ -51,7 +61,6 @@ class Datasource() {
             "Alarm_sound_3",
             "Alarm_sound_4",
             "Alarm_sound_5",
-            "Alarm_sound_6",
         )
     }
-}
+}*/

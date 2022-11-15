@@ -16,4 +16,9 @@
     <string name="alarm_sound3">Morning Glory</string>
     <string name="alarm_sound4">Piano</string>
     <string name="alarm_sound5">Sparkle</string>
+    <string name="game_connect">Connect</string>
+    <string name="game_equation">Equation</string>
+    <string name="game_memory">Memory</string>
+    <string name="game_sorting">Sorting</string>
+    <string name="game_typo">Typo</string>
 </resources>

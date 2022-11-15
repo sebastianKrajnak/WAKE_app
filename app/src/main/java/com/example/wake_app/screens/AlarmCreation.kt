@@ -31,7 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.chargemap.compose.numberpicker.NumberPicker
-import com.example.wake_app.data.Datasource
+import com.example.wake_app.data.DataSource
+import com.example.wake_app.data.DataSource.gameButtons
 import com.example.wake_app.model.GameButton
 import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
@@ -74,10 +75,10 @@ fun AlarmCreationScreen() {
                         color = Color.White
                     )
 
-                    GameList(gameList = Datasource().loadGameButtons())
+                    GameList(gameList = gameButtons)
 
                     Text(
-                        text = "Label",
+                        text = "Name",
                         color = Color.White,
                         fontSize = 25.sp,
                         textAlign = TextAlign.Left,
