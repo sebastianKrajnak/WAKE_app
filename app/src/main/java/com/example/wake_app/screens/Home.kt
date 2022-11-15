@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.wake_app.data.Alarm
-import com.example.wake_app.data.alarms
+import com.example.wake_app.data.DataSource.alarms
 
 val createAlarm = { /* Do something */ }
 

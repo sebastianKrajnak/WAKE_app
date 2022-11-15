@@ -6,4 +6,14 @@
     <string name="alarm_description_1">Wake up</string>
     <string name="alarm_description_2">Have lunch</string>
     <string name="alarm_description_3">Have dinner</string>
+    <string name="language_english">English</string>
+    <string name="language_german">German</string>
+    <string name="language_spanish">Spanish</string>
+    <string name="language_russian">Russian</string>
+    <string name="language_mandarin">Mandarin</string>
+    <string name="alarm_sound1">Basic Bell</string>
+    <string name="alarm_sound2">Lullaby</string>
+    <string name="alarm_sound3">Morning Glory</string>
+    <string name="alarm_sound4">Piano</string>
+    <string name="alarm_sound5">Sparkle</string>
 </resources>
