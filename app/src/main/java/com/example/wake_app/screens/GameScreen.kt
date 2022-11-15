@@ -1,8 +1,5 @@
 package com.example.wake_app.screens
 
-import android.app.Activity
-import android.os.Build
-import android.view.WindowManager
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -17,12 +14,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.wake_app.BottomBarScreen
-import com.example.wake_app.R
-import com.example.wake_app.model.Game
+import com.example.wake_app.data.Game
 
 @Composable
 fun GameScreen(game: Game) {
@@ -87,7 +80,7 @@ fun checkResult(result: String, gameResult: String, navController: NavHostContro
 
 @Composable
 @Preview
-fun GameScreenpreview() {
+fun GameScreenPreview() {
     GameScreen (
         Game("1", "5 + 5 / 5", "6", "Solve the equation")
     )
