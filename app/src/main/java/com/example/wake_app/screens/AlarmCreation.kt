@@ -13,6 +13,8 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.colors
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +33,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.chargemap.compose.numberpicker.NumberPicker
 import com.example.wake_app.R
 import com.example.wake_app.data.DataSource
@@ -41,13 +45,25 @@ import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 import java.util.*
 
 @Composable
-fun AlarmCreationScreen() {
+fun AlarmCreationScreen(navController: NavHostController) {
     var textLabel by remember { mutableStateOf("") }
     var ringTone by remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Create alarm") })
+            TopAppBar(title = { Text("Create alarm") },
+                navigationIcon = if (navController.previousBackStackEntry != null) {
+                {
+                    IconButton(onClick = { navController.navigateUp() }) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Back"
+                        )
+                    }
+                }
+            } else {
+                null
+            })
         },
         content = {
             Box (
@@ -270,5 +286,6 @@ fun GameItem(gameBtn: GameButton) {
 @Composable
 @Preview
 fun AlarmCreationPreview() {
-    AlarmCreationScreen()
+    val navController = rememberNavController()
+    AlarmCreationScreen(navController)
 }

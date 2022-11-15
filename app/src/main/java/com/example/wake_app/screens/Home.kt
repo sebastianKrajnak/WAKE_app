@@ -11,28 +11,35 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.wake_app.R
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.example.wake_app.BottomBarScreen
+import com.example.wake_app.BottomNavGraph
 import com.example.wake_app.model.Alarm
 import com.example.wake_app.data.DataSource.alarms
 
 val createAlarm = { /* Do something */ }
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavHostController) {
     Scaffold(
+
         topBar = {
             TopAppBar(title = { Text("Alarms") })
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = createAlarm,
-                backgroundColor = colorResource(R.color.background_dark),
+                onClick = {navController.navigate(BottomBarScreen.AlarmCreation.route) {
+                    popUpTo(navController.graph.findStartDestination().id)
+                    launchSingleTop = true
+                }},
+                backgroundColor = Color.LightGray,
                 content = {
                         Icon(Icons.Filled.Add,"")
                 },
@@ -43,7 +50,7 @@ fun HomeScreen() {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(colorResource(R.color.background_dark)),
+                    .background(Color.Black),
             ) {
                 LazyColumn {
                     items(alarms) {
@@ -61,7 +68,6 @@ fun AlarmItem(Alarm: Alarm) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
-        backgroundColor = colorResource(R.color.background_dark),
 //            .clickable{ },
         elevation = 4.dp
     ) {
@@ -69,8 +75,7 @@ fun AlarmItem(Alarm: Alarm) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(4.dp)
-                .background(colorResource(R.color.background_dark))
-
+                .background(Color.Cyan)
         ) {
             AlarmInformation(Alarm.time, Alarm.description)
         }
@@ -85,13 +90,13 @@ fun AlarmInformation(@StringRes AlarmTime: Int, AlarmDescription: Int, modifier:
             text = stringResource(AlarmTime),
             fontSize = 35.sp,
             fontWeight = FontWeight.Bold,
-            color = colorResource(R.color.text_color_white)
+            color = Color.Black
         )
         Text(
             text = stringResource(AlarmDescription),
             modifier = modifier.padding(start = 8.dp),
             fontSize = 20.sp,
-            color = colorResource(R.color.text_color_white)
+            color = Color.Black
         )
         Spacer(Modifier.weight(1f).fillMaxHeight())
         Switch(
@@ -105,5 +110,6 @@ fun AlarmInformation(@StringRes AlarmTime: Int, AlarmDescription: Int, modifier:
 @Composable
 @Preview
 fun HomeScreenPreview() {
-    HomeScreen()
+    val navController = rememberNavController()
+    HomeScreen(navController)
 }
