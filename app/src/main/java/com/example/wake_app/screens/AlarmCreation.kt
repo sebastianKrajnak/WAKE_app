@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -31,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.chargemap.compose.numberpicker.NumberPicker
+import com.example.wake_app.R
 import com.example.wake_app.data.DataSource
 import com.example.wake_app.data.DataSource.gameButtons
 import com.example.wake_app.model.GameButton
@@ -72,14 +74,14 @@ fun AlarmCreationScreen() {
                                 end = 0.dp,
                                 bottom = 0.dp
                             )                            .align(Alignment.Start),
-                        color = Color.White
+                        color = colorResource(R.color.text_color_white)
                     )
 
                     GameList(gameList = gameButtons)
 
                     Text(
                         text = "Name",
-                        color = Color.White,
+                        color = colorResource(R.color.text_color_white),
                         fontSize = 25.sp,
                         textAlign = TextAlign.Left,
                         modifier = Modifier
@@ -95,7 +97,7 @@ fun AlarmCreationScreen() {
                         value = textLabel,
                         onValueChange = { textLabel = it },
                         textStyle = TextStyle(
-                            color = Color.White
+                            color = colorResource(R.color.text_color_white)
                         ),
                         modifier = Modifier
                             .padding(
@@ -112,7 +114,7 @@ fun AlarmCreationScreen() {
                     Text(
                         text = "Alarm ringtone",
                         fontSize = 25.sp,
-                        color = Color.White,
+                        color = colorResource(R.color.text_color_white),
                         textAlign = TextAlign.Left,
                         modifier = Modifier
                             .padding(
@@ -127,7 +129,7 @@ fun AlarmCreationScreen() {
                         value = ringTone,
                         onValueChange = { ringTone = it },
                         textStyle = TextStyle(
-                            color = Color.White
+                            color = colorResource(R.color.text_color_white)
                         ),
                         modifier = Modifier
                             .padding(
@@ -145,7 +147,7 @@ fun AlarmCreationScreen() {
                     Text(
                         text = "Vibrate",
                         fontSize = 25.sp,
-                        color = Color.White,
+                        color = colorResource(R.color.text_color_white),
                         textAlign = TextAlign.Left,
                         modifier = Modifier
                             .padding(
@@ -170,7 +172,9 @@ fun AlarmCreationScreen() {
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color(65,72,76))
                     )
                     {
-                        Text("Set alarm")
+                        Text("Set alarm",
+                            color = colorResource(R.color.text_color_white)
+                        )
                     }
 
                 }
@@ -201,7 +205,7 @@ fun TimePick() {
                 },
                 textStyle = TextStyle(
                     fontSize = 45.sp,
-                    color = Color.White
+                    color = colorResource(R.color.text_color_white)
                 )
             )
         }
@@ -214,7 +218,7 @@ fun TimePick() {
                 },
                 textStyle = TextStyle(
                     fontSize = 45.sp,
-                    color = Color.White
+                    color = colorResource(R.color.text_color_white)
                 )
             )
         }
