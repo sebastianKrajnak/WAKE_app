@@ -8,6 +8,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.rounded.KeyboardArrowDown
+import androidx.compose.material.icons.rounded.KeyboardArrowRight
+import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -61,9 +64,9 @@ fun DropdownRow(Text: String, @StringRes DropdownItems: List<Int>, modifier: Mod
         var mSelectedText by remember { mutableStateOf("") }
 
         val icon = if (mExpanded)
-            Icons.Filled.KeyboardArrowUp
+            Icons.Rounded.KeyboardArrowUp
         else
-            Icons.Filled.KeyboardArrowDown
+            Icons.Rounded.KeyboardArrowDown
 
         Text(
             text = Text,
@@ -80,7 +83,7 @@ fun DropdownRow(Text: String, @StringRes DropdownItems: List<Int>, modifier: Mod
             .padding(end = 8.dp)
         ) {
             IconButton(onClick = { mExpanded = !mExpanded }) {
-                Icon(icon, "")
+                Icon(icon, "", tint = Color.White)
             }
             DropdownMenu(
                 expanded = mExpanded,
@@ -130,7 +133,7 @@ fun SwitcherRow(Text: String, modifier: Modifier = Modifier) {
 
 @Composable
 fun AboutRow(Text: String, modifier: Modifier = Modifier) {
-    val icon = Icons.Filled.KeyboardArrowRight
+    val icon = Icons.Rounded.KeyboardArrowRight
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -152,7 +155,7 @@ fun AboutRow(Text: String, modifier: Modifier = Modifier) {
         IconButton(
             modifier = modifier.padding(end = 8.dp),
             onClick = {/* TODO */ }) {
-            Icon(icon, "")
+            Icon(icon, "", tint = Color.White)
         }
     }
 }
