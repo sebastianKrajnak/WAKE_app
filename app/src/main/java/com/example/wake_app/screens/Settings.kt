@@ -31,7 +31,7 @@ fun SettingsScreen() {
 }
 
 @Composable
-fun PageContent(modifier: Modifier = Modifier) {
+private fun PageContent(modifier: Modifier = Modifier) {
 
     Column(
         modifier = modifier

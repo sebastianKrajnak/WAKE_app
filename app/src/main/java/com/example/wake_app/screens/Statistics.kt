@@ -4,8 +4,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
+import androidx.compose.material.Scaffold
 
 import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +22,16 @@ import com.example.wake_app.R
 
 @Composable
 fun StatisticsScreen() {
+    Scaffold(
+        topBar = {
+            TopAppBar(title = { Text("Statistics") })
+        },
+        content = { PageContent() }
+    )
+}
+
+@Composable
+private fun PageContent(modifier: Modifier = Modifier) {
     val col = colorResource(R.color.background_dark)
     Column(
         Modifier
@@ -30,12 +42,12 @@ fun StatisticsScreen() {
 
         ) {
 
-        Text(
-            modifier = Modifier.padding(start = 8.dp),
-            text = "Statistics",
-            fontSize = 34.sp,
-            color = colorResource(R.color.text_color_white)
-        )
+//        Text(
+//            modifier = Modifier.padding(start = 8.dp),
+//            text = "Statistics",
+//            fontSize = 34.sp,
+//            color = colorResource(R.color.text_color_white)
+//        )
 
         Text(
             modifier = Modifier.padding(start = 8.dp),
