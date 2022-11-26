@@ -8,11 +8,12 @@
     <color name="black">#FF000000</color>
     <color name="black_overlay">#FF000000</color>
     <color name="background_light">#FF1D1D1D</color>
-    <color name="background_theme">#FF2DC09D</color>
+    <color name="main_accent">#FF2DC09D</color>
 
     <color name="input_field">#FF41484C</color>
     <color name="background_dark">#FF000000</color>
     <color name="text_color_white">#FFFFFFFF</color>
     <color name="light_blue_A400">#FF00B0FF</color>
     <color name="light_blue_900">#FF01579B</color>
+    <color name="main_accent_dark">#0E392F</color>
 </resources>

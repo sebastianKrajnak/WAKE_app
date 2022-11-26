@@ -3,6 +3,7 @@ package com.example.wake_app.data
 import com.example.wake_app.R
 import com.example.wake_app.model.Alarm
 import com.example.wake_app.model.GameButton
+import com.example.wake_app.model.WeekdayButton
 
 object DataSource {
 
@@ -34,6 +35,16 @@ object DataSource {
         GameButton(R.string.game_memory, R.drawable.memory),
         GameButton(R.string.game_sorting, R.drawable.sorting),
         GameButton(R.string.game_typo, R.drawable.typo)
+    )
+
+    val weekdayButtons = listOf(
+        WeekdayButton(0, "M"),
+        WeekdayButton(1, "T"),
+        WeekdayButton(2, "W"),
+        WeekdayButton(3, "T"),
+        WeekdayButton(4, "F"),
+        WeekdayButton(5, "S"),
+        WeekdayButton(6, "S")
     )
 }
 
