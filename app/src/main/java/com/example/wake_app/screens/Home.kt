@@ -1,5 +1,7 @@
 package com.example.wake_app.screens
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -25,8 +27,6 @@ import com.example.wake_app.BottomNavGraph
 import com.example.wake_app.R
 import com.example.wake_app.model.Alarm
 import com.example.wake_app.data.DataSource.alarms
-
-val createAlarm = { /* Do something */ }
 
 @Composable
 fun HomeScreen(navController: NavHostController) {

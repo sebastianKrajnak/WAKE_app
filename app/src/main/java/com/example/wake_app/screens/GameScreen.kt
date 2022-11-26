@@ -1,5 +1,6 @@
 package com.example.wake_app.screens
 
+import android.media.MediaPlayer
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -89,6 +90,9 @@ fun checkResult(result: String, gameResult: String, navController: NavHostContro
 @Composable
 @Preview
 fun GameScreenPreview() {
+//    var mp = MediaPlayer.create(applicationContext, R.raw.alarm-tone)
+//    mp.start()
+
     GameScreen (
         Game("1", "5 + 5 / 5", "6", "Solve the equation")
     )
