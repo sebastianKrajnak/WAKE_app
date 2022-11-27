@@ -11,6 +11,15 @@ object DataSource {
         Alarm(R.string.alarm_time_1, R.string.alarm_description_1, true),
         Alarm(R.string.alarm_time_2, R.string.alarm_description_2, false),
         Alarm(R.string.alarm_time_3, R.string.alarm_description_3, true),
+        Alarm(R.string.alarm_time_1, R.string.alarm_description_1, true),
+        Alarm(R.string.alarm_time_2, R.string.alarm_description_2, false),
+        Alarm(R.string.alarm_time_3, R.string.alarm_description_3, true),
+        Alarm(R.string.alarm_time_1, R.string.alarm_description_1, true),
+        Alarm(R.string.alarm_time_2, R.string.alarm_description_2, false),
+        Alarm(R.string.alarm_time_3, R.string.alarm_description_3, true),
+        Alarm(R.string.alarm_time_1, R.string.alarm_description_1, true),
+        Alarm(R.string.alarm_time_2, R.string.alarm_description_2, false),
+        Alarm(R.string.alarm_time_3, R.string.alarm_description_3, false),
     )
 
     val languages = listOf(
@@ -32,8 +41,8 @@ object DataSource {
     val gameButtons = listOf(
         GameButton(R.string.game_connect, R.drawable.connect),
         GameButton(R.string.game_equation, R.drawable.equation),
-        GameButton(R.string.game_memory, R.drawable.memory),
-        GameButton(R.string.game_sorting, R.drawable.sorting),
+        GameButton(R.string.game_memory, R.drawable.brain),
+        GameButton(R.string.game_sorting, R.drawable.sequence),
         GameButton(R.string.game_typo, R.drawable.typo)
     )
 

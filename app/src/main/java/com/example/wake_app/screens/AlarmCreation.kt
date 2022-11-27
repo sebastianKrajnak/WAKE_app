@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -39,7 +40,6 @@ import java.util.*
 fun AlarmCreationScreen(navController: NavHostController) {
     var textLabel by remember { mutableStateOf("") }
     var ringTone by remember { mutableStateOf("") }
-    val weekdays = listOf("M", "T", "W", "T", "F", "S", "S")
 
     val mContext = LocalContext.current
 
@@ -52,7 +52,7 @@ fun AlarmCreationScreen(navController: NavHostController) {
     val time = remember { mutableStateOf("") }
     time.value = SimpleDateFormat("HH:mm").format(Date())
 
-    // Creating a TimePicker dialod
+    // Creating a TimePicker dialog
     val timePickerDialog = TimePickerDialog(
         mContext,
         {_, hour : Int, minute: Int ->
@@ -74,7 +74,9 @@ fun AlarmCreationScreen(navController: NavHostController) {
                 }
             } else {
                 null
-            })
+            },
+                backgroundColor = colorResource(R.color.background_light)
+            )
         },
         content = {
             Box (
@@ -145,7 +147,7 @@ fun AlarmCreationScreen(navController: NavHostController) {
 
                     OutlinedTextField(
                         value = textLabel,
-                        onValueChange = {textLabel = it},
+                        onValueChange = { if (it.length <= 15) textLabel = it},
                         label = { Text(text = "Label", fontSize = 20.sp,
                                     color = colorResource(R.color.text_color_white))
                                 },
@@ -168,8 +170,8 @@ fun AlarmCreationScreen(navController: NavHostController) {
                     Spacer(modifier = Modifier.height(9.dp))
 
                     OutlinedTextField(
-                        value = textLabel,
-                        onValueChange = {textLabel = it},
+                        value = ringTone,
+                        onValueChange = {ringTone = it},
                         label = { Text(text = "Alarm ringtone", fontSize = 20.sp,
                             color = colorResource(R.color.text_color_white))
                         },
@@ -216,10 +218,12 @@ fun AlarmCreationScreen(navController: NavHostController) {
 
                     Button(
                         onClick = {},
+                        shape = CircleShape,
                         colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(R.color.input_field))
                     )
                     {
-                        Text("Set alarm",
+                        Text(text = "Set alarm",
+                            fontSize = 15.sp,
                             color = colorResource(R.color.text_color_white)
                         )
                     }
@@ -236,7 +240,7 @@ fun GameList(gameList : List<GameButton>) {
     // lazy row for displaying a horizontal list view.
     LazyRow (horizontalArrangement = Arrangement.Start) {
         // in the below line, we are setting data for each item of our listview.
-        itemsIndexed(gameList) { index, item ->
+        itemsIndexed(gameList) { _, item ->
             GameItem(gameBtn = item)
         }
     }
@@ -265,8 +269,7 @@ fun GameItem(gameBtn: GameButton) {
             Image(
             painter = painterResource(gameBtn.iconResourceId),
             contentDescription = null,
-            modifier = Modifier
-                .size(60.dp, 60.dp)
+            modifier = Modifier.size(60.dp, 60.dp)
             )
         }
     }
