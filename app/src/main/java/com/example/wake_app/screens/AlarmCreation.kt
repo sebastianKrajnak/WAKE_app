@@ -1,6 +1,8 @@
 package com.example.wake_app.screens
 
+import android.app.AlarmManager
 import android.app.TimePickerDialog
+import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -33,9 +35,17 @@ import com.example.wake_app.data.DataSource.weekdayButtons
 import com.example.wake_app.model.GameButton
 import com.example.wake_app.model.WeekdayButton
 import java.text.SimpleDateFormat
-
 import java.util.*
+import android.app.PendingIntent
 
+import android.content.Intent
+import android.os.Build
+import android.util.Log
+import android.widget.Toast
+import androidx.annotation.RequiresApi
+
+
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AlarmCreationScreen(navController: NavHostController) {
     var textLabel by remember { mutableStateOf("") }
@@ -59,6 +69,8 @@ fun AlarmCreationScreen(navController: NavHostController) {
             time.value = String.format("%02d:%02d", hour, minute)
         }, hour, minute, true
     )
+
+
 
     Scaffold(
         topBar = {
@@ -217,7 +229,7 @@ fun AlarmCreationScreen(navController: NavHostController) {
                         )
 
                     Button(
-                        onClick = {},
+                        onClick = {setAlarm(mContext, timePickerDialog)},
                         shape = CircleShape,
                         colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(R.color.input_field))
                     )
@@ -303,4 +315,48 @@ fun Weekday(weekdayButton: WeekdayButton) {
 fun AlarmCreationPreview() {
     val navController = rememberNavController()
     AlarmCreationScreen(navController)
+}
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun setAlarm(context: Context, timePickerDialog: TimePickerDialog) {
+    val sec =  10
+    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    val intent = Intent(context, AlarmNotification::class.java)
+    val days = false // Todo set repeating days
+    intent.putExtra("2", days);
+    val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+
+    } else {
+        TODO("VERSION.SDK_INT < M")
+    }
+
+
+    val calendar: Calendar = Calendar.getInstance()
+    calendar.set(
+        calendar.get(Calendar.YEAR),
+        calendar.get(Calendar.MONTH),
+        calendar.get(Calendar.DAY_OF_MONTH),
+        21,
+        19,
+        0
+    )
+
+
+
+
+
+    val repeating: Boolean = true
+    if (repeating) {
+        // Todo get range
+        val interval : Long = 1000 * 60 * 1
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, interval, pendingIntent)
+    } else {
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+    }
+
+    Toast.makeText(context, "Alarm is set for 10 sec from now", Toast.LENGTH_LONG).show()
+    Log.d("Alarm Bell", "testsss")
+    System.out.println("Testing")
 }

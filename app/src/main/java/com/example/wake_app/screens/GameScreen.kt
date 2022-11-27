@@ -31,43 +31,48 @@ fun GameScreen(game: Game) {
         horizontalAlignment = Alignment.CenterHorizontally,
 
     ) {
-        Text(text = game.title,
-            fontSize = 30.sp,
-            modifier = Modifier.padding(16.dp),
-            color = colorResource(R.color.text_color_white),
-        )
-        Card(backgroundColor = colorResource(R.color.background_dark),
-            modifier = Modifier
-                .padding(8.dp) // margin
-                .border(2.dp, colorResource(R.color.text_color_white)) // outer border
-                .padding(16.dp), // space between the borders
-            elevation = 18.dp
-             ) {
-            Text(
-                text = game.equation,
-                fontSize = 35.sp,
+
+        // Load Game
+
+            Text(text = game.title,
+                fontSize = 30.sp,
+                modifier = Modifier.padding(16.dp),
                 color = colorResource(R.color.text_color_white),
-                textAlign = TextAlign.Center
             )
-        }
-        
-        Text(text = " ", modifier = Modifier.padding(100.dp))
 
-        TextField(
-            value = result,
-            onValueChange = { result = it },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            label = { Text("Result", color = colorResource(R.color.text_color_white)) },
-            modifier = Modifier.background(colorResource(R.color.input_field))
-        )
 
-        Button(onClick = {
-            checkResult(result, game.result, navController)
+            Card(backgroundColor = colorResource(R.color.background_dark),
+                modifier = Modifier
+                    .padding(8.dp) // margin
+                    .border(2.dp, colorResource(R.color.text_color_white)) // outer border
+                    .padding(16.dp), // space between the borders
+                elevation = 18.dp
+                 ) {
+                Text(
+                    text = game.equation,
+                    fontSize = 35.sp,
+                    color = colorResource(R.color.text_color_white),
+                    textAlign = TextAlign.Center
+                )
+            }
 
-        }
-        ) {
-            Text(text = "Submit")
-        }
+            Text(text = " ", modifier = Modifier.padding(100.dp))
+
+            TextField(
+                value = result,
+                onValueChange = { result = it },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                label = { Text("Result", color = colorResource(R.color.text_color_white)) },
+                modifier = Modifier.background(colorResource(R.color.input_field))
+            )
+
+            Button(onClick = {
+                checkResult(result, game.result, navController)
+
+            }
+            ) {
+                Text(text = "Submit")
+            }
 
 
     }
@@ -77,8 +82,7 @@ fun GameScreen(game: Game) {
 fun checkResult(result: String, gameResult: String, navController: NavHostController){
     if (result.equals(gameResult)) {
         System.out.println("Correct")
-//        navController.navigate(BottomBarScreen.Statistics.route)
-        // TODO navigate to Home screen
+        navController.popBackStack()
     } else {
         System.out.println("Incorrect")
     }
