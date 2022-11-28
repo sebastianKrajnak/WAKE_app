@@ -26,6 +26,7 @@ import java.util.*
 @Composable
 fun AlarmEditScreen(navController: NavHostController, sharedViewModel: SharedViewModel) {
     val alarm = sharedViewModel.alarm
+    var newAlarm = Alarm()
     var alarmName by remember { mutableStateOf("") }
     var ringTone by remember { mutableStateOf("") }
 
@@ -90,6 +91,7 @@ fun AlarmEditScreen(navController: NavHostController, sharedViewModel: SharedVie
                             fontSize = 90.sp,
                             )
                     }
+                    newAlarm.time = time.value
 
                     Text(
                         text = "Games",
@@ -107,7 +109,8 @@ fun AlarmEditScreen(navController: NavHostController, sharedViewModel: SharedVie
                     )
 
                     if (alarm != null) {
-                        GameList(gameList = gameButtons, alarm)
+                        newAlarm.games = alarm.games
+                        GameList(gameList = gameButtons, newAlarm)
                     }
 
 
@@ -132,7 +135,8 @@ fun AlarmEditScreen(navController: NavHostController, sharedViewModel: SharedVie
                     ){
                         for(button in weekdayButtons){
                             if (alarm != null) {
-                                Weekday(weekdayButton = button, alarm)
+                                newAlarm.weekdays = alarm.weekdays
+                                Weekday(weekdayButton = button, newAlarm)
                             }
                         }
                     }
@@ -142,7 +146,10 @@ fun AlarmEditScreen(navController: NavHostController, sharedViewModel: SharedVie
 
                     OutlinedTextField(
                         value = alarmName,
-                        onValueChange = { if (it.length <= 15) alarmName = it},
+                        onValueChange = { if (it.length <= 15)
+                            alarmName = it
+                            newAlarm.name = alarmName
+                                        },
                         label = { Text(text = "Alarm name", fontSize = 20.sp,
                                     color = colorResource(R.color.text_color_white))
                                 },
@@ -204,31 +211,28 @@ fun AlarmEditScreen(navController: NavHostController, sharedViewModel: SharedVie
                             )
                             .align(Alignment.Start)
                     )
+
                     var checkedState by remember { mutableStateOf(true) }
                     if (alarm != null) {
-                        checkedState = alarm.vibrate
+                        newAlarm.vibrate = alarm.vibrate
+                        checkedState = newAlarm.vibrate
                     }
                         Checkbox(
                             checked = checkedState,
                             onCheckedChange = {
                                 checkedState = !checkedState
-                                if (alarm != null) {
-                                    alarm.vibrate = checkedState
-                                }
+                                newAlarm.vibrate = checkedState
                                               },
                             modifier = Modifier
                                 .padding(start = 30.dp)
                                 .align(Alignment.Start)
                         )
 
-                    if (alarm != null) {
-                        alarm.time = time.value
-                    }
                     Button(
                         onClick = {
                             try {
                                 if (alarm != null) {
-                                    repo.updateAlarm(alarm, Alarm(alarm.time, alarm.games, alarm.weekdays, alarm.name, !alarm.active))
+                                    repo.updateAlarm(alarm, Alarm(time.value, newAlarm.games, newAlarm.weekdays, alarmName, checkedState, true))
                                 }
                             } catch (e: Exception) {
                                 e.printStackTrace()

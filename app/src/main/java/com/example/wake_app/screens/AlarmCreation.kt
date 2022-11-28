@@ -36,7 +36,7 @@ import java.util.*
 
 @Composable
 fun AlarmCreationScreen(navController: NavHostController) {
-    val alarm: Alarm = Alarm()
+    val alarm = Alarm()
 
     var alarmName by remember { mutableStateOf("") }
     var ringTone by remember { mutableStateOf("") }
