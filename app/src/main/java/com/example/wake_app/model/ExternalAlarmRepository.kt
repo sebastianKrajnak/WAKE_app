@@ -23,10 +23,6 @@ class ExternalAlarmRepository(var context: Context) : AlarmRepository {
         }
     }
 
-    override fun updateAlarm(alarm: Alarm) {
-        var alarmList = getAlarmList()
-    }
-
     override fun getAlarmList(): List<Alarm> {
         try {
             return if (isExternalStorageReadable()) {
@@ -50,6 +46,27 @@ class ExternalAlarmRepository(var context: Context) : AlarmRepository {
 
         alarmList.forEach {
             if (it != alarm)
+                newAlarmList += it
+        }
+
+        if (isExternalStorageWritable()) {
+            FileOutputStream(noteFile(fileName)).use{ output ->
+                val oos = ObjectOutputStream(output)
+                oos.writeObject(newAlarmList)
+                oos.close()
+            }
+        }
+    }
+
+    override fun updateAlarm(old: Alarm, new: Alarm) {
+        var alarmList = getAlarmList()
+
+        var newAlarmList =  emptyList<Alarm>()
+
+        alarmList.forEach {
+            if (it == old)
+                newAlarmList += new
+            else
                 newAlarmList += it
         }
 

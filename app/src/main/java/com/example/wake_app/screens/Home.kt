@@ -95,7 +95,7 @@ fun AlarmItem(Alarm: Alarm, NavController: NavHostController, repo: AlarmReposit
     // TODO turn this into an expendablecard and add edit and delete options
 
     var expanded by remember { mutableStateOf(false) }
-    val checkedState = remember { mutableStateOf(true) }
+    val checkedState = remember { mutableStateOf(Alarm.active) }
     val textColor = if (checkedState.value) colorResource(R.color.text_color_white) else Color.DarkGray
     val iconColorFilter = if (checkedState.value)
         ColorFilter.tint(colorResource(R.color.main_accent))
@@ -124,7 +124,10 @@ fun AlarmItem(Alarm: Alarm, NavController: NavHostController, repo: AlarmReposit
                 AlarmInformation(Alarm.time, Alarm.description, CheckedState = checkedState)
                 Switch(
                     checked = checkedState.value,
-                    onCheckedChange = { checkedState.value = it },
+                    onCheckedChange = {
+                        checkedState.value = it
+                        repo.updateAlarm(Alarm, Alarm(Alarm.time, Alarm.description, !Alarm.active))
+                    },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = colorResource(id = R.color.main_accent),
                         uncheckedThumbColor = Color.LightGray,
