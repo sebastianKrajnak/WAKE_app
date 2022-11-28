@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -39,15 +40,21 @@ import androidx.navigation.compose.rememberNavController
 import com.example.wake_app.BottomBarScreen
 import com.example.wake_app.R
 import com.example.wake_app.model.Alarm
-import com.example.wake_app.data.DataSource.alarms
 import com.example.wake_app.data.DataSource.gameButtons
 import com.example.wake_app.data.DataSource.weekdayButtons
+import com.example.wake_app.model.AlarmRepository
+import com.example.wake_app.model.ExternalAlarmRepository
 import com.example.wake_app.ui.theme.inter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
-val createAlarm = { /* Do something */ }
 
 @Composable
 fun HomeScreen(navController: NavHostController) {
+    val context = LocalContext.current
+    val repo: AlarmRepository by lazy { ExternalAlarmRepository(context) }
+    var alarmList = repo.getAlarmList()
+
     Scaffold(
 
         topBar = {
@@ -73,8 +80,8 @@ fun HomeScreen(navController: NavHostController) {
                     .background(colorResource(R.color.background_light)),
             ) {
                 LazyColumn {
-                    items(alarms) {
-                        AlarmItem(Alarm = it, navController)
+                    items(alarmList) {
+                        AlarmItem(Alarm = it, navController,repo)
                     }
                 }
             }
@@ -84,7 +91,7 @@ fun HomeScreen(navController: NavHostController) {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun AlarmItem(Alarm: Alarm, NavController: NavHostController) {
+fun AlarmItem(Alarm: Alarm, NavController: NavHostController, repo: AlarmRepository) {
     // TODO turn this into an expendablecard and add edit and delete options
     var expanded by remember { mutableStateOf(false) }
     val checkedState = remember { mutableStateOf(true) }
@@ -153,7 +160,10 @@ fun AlarmItem(Alarm: Alarm, NavController: NavHostController) {
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        IconButton(onClick = { /*TODO remove alarm*/ }) {
+                        IconButton(onClick = {
+                                repo.deleteAlarm(Alarm)
+                                NavController.navigate(BottomBarScreen.Home.route)
+                        }) {
                             Icon(
                                 imageVector = Icons.Default.Delete,
                                 contentDescription = null,
@@ -184,7 +194,7 @@ fun AlarmItem(Alarm: Alarm, NavController: NavHostController) {
 }
 
 @Composable
-fun AlarmInformation(@StringRes AlarmTime: Int, AlarmDescription: Int, modifier: Modifier = Modifier, CheckedState: MutableState<Boolean>) {
+fun AlarmInformation(AlarmTime: String, AlarmDescription: String, modifier: Modifier = Modifier, CheckedState: MutableState<Boolean>) {
     val textColor = if (CheckedState.value) colorResource(R.color.text_color_white) else Color.DarkGray
 
     Column {
@@ -195,7 +205,7 @@ fun AlarmInformation(@StringRes AlarmTime: Int, AlarmDescription: Int, modifier:
                 .defaultMinSize(minHeight = 2.dp)
                 ){
             Text(
-                text = stringResource(AlarmTime),
+                text = AlarmTime,
                 fontSize = 35.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = inter,
@@ -206,7 +216,7 @@ fun AlarmInformation(@StringRes AlarmTime: Int, AlarmDescription: Int, modifier:
                 )
             )
             Text(
-                text = stringResource(AlarmDescription),
+                text = AlarmDescription,
                 modifier = modifier.padding(start = 9.dp),
                 fontSize = 20.sp,
                 fontFamily = inter,

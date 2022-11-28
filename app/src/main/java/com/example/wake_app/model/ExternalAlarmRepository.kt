@@ -2,6 +2,7 @@ package com.example.wake_app.model
 
 import android.content.Context
 import android.os.Environment
+import android.util.Log
 import java.io.*
 
 class ExternalAlarmRepository(var context: Context) : AlarmRepository {
@@ -51,7 +52,7 @@ class ExternalAlarmRepository(var context: Context) : AlarmRepository {
         if (isExternalStorageWritable()) {
             FileOutputStream(noteFile(fileName)).use{ output ->
                 val oos = ObjectOutputStream(output)
-                oos.writeObject(alarmList)
+                oos.writeObject(newAlarmList)
                 oos.close()
             }
         }
