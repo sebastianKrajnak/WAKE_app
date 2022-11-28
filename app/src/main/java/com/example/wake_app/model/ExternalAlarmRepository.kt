@@ -45,7 +45,7 @@ class ExternalAlarmRepository(var context: Context) : AlarmRepository {
         var newAlarmList =  emptyList<Alarm>()
 
         alarmList.forEach {
-            if (it != alarm)
+            if (!(it.name == alarm.name && it.time == alarm.time))
                 newAlarmList += it
         }
 
@@ -64,7 +64,7 @@ class ExternalAlarmRepository(var context: Context) : AlarmRepository {
         var newAlarmList =  emptyList<Alarm>()
 
         alarmList.forEach {
-            if (it == old)
+            if (it.name == old.name && it.time == old.time)
                 newAlarmList += new
             else
                 newAlarmList += it
