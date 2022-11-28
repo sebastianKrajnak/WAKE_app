@@ -27,7 +27,7 @@ import com.example.wake_app.data.DataSource.languages
 fun SettingsScreen() {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Settings") })
+            TopAppBar(title = { Text("Settings") }, backgroundColor = colorResource(R.color.background_light))
         },
         content =  { PageContent() }
     )

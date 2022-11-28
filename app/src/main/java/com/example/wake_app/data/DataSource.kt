@@ -3,13 +3,23 @@ package com.example.wake_app.data
 import com.example.wake_app.R
 import com.example.wake_app.model.Alarm
 import com.example.wake_app.model.GameButton
+import com.example.wake_app.model.WeekdayButton
 
 object DataSource {
 
     val alarms = listOf(
-        Alarm("5:06", "Wake up", true),
-        Alarm("12:27", "Have lunch", false),
-        Alarm("18:36", "Have dinner", true),
+        Alarm(R.string.alarm_time_1, R.string.alarm_description_1, true),
+        Alarm(R.string.alarm_time_2, R.string.alarm_description_2, false),
+        Alarm(R.string.alarm_time_3, R.string.alarm_description_3, true),
+        Alarm(R.string.alarm_time_1, R.string.alarm_description_1, true),
+        Alarm(R.string.alarm_time_2, R.string.alarm_description_2, false),
+        Alarm(R.string.alarm_time_3, R.string.alarm_description_3, true),
+        Alarm(R.string.alarm_time_1, R.string.alarm_description_1, true),
+        Alarm(R.string.alarm_time_2, R.string.alarm_description_2, false),
+        Alarm(R.string.alarm_time_3, R.string.alarm_description_3, true),
+        Alarm(R.string.alarm_time_1, R.string.alarm_description_1, true),
+        Alarm(R.string.alarm_time_2, R.string.alarm_description_2, false),
+        Alarm(R.string.alarm_time_3, R.string.alarm_description_3, false),
     )
 
     val languages = listOf(
@@ -31,9 +41,19 @@ object DataSource {
     val gameButtons = listOf(
         GameButton(R.string.game_connect, R.drawable.connect),
         GameButton(R.string.game_equation, R.drawable.equation),
-        GameButton(R.string.game_memory, R.drawable.memory),
-        GameButton(R.string.game_sorting, R.drawable.sorting),
+        GameButton(R.string.game_memory, R.drawable.brain),
+        GameButton(R.string.game_sorting, R.drawable.sequence),
         GameButton(R.string.game_typo, R.drawable.typo)
+    )
+
+    val weekdayButtons = listOf(
+        WeekdayButton(0, "M"),
+        WeekdayButton(1, "T"),
+        WeekdayButton(2, "W"),
+        WeekdayButton(3, "T"),
+        WeekdayButton(4, "F"),
+        WeekdayButton(5, "S"),
+        WeekdayButton(6, "S")
     )
 }
 
