@@ -23,6 +23,10 @@ class ExternalAlarmRepository(var context: Context) : AlarmRepository {
         }
     }
 
+    override fun updateAlarm(alarm: Alarm) {
+        var alarmList = getAlarmList()
+    }
+
     override fun getAlarmList(): List<Alarm> {
         try {
             return if (isExternalStorageReadable()) {

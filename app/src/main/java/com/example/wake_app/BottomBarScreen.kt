@@ -35,4 +35,10 @@ sealed class BottomBarScreen(
         tittle = "Alarm Creation",
         icon = Icons.Default.Info
     )
+
+    object AlarmEdit: BottomBarScreen (
+        route = "alarmedit",
+        tittle = "Alarm Edit",
+        icon = Icons.Default.Info
+    )
 }

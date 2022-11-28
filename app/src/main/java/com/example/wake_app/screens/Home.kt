@@ -32,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -42,13 +43,14 @@ import com.example.wake_app.data.DataSource.gameButtons
 import com.example.wake_app.data.DataSource.weekdayButtons
 import com.example.wake_app.model.AlarmRepository
 import com.example.wake_app.model.ExternalAlarmRepository
+import com.example.wake_app.model.SharedViewModel
 import com.example.wake_app.ui.theme.inter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen(navController: NavHostController, sharedViewModel: SharedViewModel) {
     val context = LocalContext.current
     val repo: AlarmRepository by lazy { ExternalAlarmRepository(context) }
     var alarmList = repo.getAlarmList()
@@ -79,7 +81,7 @@ fun HomeScreen(navController: NavHostController) {
             ) {
                 LazyColumn {
                     items(alarmList) {
-                        AlarmItem(Alarm = it, navController,repo)
+                        AlarmItem(Alarm = it, navController, repo, sharedViewModel)
                     }
                 }
             }
@@ -89,7 +91,7 @@ fun HomeScreen(navController: NavHostController) {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun AlarmItem(Alarm: Alarm, NavController: NavHostController, repo: AlarmRepository) {
+fun AlarmItem(Alarm: Alarm, NavController: NavHostController, repo: AlarmRepository, sharedViewModel: SharedViewModel) {
     // TODO turn this into an expendablecard and add edit and delete options
 
     var expanded by remember { mutableStateOf(false) }
@@ -155,7 +157,9 @@ fun AlarmItem(Alarm: Alarm, NavController: NavHostController, repo: AlarmReposit
                         }
                     }
                     Row (
-                        Modifier.padding(start = 18.dp).fillMaxWidth(),
+                        Modifier
+                            .padding(start = 18.dp)
+                            .fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
@@ -173,7 +177,8 @@ fun AlarmItem(Alarm: Alarm, NavController: NavHostController, repo: AlarmReposit
                         IconButton(
                             // TODO edit button opens up the actual alarm
                             onClick = {
-                                NavController.navigate(BottomBarScreen.AlarmCreation.route) {
+                                sharedViewModel.addAlarmView(Alarm)
+                                NavController.navigate(BottomBarScreen.AlarmEdit.route) {
                                     popUpTo(NavController.graph.findStartDestination().id)
                                     launchSingleTop = true
                                 }
@@ -231,7 +236,7 @@ fun AlarmInformation(AlarmTime: String, AlarmDescription: String, modifier: Modi
                 Text(
                     text = day.day,
                     fontSize = 12.sp,
-                    // TODO add  repeat on this day is true condition to color
+                    // TODO add repeat on this day is true condition to color
                     color = if(!CheckedState.value) Color.DarkGray else colorResource(R.color.main_accent),
                     modifier = Modifier.padding(start = 12.dp)
                 )
@@ -240,9 +245,10 @@ fun AlarmInformation(AlarmTime: String, AlarmDescription: String, modifier: Modi
     }
 }
 
+/*
 @Composable
 @Preview
 fun HomeScreenPreview() {
     val navController = rememberNavController()
     HomeScreen(navController)
-}
+}*/

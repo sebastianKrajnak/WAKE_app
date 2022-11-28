@@ -34,7 +34,6 @@ private fun PageContent(modifier: Modifier = Modifier) {
         Modifier
             .fillMaxSize()
             .background(colorResource(R.color.background_light)),
-//            .background(colorResource(R.color.background)),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
         ) {
