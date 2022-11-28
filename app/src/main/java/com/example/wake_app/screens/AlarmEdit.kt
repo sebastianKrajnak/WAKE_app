@@ -13,16 +13,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.wake_app.R
 import com.example.wake_app.data.DataSource.gameButtons
 import com.example.wake_app.data.DataSource.weekdayButtons
 import com.example.wake_app.model.*
-import java.text.SimpleDateFormat
 
 import java.util.*
 
@@ -44,7 +41,7 @@ fun AlarmEditScreen(navController: NavHostController, sharedViewModel: SharedVie
     val time = remember { mutableStateOf("") }
     if (alarm != null) {
         time.value = alarm.time
-        alarmName = alarm.description
+        alarmName = alarm.name
     }
 
     // Creating a TimePicker dialog
@@ -109,7 +106,9 @@ fun AlarmEditScreen(navController: NavHostController, sharedViewModel: SharedVie
                         color = colorResource(R.color.text_color_white)
                     )
 
-                    GameList(gameList = gameButtons)
+                    if (alarm != null) {
+                        GameList(gameList = gameButtons, alarm)
+                    }
 
 
                     Text(
@@ -132,7 +131,9 @@ fun AlarmEditScreen(navController: NavHostController, sharedViewModel: SharedVie
                         modifier = Modifier.fillMaxWidth()
                     ){
                         for(button in weekdayButtons){
-                            Weekday(weekdayButton = button)
+                            if (alarm != null) {
+                                Weekday(weekdayButton = button, alarm)
+                            }
                         }
                     }
 
@@ -203,20 +204,31 @@ fun AlarmEditScreen(navController: NavHostController, sharedViewModel: SharedVie
                             )
                             .align(Alignment.Start)
                     )
-                    val checkedState = remember { mutableStateOf(true) }
+                    var checkedState by remember { mutableStateOf(true) }
+                    if (alarm != null) {
+                        checkedState = alarm.vibrate
+                    }
                         Checkbox(
-                            checked = checkedState.value,
-                            onCheckedChange = { checkedState.value = it },
+                            checked = checkedState,
+                            onCheckedChange = {
+                                checkedState = !checkedState
+                                if (alarm != null) {
+                                    alarm.vibrate = checkedState
+                                }
+                                              },
                             modifier = Modifier
                                 .padding(start = 30.dp)
                                 .align(Alignment.Start)
                         )
 
+                    if (alarm != null) {
+                        alarm.time = time.value
+                    }
                     Button(
                         onClick = {
                             try {
                                 if (alarm != null) {
-                                    repo.updateAlarm(alarm, Alarm(time.value, alarmName, true))
+                                    repo.updateAlarm(alarm, Alarm(alarm.time, alarm.games, alarm.weekdays, alarm.name, !alarm.active))
                                 }
                             } catch (e: Exception) {
                                 e.printStackTrace()
@@ -237,76 +249,4 @@ fun AlarmEditScreen(navController: NavHostController, sharedViewModel: SharedVie
             }
         }
     )
-}
-
-//TODO change when alarm object will have arrays for repeats and games
-/*@Composable
-fun GameList(gameList : List<GameButton>) {
-    // in the below line, we are creating a
-    // lazy row for displaying a horizontal list view.
-    LazyRow (horizontalArrangement = Arrangement.Start) {
-        // in the below line, we are setting data for each item of our listview.
-        itemsIndexed(gameList) { _, item ->
-            GameItem(gameBtn = item)
-        }
-    }
-}
-
-@Composable
-fun GameItem(gameBtn: GameButton) {
-    var selected by remember { mutableStateOf(false) }
-    val color = if (selected) colorResource(R.color.main_accent) else Color(152,152,152)
-    Column (modifier = Modifier
-        .padding(
-            start = 25.dp,
-            top = 0.dp,
-            end = 0.dp,
-            bottom = 25.dp
-        )
-        .clip(RoundedCornerShape(10.dp))
-        .background(color)
-    ) {
-        Button(
-            onClick = { selected = !selected },
-            colors = ButtonDefaults.buttonColors(backgroundColor = color),
-            modifier = Modifier
-                .size(60.dp, 60.dp)
-        ) {
-            Image(
-            painter = painterResource(gameBtn.iconResourceId),
-            contentDescription = null,
-            modifier = Modifier.size(60.dp, 60.dp)
-            )
-        }
-    }
-}
-
-
-@Composable
-fun Weekday(weekdayButton: WeekdayButton) {
-    var selected by remember { mutableStateOf(false) }
-    val color = if (selected) colorResource(R.color.main_accent) else colorResource(R.color.background_light)
-    OutlinedButton(
-        onClick = {
-            selected = !selected
-            // create a bool array in AlarmClass where index == WeekdayButton.index and change val from false to true
-                  },
-        shape = CircleShape,
-        contentPadding = PaddingValues(6.dp),
-        modifier = Modifier.size(40.dp),
-        border = BorderStroke(1.dp, colorResource(R.color.main_accent_dark)),
-        colors =  ButtonDefaults.buttonColors(
-            backgroundColor = color
-        )
-    ){
-        Text(text = weekdayButton.day, color = colorResource(R.color.text_color_white))
-    }
-}*/
-
-
-@Composable
-@Preview
-fun AlarmEditPreview() {
-    val navController = rememberNavController()
-    AlarmCreationScreen(navController)
 }

@@ -17,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -37,6 +36,8 @@ import java.util.*
 
 @Composable
 fun AlarmCreationScreen(navController: NavHostController) {
+    val alarm: Alarm = Alarm()
+
     var alarmName by remember { mutableStateOf("") }
     var ringTone by remember { mutableStateOf("") }
 
@@ -92,8 +93,9 @@ fun AlarmCreationScreen(navController: NavHostController) {
                     verticalArrangement = Arrangement.spacedBy(5.dp)
 
                 ) {
-                    //TimePick()
-                    TextButton(onClick = { timePickerDialog.show() }) {
+                    TextButton(onClick = {
+                        timePickerDialog.show()
+                    }) {
                         Text(
                             text = time.value,
                             fontSize = 90.sp,
@@ -115,7 +117,7 @@ fun AlarmCreationScreen(navController: NavHostController) {
                         color = colorResource(R.color.text_color_white)
                     )
 
-                    GameList(gameList = gameButtons)
+                    GameList(gameList = gameButtons, alarm)
 
 
                     Text(
@@ -138,7 +140,7 @@ fun AlarmCreationScreen(navController: NavHostController) {
                         modifier = Modifier.fillMaxWidth()
                     ){
                         for(button in weekdayButtons){
-                            Weekday(weekdayButton = button)
+                            Weekday(weekdayButton = button, alarm)
                         }
                     }
 
@@ -147,7 +149,9 @@ fun AlarmCreationScreen(navController: NavHostController) {
 
                     OutlinedTextField(
                         value = alarmName,
-                        onValueChange = { if (it.length <= 15) alarmName = it},
+                        onValueChange = { if (it.length <= 15) {
+                            alarmName = it
+                            alarm.name = alarmName}},
                         label = { Text(text = "Alarm name", fontSize = 20.sp,
                                     color = colorResource(R.color.text_color_white))
                                 },
@@ -212,16 +216,20 @@ fun AlarmCreationScreen(navController: NavHostController) {
                     val checkedState = remember { mutableStateOf(true) }
                         Checkbox(
                             checked = checkedState.value,
-                            onCheckedChange = { checkedState.value = it },
+                            onCheckedChange = {
+                                checkedState.value = it
+                                alarm.vibrate = checkedState.value
+                                              },
                             modifier = Modifier
                                 .padding(start = 30.dp)
                                 .align(Alignment.Start)
                         )
 
+                    alarm.time = time.value
                     Button(
                         onClick = {
                             try {
-                                repo.addAlarm(Alarm(time.value,alarmName, true))
+                                repo.addAlarm(alarm)
                             } catch (e: Exception) {
                                 e.printStackTrace()
                             }
@@ -244,21 +252,23 @@ fun AlarmCreationScreen(navController: NavHostController) {
 }
 
 @Composable
-fun GameList(gameList : List<GameButton>) {
+fun GameList(gameList : List<GameButton>, alarm: Alarm) {
     // in the below line, we are creating a
     // lazy row for displaying a horizontal list view.
     LazyRow (horizontalArrangement = Arrangement.Start) {
         // in the below line, we are setting data for each item of our listview.
         itemsIndexed(gameList) { _, item ->
-            GameItem(gameBtn = item)
+            GameItem(gameBtn = item, alarm)
         }
     }
 }
 
 @Composable
-fun GameItem(gameBtn: GameButton) {
+fun GameItem(gameBtn: GameButton, alarm: Alarm) {
     var selected by remember { mutableStateOf(false) }
+    selected = alarm.games[gameBtn.index]
     val color = if (selected) colorResource(R.color.main_accent) else Color(152,152,152)
+
     Column (modifier = Modifier
         .padding(
             start = 25.dp,
@@ -270,7 +280,10 @@ fun GameItem(gameBtn: GameButton) {
         .background(color)
     ) {
         Button(
-            onClick = { selected = !selected },
+            onClick = {
+                selected = !selected
+                alarm.games[gameBtn.index] = selected
+                      },
             colors = ButtonDefaults.buttonColors(backgroundColor = color),
             modifier = Modifier
                 .size(60.dp, 60.dp)
@@ -286,13 +299,15 @@ fun GameItem(gameBtn: GameButton) {
 
 
 @Composable
-fun Weekday(weekdayButton: WeekdayButton) {
+fun Weekday(weekdayButton: WeekdayButton, alarm: Alarm) {
     var selected by remember { mutableStateOf(false) }
+    selected = alarm.weekdays[weekdayButton.index]
     val color = if (selected) colorResource(R.color.main_accent) else colorResource(R.color.background_light)
+
     OutlinedButton(
         onClick = {
             selected = !selected
-            // create a bool array in AlarmClass where index == WeekdayButton.index and change val from false to true
+            alarm.weekdays[weekdayButton.index] = selected
                   },
         shape = CircleShape,
         contentPadding = PaddingValues(6.dp),

@@ -1,6 +1,5 @@
 package com.example.wake_app.screens
 
-import androidx.annotation.StringRes
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -25,17 +24,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.wake_app.BottomBarScreen
 import com.example.wake_app.R
 import com.example.wake_app.model.Alarm
@@ -45,8 +40,6 @@ import com.example.wake_app.model.AlarmRepository
 import com.example.wake_app.model.ExternalAlarmRepository
 import com.example.wake_app.model.SharedViewModel
 import com.example.wake_app.ui.theme.inter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 
 @Composable
@@ -81,7 +74,7 @@ fun HomeScreen(navController: NavHostController, sharedViewModel: SharedViewMode
             ) {
                 LazyColumn {
                     items(alarmList) {
-                        AlarmItem(Alarm = it, navController, repo, sharedViewModel)
+                        AlarmItem(alarm = it, navController, repo, sharedViewModel)
                     }
                 }
             }
@@ -91,11 +84,9 @@ fun HomeScreen(navController: NavHostController, sharedViewModel: SharedViewMode
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun AlarmItem(Alarm: Alarm, NavController: NavHostController, repo: AlarmRepository, sharedViewModel: SharedViewModel) {
-    // TODO turn this into an expendablecard and add edit and delete options
-
+fun AlarmItem(alarm: Alarm, NavController: NavHostController, repo: AlarmRepository, sharedViewModel: SharedViewModel) {
     var expanded by remember { mutableStateOf(false) }
-    val checkedState = remember { mutableStateOf(Alarm.active) }
+    val checkedState = remember { mutableStateOf(alarm.active) }
     val textColor = if (checkedState.value) colorResource(R.color.text_color_white) else Color.DarkGray
     val iconColorFilter = if (checkedState.value)
         ColorFilter.tint(colorResource(R.color.main_accent))
@@ -121,12 +112,12 @@ fun AlarmItem(Alarm: Alarm, NavController: NavHostController, repo: AlarmReposit
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                AlarmInformation(Alarm.time, Alarm.description, CheckedState = checkedState)
+                AlarmInformation(alarm)
                 Switch(
                     checked = checkedState.value,
                     onCheckedChange = {
                         checkedState.value = it
-                        repo.updateAlarm(Alarm, Alarm(Alarm.time, Alarm.description, !Alarm.active))
+                        repo.updateAlarm(alarm, Alarm(alarm.time, alarm.games, alarm.weekdays, alarm.name, !alarm.active))
                     },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = colorResource(id = R.color.main_accent),
@@ -148,15 +139,17 @@ fun AlarmItem(Alarm: Alarm, NavController: NavHostController, repo: AlarmReposit
                         )
                         // TODO add if to check for selected games from the alarm object
                         for (game in gameButtons) {
-                            Image(
-                                painter = painterResource(game.iconResourceId),
-                                contentDescription = null,
-                                contentScale = ContentScale.Fit,
-                                modifier = Modifier
-                                    .size(23.dp)
-                                    .padding(2.dp),
-                                colorFilter = iconColorFilter,
-                            )
+                            if (alarm.games[game.index]) {
+                                Image(
+                                    painter = painterResource(game.iconResourceId),
+                                    contentDescription = null,
+                                    contentScale = ContentScale.Fit,
+                                    modifier = Modifier
+                                        .size(23.dp)
+                                        .padding(2.dp),
+                                    colorFilter = iconColorFilter,
+                                )
+                            }
                         }
                     }
                     Row (
@@ -167,7 +160,7 @@ fun AlarmItem(Alarm: Alarm, NavController: NavHostController, repo: AlarmReposit
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         IconButton(onClick = {
-                                repo.deleteAlarm(Alarm)
+                                repo.deleteAlarm(alarm)
                                 NavController.navigate(BottomBarScreen.Home.route)
                         }) {
                             Icon(
@@ -178,9 +171,8 @@ fun AlarmItem(Alarm: Alarm, NavController: NavHostController, repo: AlarmReposit
                         }
 
                         IconButton(
-                            // TODO edit button opens up the actual alarm
                             onClick = {
-                                sharedViewModel.addAlarmView(Alarm)
+                                sharedViewModel.addAlarmView(alarm)
                                 NavController.navigate(BottomBarScreen.AlarmEdit.route) {
                                     popUpTo(NavController.graph.findStartDestination().id)
                                     launchSingleTop = true
@@ -201,8 +193,8 @@ fun AlarmItem(Alarm: Alarm, NavController: NavHostController, repo: AlarmReposit
 }
 
 @Composable
-fun AlarmInformation(AlarmTime: String, AlarmDescription: String, modifier: Modifier = Modifier, CheckedState: MutableState<Boolean>) {
-    val textColor = if (CheckedState.value) colorResource(R.color.text_color_white) else Color.DarkGray
+fun AlarmInformation(alarm: Alarm, modifier: Modifier = Modifier) {
+    val textColor = if (alarm.active) colorResource(R.color.text_color_white) else Color.DarkGray
 
     Column {
         Row (
@@ -212,7 +204,7 @@ fun AlarmInformation(AlarmTime: String, AlarmDescription: String, modifier: Modi
                 .defaultMinSize(minHeight = 2.dp)
                 ){
             Text(
-                text = AlarmTime,
+                text = alarm.time,
                 fontSize = 35.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = inter,
@@ -223,7 +215,7 @@ fun AlarmInformation(AlarmTime: String, AlarmDescription: String, modifier: Modi
                 )
             )
             Text(
-                text = AlarmDescription,
+                text = alarm.name,
                 modifier = modifier.padding(start = 9.dp),
                 fontSize = 20.sp,
                 fontFamily = inter,
@@ -239,9 +231,12 @@ fun AlarmInformation(AlarmTime: String, AlarmDescription: String, modifier: Modi
                 Text(
                     text = day.day,
                     fontSize = 12.sp,
-                    // TODO add repeat on this day is true condition to color
-                    color = if(!CheckedState.value) Color.DarkGray else colorResource(R.color.main_accent),
-                    modifier = Modifier.padding(start = 12.dp)
+                    color =
+                        if (alarm.active and alarm.weekdays[day.index])
+                            colorResource(R.color.main_accent)
+                        else
+                            Color.DarkGray,
+                                    modifier = Modifier.padding(start = 12.dp)
                 )
             }
         }
