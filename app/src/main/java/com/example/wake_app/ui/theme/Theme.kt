@@ -33,7 +33,8 @@ fun WAKE_appTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composab
     val colors = if (darkTheme) {
         DarkColorPalette
     } else {
-        LightColorPalette
+        DarkColorPalette
+        //LightColorPalette
     }
 
     MaterialTheme(

@@ -55,7 +55,7 @@ fun DropdownRow(Text: String, @StringRes DropdownItems: List<Int>, modifier: Mod
             modifier = modifier
                 .fillMaxWidth()
                 .padding(8.dp)
-                .background(colorResource(R.color.background_dark))
+                //.background(colorResource(R.color.background_dark))
                 .height(45.dp)
     ) {
 
@@ -71,7 +71,7 @@ fun DropdownRow(Text: String, @StringRes DropdownItems: List<Int>, modifier: Mod
         Text(
             text = Text,
             modifier = modifier.padding(start = 8.dp),
-            fontSize = 30.sp,
+            fontSize = 25.sp,
             color = colorResource(R.color.text_color_white),
         )
         Spacer(
@@ -109,13 +109,13 @@ fun SwitcherRow(Text: String, modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .background(colorResource(R.color.background_dark))
+            //.background(colorResource(R.color.background_dark))
             .height(45.dp)
     ) {
         Text(
             text = Text,
             modifier = modifier.padding(start = 8.dp),
-            fontSize = 30.sp,
+            fontSize = 25.sp,
             color = colorResource(R.color.text_color_white),
         )
         Spacer(
@@ -138,13 +138,13 @@ fun AboutRow(Text: String, modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .background(colorResource(R.color.background_dark))
+            //.background(colorResource(R.color.background_dark))
             .height(45.dp)
     ) {
         Text(
             text = Text,
             modifier = modifier.padding(start = 8.dp),
-            fontSize = 30.sp,
+            fontSize = 25.sp,
             color = colorResource(R.color.text_color_white),
         )
         Spacer(
