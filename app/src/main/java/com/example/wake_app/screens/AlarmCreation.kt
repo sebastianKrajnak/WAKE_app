@@ -30,18 +30,18 @@ import androidx.navigation.compose.rememberNavController
 import com.example.wake_app.R
 import com.example.wake_app.data.DataSource.gameButtons
 import com.example.wake_app.data.DataSource.weekdayButtons
-import com.example.wake_app.model.GameButton
-import com.example.wake_app.model.WeekdayButton
+import com.example.wake_app.model.*
 import java.text.SimpleDateFormat
 
 import java.util.*
 
 @Composable
 fun AlarmCreationScreen(navController: NavHostController) {
-    var textLabel by remember { mutableStateOf("") }
+    var alarmName by remember { mutableStateOf("") }
     var ringTone by remember { mutableStateOf("") }
 
     val mContext = LocalContext.current
+    val repo: AlarmRepository by lazy { ExternalAlarmRepository(mContext) }
 
     // Declaring and initializing a calendar
     val calendar = Calendar.getInstance()
@@ -146,9 +146,9 @@ fun AlarmCreationScreen(navController: NavHostController) {
 
 
                     OutlinedTextField(
-                        value = textLabel,
-                        onValueChange = { if (it.length <= 15) textLabel = it},
-                        label = { Text(text = "Label", fontSize = 20.sp,
+                        value = alarmName,
+                        onValueChange = { if (it.length <= 15) alarmName = it},
+                        label = { Text(text = "Alarm name", fontSize = 20.sp,
                                     color = colorResource(R.color.text_color_white))
                                 },
                         modifier = Modifier
@@ -172,7 +172,7 @@ fun AlarmCreationScreen(navController: NavHostController) {
                     OutlinedTextField(
                         value = ringTone,
                         onValueChange = {ringTone = it},
-                        label = { Text(text = "Alarm ringtone", fontSize = 20.sp,
+                        label = { Text(text = "Choose ringtone", fontSize = 20.sp,
                             color = colorResource(R.color.text_color_white))
                         },
                         modifier = Modifier
@@ -217,7 +217,14 @@ fun AlarmCreationScreen(navController: NavHostController) {
                         )
 
                     Button(
-                        onClick = {},
+                        onClick = {
+                            try {
+                                repo.addAlarm(Alarm(time.value,alarmName, true))
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
+                            navController.navigateUp()
+                        },
                         shape = CircleShape,
                         colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(R.color.input_field))
                     )
