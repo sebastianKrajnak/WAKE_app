@@ -34,6 +34,7 @@ fun WAKE_appTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composab
         DarkColorPalette
     } else {
         DarkColorPalette
+
     }
 
     MaterialTheme(

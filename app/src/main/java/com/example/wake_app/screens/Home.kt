@@ -15,11 +15,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
@@ -93,6 +91,7 @@ fun HomeScreen(navController: NavHostController) {
 @Composable
 fun AlarmItem(Alarm: Alarm, NavController: NavHostController, repo: AlarmRepository) {
     // TODO turn this into an expendablecard and add edit and delete options
+
     var expanded by remember { mutableStateOf(false) }
     val checkedState = remember { mutableStateOf(true) }
     val textColor = if (checkedState.value) colorResource(R.color.text_color_white) else Color.DarkGray
