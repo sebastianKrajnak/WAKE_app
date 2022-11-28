@@ -6,7 +6,4 @@ TODO:
 - write README.md (later, unnecassary now)
 - add more games
 - add display of weekdays for alarm (and maybe also the game type)
-- add edit alarm screen
-- integrate with database
 - make an alarm notification
-- improve the GUI
