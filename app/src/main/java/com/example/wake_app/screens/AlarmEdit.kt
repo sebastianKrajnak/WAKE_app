@@ -1,26 +1,17 @@
 package com.example.wake_app.screens
 
 import android.app.TimePickerDialog
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,7 +27,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @Composable
-fun AlarmCreationScreen(navController: NavHostController) {
+fun AlarmEditScreen(navController: NavHostController, sharedViewModel: SharedViewModel) {
+    val alarm = sharedViewModel.alarm
     var alarmName by remember { mutableStateOf("") }
     var ringTone by remember { mutableStateOf("") }
 
@@ -50,7 +42,10 @@ fun AlarmCreationScreen(navController: NavHostController) {
 
     // Value for storing time as a string
     val time = remember { mutableStateOf("") }
-    time.value = SimpleDateFormat("HH:mm").format(Date())
+    if (alarm != null) {
+        time.value = alarm.time
+        alarmName = alarm.description
+    }
 
     // Creating a TimePicker dialog
     val timePickerDialog = TimePickerDialog(
@@ -62,7 +57,7 @@ fun AlarmCreationScreen(navController: NavHostController) {
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Create alarm") },
+            TopAppBar(title = { Text("Edit alarm") },
                 navigationIcon = if (navController.previousBackStackEntry != null) {
                 {
                     IconButton(onClick = { navController.navigateUp() }) {
@@ -92,7 +87,6 @@ fun AlarmCreationScreen(navController: NavHostController) {
                     verticalArrangement = Arrangement.spacedBy(5.dp)
 
                 ) {
-                    //TimePick()
                     TextButton(onClick = { timePickerDialog.show() }) {
                         Text(
                             text = time.value,
@@ -221,7 +215,9 @@ fun AlarmCreationScreen(navController: NavHostController) {
                     Button(
                         onClick = {
                             try {
-                                repo.addAlarm(Alarm(time.value,alarmName, true))
+                                if (alarm != null) {
+                                    repo.updateAlarm(alarm, Alarm(time.value, alarmName, true))
+                                }
                             } catch (e: Exception) {
                                 e.printStackTrace()
                             }
@@ -231,7 +227,7 @@ fun AlarmCreationScreen(navController: NavHostController) {
                         colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(R.color.input_field))
                     )
                     {
-                        Text(text = "Set alarm",
+                        Text(text = "Save alarm",
                             fontSize = 15.sp,
                             color = colorResource(R.color.text_color_white)
                         )
@@ -243,7 +239,8 @@ fun AlarmCreationScreen(navController: NavHostController) {
     )
 }
 
-@Composable
+//TODO change when alarm object will have arrays for repeats and games
+/*@Composable
 fun GameList(gameList : List<GameButton>) {
     // in the below line, we are creating a
     // lazy row for displaying a horizontal list view.
@@ -304,12 +301,12 @@ fun Weekday(weekdayButton: WeekdayButton) {
     ){
         Text(text = weekdayButton.day, color = colorResource(R.color.text_color_white))
     }
-}
+}*/
 
 
 @Composable
 @Preview
-fun AlarmCreationPreview() {
+fun AlarmEditPreview() {
     val navController = rememberNavController()
     AlarmCreationScreen(navController)
 }

@@ -2,8 +2,8 @@ package com.example.wake_app.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
-val Teal400 = Color(0xFF26A69A)
+val MainAccent = Color(0xFF2DC09D)
+val Background = Color(0xFF323232)
+val BackgroundLight = Color(0xFF1D1D1D)
+val TextWhite = Color.White
+val MainAccentDark = Color(0xFF0E392F)

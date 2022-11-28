@@ -5,17 +5,18 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 
 private val DarkColorPalette = darkColors(
-    primary = Teal200,
-    primaryVariant = Teal200,
-    secondary = Teal200
+    primary = MainAccent,
+    primaryVariant = Color.Red,
+    secondary = MainAccent
 )
 
 private val LightColorPalette = lightColors(
-    primary = Teal400,
-    primaryVariant = Teal400,
-    secondary = Teal200
+    primary = MainAccent,
+    primaryVariant = Color.Red,
+    secondary = Color.Red
 
     /* Other default colors to override
     background = Color.White,
@@ -32,7 +33,8 @@ fun WAKE_appTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composab
     val colors = if (darkTheme) {
         DarkColorPalette
     } else {
-        LightColorPalette
+        DarkColorPalette
+
     }
 
     MaterialTheme(

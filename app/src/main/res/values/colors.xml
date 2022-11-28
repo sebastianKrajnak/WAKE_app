@@ -8,7 +8,8 @@
     <color name="black">#FF000000</color>
     <color name="black_overlay">#FF000000</color>
     <color name="background_light">#FF1D1D1D</color>
-    <color name="background_theme">#FF2DC09D</color>
+    <color name="main_accent">#FF2DC09D</color>
+    <color name="main_accent_dark">#FF0E392F</color>
 
     <color name="input_field">#FF41484C</color>
     <color name="background_dark">#FF000000</color>

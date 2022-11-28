@@ -1,9 +1,14 @@
 package com.example.wake_app
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.modifier.modifierLocalOf
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -18,10 +23,13 @@ fun MainScreen() {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = { BottomBar(navController = navController) }
-    ) {
-        BottomNavGraph(navController = navController)
+    ) { innerPadding ->
+            Box(modifier = Modifier.padding(innerPadding)) {
+                BottomNavGraph(navController = navController)
+            }
     }
 }
+
 @Preview
 @Composable
 fun BottomBar(navController: NavHostController) {
@@ -33,7 +41,10 @@ fun BottomBar(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    BottomNavigation {
+    BottomNavigation (
+        backgroundColor = colorResource(R.color.main_accent),
+        contentColor = colorResource(R.color.main_accent_dark)
+            ){
         screens.forEach {
             screen -> AddItem(
                 screen = screen,
