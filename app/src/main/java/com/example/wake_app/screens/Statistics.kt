@@ -30,7 +30,6 @@ fun StatisticsScreen() {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun PageContent(modifier: Modifier = Modifier) {
-    val col = colorResource(R.color.background_dark)
     Column(
         Modifier
             .fillMaxSize()
