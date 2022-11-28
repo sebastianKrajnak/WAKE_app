@@ -1,6 +1,6 @@
 package com.example.wake_app.screens
 
-import androidx.annotation.StringRes
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -11,8 +11,8 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -21,17 +21,30 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.wake_app.BottomBarScreen
-import com.example.wake_app.BottomNavGraph
 import com.example.wake_app.R
 import com.example.wake_app.model.Alarm
-import com.example.wake_app.data.DataSource.alarms
+import com.example.wake_app.model.AlarmRepository
+import com.example.wake_app.model.ExternalAlarmRepository
+import java.io.ByteArrayInputStream
+import java.io.File
+import java.io.FileInputStream
+import java.io.ObjectInputStream
+import java.util.stream.Collectors.toList
 
 val createAlarm = { /* Do something */ }
 
+
+//var alarmList =  emptyList<Alarm>()
+
+
 @Composable
 fun HomeScreen(navController: NavHostController) {
-    Scaffold(
 
+    val context = LocalContext.current
+    val repo: AlarmRepository by lazy { ExternalAlarmRepository(context) }
+    val alarmList = repo.getAlarmList()
+
+    Scaffold(
         topBar = {
             TopAppBar(title = { Text("Alarms") })
         },
@@ -55,7 +68,7 @@ fun HomeScreen(navController: NavHostController) {
                     .background(colorResource(R.color.background_light)),
             ) {
                 LazyColumn {
-                    items(alarms) {
+                    items(alarmList) {
                         AlarmItem(Alarm = it)
                     }
                 }
@@ -85,17 +98,17 @@ fun AlarmItem(Alarm: Alarm) {
 }
 
 @Composable
-fun AlarmInformation(@StringRes AlarmTime: Int, AlarmDescription: Int, modifier: Modifier = Modifier) {
+fun AlarmInformation(AlarmTime: String, AlarmDescription: String, modifier: Modifier = Modifier) {
     val checkedState = remember { mutableStateOf(true) }
     Row {
         Text(
-            text = stringResource(AlarmTime),
+            text = AlarmTime,
             fontSize = 35.sp,
             fontWeight = FontWeight.Bold,
             color = colorResource(R.color.text_color_white)
         )
         Text(
-            text = stringResource(AlarmDescription),
+            text = AlarmDescription,
             modifier = modifier.padding(start = 8.dp),
             fontSize = 20.sp,
             color = colorResource(R.color.text_color_white)
