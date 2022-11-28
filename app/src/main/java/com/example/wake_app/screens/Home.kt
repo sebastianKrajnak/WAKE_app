@@ -13,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -27,14 +28,19 @@ import androidx.navigation.compose.rememberNavController
 import com.example.wake_app.BottomBarScreen
 import com.example.wake_app.R
 import com.example.wake_app.model.Alarm
-import com.example.wake_app.data.DataSource.alarms
 import com.example.wake_app.data.DataSource.weekdayButtons
+import com.example.wake_app.model.AlarmRepository
+import com.example.wake_app.model.ExternalAlarmRepository
 import com.example.wake_app.ui.theme.inter
 
-val createAlarm = { /* Do something */ }
 
 @Composable
 fun HomeScreen(navController: NavHostController) {
+
+    val context = LocalContext.current
+    val repo: AlarmRepository by lazy { ExternalAlarmRepository(context) }
+    val alarmList = repo.getAlarmList()
+
     Scaffold(
 
         topBar = {
@@ -60,7 +66,7 @@ fun HomeScreen(navController: NavHostController) {
                     .background(colorResource(R.color.background_light)),
             ) {
                 LazyColumn {
-                    items(alarms) {
+                    items(alarmList) {
                         AlarmItem(Alarm = it)
                     }
                 }
@@ -91,7 +97,7 @@ fun AlarmItem(Alarm: Alarm) {
 }
 
 @Composable
-fun AlarmInformation(@StringRes AlarmTime: Int, AlarmDescription: Int, modifier: Modifier = Modifier) {
+fun AlarmInformation(AlarmTime: String, AlarmDescription: String, modifier: Modifier = Modifier) {
     val checkedState = remember { mutableStateOf(true) }
     val textColor = if (checkedState.value) colorResource(R.color.text_color_white) else Color.DarkGray
 
@@ -103,7 +109,7 @@ fun AlarmInformation(@StringRes AlarmTime: Int, AlarmDescription: Int, modifier:
                 .defaultMinSize(minHeight = 2.dp)
                 ){
             Text(
-                text = stringResource(AlarmTime),
+                text = AlarmTime,
                 fontSize = 35.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = inter,
@@ -114,7 +120,7 @@ fun AlarmInformation(@StringRes AlarmTime: Int, AlarmDescription: Int, modifier:
                 )
             )
             Text(
-                text = stringResource(AlarmDescription),
+                text = AlarmDescription,
                 modifier = modifier.padding(start = 9.dp),
                 fontSize = 20.sp,
                 fontFamily = inter,
