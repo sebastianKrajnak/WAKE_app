@@ -26,11 +26,13 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.wake_app.BottomBarScreen
 import com.example.wake_app.R
 import com.example.wake_app.model.Alarm
@@ -46,7 +48,7 @@ import com.example.wake_app.ui.theme.inter
 fun HomeScreen(navController: NavHostController, sharedViewModel: SharedViewModel) {
     val context = LocalContext.current
     val repo: AlarmRepository by lazy { ExternalAlarmRepository(context) }
-    var alarmList = repo.getAlarmList()
+    val alarmList = repo.getAlarmList()
 
     Scaffold(
 
@@ -243,10 +245,11 @@ fun AlarmInformation(alarm: Alarm, modifier: Modifier = Modifier) {
     }
 }
 
-/*
+
 @Composable
 @Preview
 fun HomeScreenPreview() {
     val navController = rememberNavController()
-    HomeScreen(navController)
-}*/
+    val sharedViewModel = SharedViewModel()
+    HomeScreen(navController, sharedViewModel)
+}

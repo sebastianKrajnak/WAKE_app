@@ -127,6 +127,12 @@ fun SwitcherRow(Text: String, modifier: Modifier = Modifier) {
             checked = checkedState.value,
             onCheckedChange = { checkedState.value = it },
             modifier = modifier.size(55.dp),
+            colors = SwitchDefaults.colors(
+                checkedThumbColor = colorResource(id = R.color.main_accent),
+                uncheckedThumbColor = Color.LightGray,
+                checkedTrackColor = colorResource(id = R.color.main_accent_dark),
+                uncheckedTrackColor = Color.DarkGray,
+            )
         )
     }
 }

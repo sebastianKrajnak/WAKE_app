@@ -9,6 +9,8 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -18,8 +20,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -60,6 +65,9 @@ fun AlarmCreationScreen(navController: NavHostController) {
             time.value = String.format("%02d:%02d", hour, minute)
         }, hour, minute, true
     )
+
+    val focusManager = LocalFocusManager.current
+
 
     Scaffold(
         topBar = {
@@ -170,6 +178,8 @@ fun AlarmCreationScreen(navController: NavHostController) {
                         ),
                         shape = CircleShape,
                         maxLines = 1,
+                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done, keyboardType = KeyboardType.Password),
                         singleLine = true
                     )
 
@@ -194,7 +204,11 @@ fun AlarmCreationScreen(navController: NavHostController) {
                             focusedBorderColor = colorResource(R.color.main_accent),
                             unfocusedBorderColor = colorResource(R.color.main_accent_dark)
                         ),
-                        shape = CircleShape
+                        shape = CircleShape,
+                        maxLines = 1,
+                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done, keyboardType = KeyboardType.Password),
+                        singleLine = true
                     )
 
                     Spacer(modifier = Modifier.height(9.dp))
@@ -218,13 +232,13 @@ fun AlarmCreationScreen(navController: NavHostController) {
                             checked = checkedState.value,
                             onCheckedChange = {
                                 checkedState.value = it
-                                alarm.vibrate = checkedState.value
                                               },
                             modifier = Modifier
                                 .padding(start = 30.dp)
                                 .align(Alignment.Start)
                         )
 
+                    alarm.vibrate = checkedState.value
                     alarm.time = time.value
                     Button(
                         onClick = {
@@ -236,7 +250,7 @@ fun AlarmCreationScreen(navController: NavHostController) {
                             navController.navigateUp()
                         },
                         shape = CircleShape,
-                        colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(R.color.input_field))
+                        colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(R.color.main_accent_dark))
                     )
                     {
                         Text(text = "Set alarm",
