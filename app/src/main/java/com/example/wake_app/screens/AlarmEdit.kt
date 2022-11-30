@@ -4,6 +4,8 @@ import android.app.TimePickerDialog
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -11,7 +13,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -52,6 +57,8 @@ fun AlarmEditScreen(navController: NavHostController, sharedViewModel: SharedVie
             time.value = String.format("%02d:%02d", hour, minute)
         }, hour, minute, true
     )
+
+    val focusManager = LocalFocusManager.current
 
     Scaffold(
         topBar = {
@@ -168,6 +175,8 @@ fun AlarmEditScreen(navController: NavHostController, sharedViewModel: SharedVie
                         ),
                         shape = CircleShape,
                         maxLines = 1,
+                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done, keyboardType = KeyboardType.Password),
                         singleLine = true
                     )
 
@@ -192,7 +201,11 @@ fun AlarmEditScreen(navController: NavHostController, sharedViewModel: SharedVie
                             focusedBorderColor = colorResource(R.color.main_accent),
                             unfocusedBorderColor = colorResource(R.color.main_accent_dark)
                         ),
-                        shape = CircleShape
+                        shape = CircleShape,
+                        maxLines = 1,
+                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done, keyboardType = KeyboardType.Password),
+                        singleLine = true
                     )
 
                     Spacer(modifier = Modifier.height(9.dp))
@@ -211,28 +224,26 @@ fun AlarmEditScreen(navController: NavHostController, sharedViewModel: SharedVie
                             )
                             .align(Alignment.Start)
                     )
-
-                    var checkedState by remember { mutableStateOf(true) }
                     if (alarm != null) {
                         newAlarm.vibrate = alarm.vibrate
-                        checkedState = newAlarm.vibrate
                     }
+                    var checkedState = remember { mutableStateOf(newAlarm.vibrate) }
                         Checkbox(
-                            checked = checkedState,
+                            checked = checkedState.value,
                             onCheckedChange = {
-                                checkedState = !checkedState
-                                newAlarm.vibrate = checkedState
+                                checkedState.value = !checkedState.value
                                               },
                             modifier = Modifier
                                 .padding(start = 30.dp)
                                 .align(Alignment.Start)
                         )
+                    newAlarm.vibrate = checkedState.value
 
                     Button(
                         onClick = {
                             try {
                                 if (alarm != null) {
-                                    repo.updateAlarm(alarm, Alarm(time.value, newAlarm.games, newAlarm.weekdays, alarmName, checkedState, true))
+                                    repo.updateAlarm(alarm, Alarm(time.value, newAlarm.games, newAlarm.weekdays, alarmName, newAlarm.vibrate, true))
                                 }
                             } catch (e: Exception) {
                                 e.printStackTrace()
@@ -240,7 +251,7 @@ fun AlarmEditScreen(navController: NavHostController, sharedViewModel: SharedVie
                             navController.navigateUp()
                         },
                         shape = CircleShape,
-                        colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(R.color.input_field))
+                        colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(R.color.main_accent_dark))
                     )
                     {
                         Text(text = "Save alarm",

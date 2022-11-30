@@ -4,8 +4,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.ui.graphics.vector.ImageVector
+
 
 sealed class BottomBarScreen(
     val route: String,
@@ -21,7 +21,7 @@ sealed class BottomBarScreen(
     object Statistics: BottomBarScreen (
         route = "statistics",
         tittle = "Statistics",
-        icon = Icons.Default.Star
+        icon = Icons.Default.Info
     )
 
     object Settings: BottomBarScreen (
