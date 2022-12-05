@@ -36,7 +36,7 @@ fun EquationMiniGameScreen(expr: Expression) {
         horizontalAlignment = Alignment.CenterHorizontally,
 
         ) {
-        Text(text = "Solve the expression",
+        Text(text = expr.title,
             fontSize = 30.sp,
             modifier = Modifier.padding(16.dp),
             color = colorResource(R.color.text_color_white),

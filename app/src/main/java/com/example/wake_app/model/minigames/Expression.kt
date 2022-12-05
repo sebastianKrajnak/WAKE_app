@@ -9,6 +9,7 @@ class Expression(val minVal : Int, val maxMal : Int) {
 
     private var _expr: String = "";
 
+    val title = "Solve the expression"
     val expr: String?
         get() = _expr
 
