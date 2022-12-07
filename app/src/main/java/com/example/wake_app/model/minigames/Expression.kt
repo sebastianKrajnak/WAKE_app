@@ -35,22 +35,9 @@ class Expression(val minVal : Int, val maxMal : Int) {
         return this._expr
     }
 
-    private fun convertToInfix(): String {
-        var s = ArrayDeque<String>()
-        var expr = _expr!!.split(" ").toTypedArray();
-
-        for (c in expr) {
-            if (!operators.contains(c)) s.addFirst(c);
-            else {
-                var op1 = s.removeFirst();
-                var op2 = s.removeFirst();
-
-                s.addFirst(op2 + " " + c + " " + op1);
-            }
-        }
-        return s.removeFirst();
-    }
-
+    /**
+     * Evaluates postfix expression and returns its value
+     */
     fun evaluate(postfix: String): Int {
         var s = ArrayDeque<Int>()
         var expr = postfix.split(" ").toTypedArray();
@@ -75,6 +62,17 @@ class Expression(val minVal : Int, val maxMal : Int) {
         return s.removeFirst();
     }
 
+    /**
+     * Generates expression containing _MAX_TERMS of terms
+     * from grammar :
+     * E -> E
+     * E -> E + E
+     * E -> E * E
+     * E -> E - E
+     *
+     *By applying right most derivation,
+     * then generates int values in interval <minVal,maxVal> for each terminal E
+     */
     private fun generateInfix() : String {
         val TERMINAL = "E";
 
@@ -106,16 +104,26 @@ class Expression(val minVal : Int, val maxMal : Int) {
         return strExpr;
     }
 
+    /**
+     * Returns precedence of operator c given it is in stack
+     */
     private fun inPrecedence(c: String): Int {
         if (c == "+" || c == "-") return 2;
         return 4; //* precedence
     }
 
+    /**
+     * Returns precednce of operator c given it is outside stack
+     */
     private fun outPrecedence(c: String): Int {
         if (c == "+" || c == "-") return 1;
         return 3; //* precedence
     }
 
+    /**
+     * Converts expression from infix notation to postfix notation
+     * eg. 1 + 2 * 3 -> 123*+
+     */
     fun toPostfix() : String {
         var postfixExpr = "";
         var s = ArrayDeque<String>()
