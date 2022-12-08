@@ -19,22 +19,26 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.example.wake_app.BottomBarScreen
 import com.example.wake_app.R
 import com.example.wake_app.data.DataSource.alarmSounds
 import com.example.wake_app.data.DataSource.languages
 
 @Composable
-fun SettingsScreen() {
+fun SettingsScreen(navController: NavHostController) {
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Settings") }, backgroundColor = colorResource(R.color.background_light))
         },
-        content =  { PageContent() }
+        content =  { PageContent(navController = navController) }
     )
 }
 
 @Composable
-private fun PageContent(modifier: Modifier = Modifier) {
+private fun PageContent(modifier: Modifier = Modifier, navController: NavHostController) {
 
     Column(
         modifier = modifier
@@ -46,6 +50,9 @@ private fun PageContent(modifier: Modifier = Modifier) {
         SwitcherRow(Text = "Push notifications")
         SwitcherRow(Text = "Dark mode")
         AboutRow(Text = "About")
+        Button(onClick = { navController.navigate(BottomBarScreen.SequenceGame.route) }, modifier = Modifier.padding(start = 10.dp)) {
+            Text(text="Try sequence")
+        }
     }
 }
 
@@ -170,5 +177,6 @@ fun AboutRow(Text: String, modifier: Modifier = Modifier) {
 @Composable
 @Preview
 fun SettingsScreenPreview() {
-    SettingsScreen()
+    val navController = rememberNavController()
+    SettingsScreen(navController)
 }

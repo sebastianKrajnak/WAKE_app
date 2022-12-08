@@ -58,7 +58,7 @@ fun EquationMiniGameScreen(expr: Expression) {
 
         Button(onClick = {
             expr.newExpression()
-            strExpr = expr.toString();
+            strExpr = expr.toString()
         }
         ) {
             Text(text = "Re-generate")
@@ -75,7 +75,7 @@ fun EquationMiniGameScreen(expr: Expression) {
                 .onKeyEvent {
                     if (it.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_ENTER){
                         //result.dropLast(1); //remove whitespace
-                        System.out.println("result " + result);
+                        System.out.println("result $result")
                         checkResult(result, expr.getResult(), navController)
                         focusManager.clearFocus()
                         result=result.trim()
@@ -99,15 +99,15 @@ fun EquationMiniGameScreen(expr: Expression) {
 
 
 fun checkResult(result: String, gameResult: Int, navController: NavHostController){
-    val result = result.trim();
-    if (result == "") return;
+    val result = result.trim()
+    if (result == "") return
 
     if (result.toInt().equals(gameResult)) {
-        System.out.println("Correct")
+        println("Correct")
 //        navController.navigate(BottomBarScreen.Statistics.route)
         // TODO navigate to Home screen
     } else {
-        System.out.println("Incorrect")
+        println("Incorrect")
     }
 }
 

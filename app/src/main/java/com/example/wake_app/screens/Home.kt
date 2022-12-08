@@ -114,7 +114,7 @@ fun AlarmItem(alarm: Alarm, NavController: NavHostController, repo: AlarmReposit
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                AlarmInformation(alarm)
+                AlarmInformation(alarm, checkedState = checkedState.value)
                 Switch(
                     checked = checkedState.value,
                     onCheckedChange = {
@@ -195,8 +195,8 @@ fun AlarmItem(alarm: Alarm, NavController: NavHostController, repo: AlarmReposit
 }
 
 @Composable
-fun AlarmInformation(alarm: Alarm, modifier: Modifier = Modifier) {
-    val textColor = if (alarm.active) colorResource(R.color.text_color_white) else Color.DarkGray
+fun AlarmInformation(alarm: Alarm, modifier: Modifier = Modifier, checkedState: Boolean) {
+    val textColor = if (checkedState) colorResource(R.color.text_color_white) else Color.DarkGray
 
     Column {
         Row (
@@ -234,7 +234,7 @@ fun AlarmInformation(alarm: Alarm, modifier: Modifier = Modifier) {
                     text = day.day,
                     fontSize = 12.sp,
                     color =
-                        if (alarm.active and alarm.weekdays[day.index])
+                        if (checkedState and alarm.weekdays[day.index])
                             colorResource(R.color.main_accent)
                         else
                             Color.DarkGray,

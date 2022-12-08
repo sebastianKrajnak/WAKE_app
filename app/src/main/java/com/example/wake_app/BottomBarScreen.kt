@@ -12,6 +12,7 @@ sealed class BottomBarScreen(
     val tittle: String,
     val icon: ImageVector
 ) {
+    // Bottom bar screens
     object Home: BottomBarScreen (
         route = "home",
         tittle = "Alarms",
@@ -30,6 +31,7 @@ sealed class BottomBarScreen(
         icon = Icons.Default.Settings
     )
 
+    // Pop-up screens
     object AlarmCreation: BottomBarScreen (
         route = "alarmcreation",
         tittle = "Alarm Creation",
@@ -39,6 +41,13 @@ sealed class BottomBarScreen(
     object AlarmEdit: BottomBarScreen (
         route = "alarmedit",
         tittle = "Alarm Edit",
+        icon = Icons.Default.Info
+    )
+
+    // Minigames
+    object SequenceGame: BottomBarScreen (
+        route = "sequenceGame",
+        tittle = "Sequence minigame",
         icon = Icons.Default.Info
     )
 }
