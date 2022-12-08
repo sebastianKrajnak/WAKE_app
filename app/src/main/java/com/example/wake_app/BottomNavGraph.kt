@@ -7,7 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.wake_app.model.SharedViewModel
 import com.example.wake_app.screens.*
-import com.example.wake_app.screens.minigames.SequenceMiniGameScreen
+import com.example.wake_app.screens.minigames.ClickSequenceMiniGameScreen
 
 @Composable
 fun BottomNavGraph(navController: NavHostController) {
@@ -33,7 +33,7 @@ fun BottomNavGraph(navController: NavHostController) {
             AlarmEditScreen(navController, sharedViewModel)
         }
         composable( route = BottomBarScreen.SequenceGame.route) {
-            SequenceMiniGameScreen(navController)
+            ClickSequenceMiniGameScreen(navController)
         }
     }
 }

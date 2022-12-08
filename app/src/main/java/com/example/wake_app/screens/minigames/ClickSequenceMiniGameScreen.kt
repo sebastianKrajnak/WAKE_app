@@ -25,7 +25,7 @@ import com.example.wake_app.R
 import kotlin.random.Random
 
 @Composable
-fun SequenceMiniGameScreen(navController: NavHostController) {
+fun ClickSequenceMiniGameScreen(navController: NavHostController) {
     val context = LocalContext.current
     val listNums = mutableListOf(1,2,3,4,5)
     val checker = mutableListOf(
@@ -97,5 +97,5 @@ fun checkSequence(num: Int, checker: MutableList<MutableState<Boolean>>, context
 @Composable
 fun PreviewSequenceMiniGameScreen() {
     val navController = rememberNavController()
-    SequenceMiniGameScreen(navController)
+    ClickSequenceMiniGameScreen(navController)
 }
