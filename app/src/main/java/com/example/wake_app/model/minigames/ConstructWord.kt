@@ -1,45 +1,66 @@
 package com.example.wake_app.model.minigames
 
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.toMutableStateList
 import com.example.wake_app.data.CommonWords
 import com.example.wake_app.data.ConstructWordMiniGameLetter
 
 class ConstructWord {
     val title = "Construct words using given letters"
 
-    private var _word: String = "";
-    val word: String?
-        get() = _word
-
-    var _selects: MutableList<Boolean> = mutableListOf()
-    val selects: List<Boolean> = _selects
-
+    var result = mutableStateOf("")
+    var word = mutableStateOf("")
     var letters = mutableStateListOf<ConstructWordMiniGameLetter>()
 
     init {
-        this._word = generateWord();
-
-        for (c in (0 until longestWord().length)) {
-            _selects.add(c,false)
-        }
-
-        for (i in (_word.indices)) {
-            letters.add(ConstructWordMiniGameLetter(_word[i].toString()))
-        }
-
+        newWord()
     }
 
+    /**
+     * Adds letter to the result string and handles setting of
+     * ConstructWordMiniGameLetter variables
+     */
+    fun handleUpdate(l: ConstructWordMiniGameLetter) {
+        if (l.selectIndex == -1) {  //not in solution => append
+            result.value += l.letter
+            l.selectIndex = result.value.length-1
+        } else { //letter already in solution => remove from solution and correct indices
+            result.value = StringBuilder(result.value).deleteCharAt(l.selectIndex).toString();
+            correctIndices(l.selectIndex)
+            l.selectIndex = -1
+        }
+
+        updateLetter(letters.indexOf(l)) //negates select flag of updated letter
+    }
+
+    /**
+     * Corrects indices of ConstructWordMiniGameLetter list,
+     * indices of letter before removed index remain unchanged,
+     * letters after removed index are decremented
+     * Removed index
+     *     |
+     * 0 1 2 3
+     * A B C D
+     *
+     * =
+     *
+     * 0 1 2
+     * A B D
+     */
+    fun correctIndices(i : Int) {
+        for (l in letters) {
+            if (l.selectIndex > i) {
+                l.selectIndex--
+            }
+        }
+    }
+
+    /**
+     * Negates selec flag of letter at given index
+     */
     fun updateLetter(index: Int){
         letters[index] = letters[index].copy(selected = !letters[index].selected)
-    }
-
-    fun setSelect(index: Int,value: Boolean) {
-        System.out.println("Printing _selects:")
-
-        for (s in _selects) {
-            System.out.println(s)
-        }
-        _selects[index] = value
     }
 
     fun longestWord() : String {
@@ -55,22 +76,36 @@ class ConstructWord {
     }
 
     override fun toString(): String {
-        return this._word
+        return this.word.value
     }
 
-    fun disableAll() {
-        for (i in 0 until letters.size) {
-            letters[i] = letters[i].copy(selected = false)
-        }
-    }
-
+    /**
+     * Generates random word from data list
+     */
     fun generateWord(): String {
-        disableAll()
-        return CommonWords.words.random();
+        return CommonWords.words.random()
     }
 
+    /**
+     * Handles generation of new word
+     * Updates letter list to change ui
+     */
     fun newWord() {
-        disableAll()
-        this._word = generateWord()
+        this.word.value = generateWord()
+
+        letters.removeAll(letters)
+
+        for (i in (word.value.indices)) {
+            letters.add(ConstructWordMiniGameLetter(word.value[i].toString(),false,i))
+        }
+        letters = letters.shuffled().toMutableStateList()
+        result.value = ""
+    }
+
+    /**
+     * Returns true if constructed letter is correct
+     */
+    fun isCorrect() : Boolean {
+        return word.value == result.value
     }
 }
