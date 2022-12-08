@@ -1,11 +1,9 @@
 package com.example.wake_app.screens.minigames
 
 import android.content.Context
-import android.content.res.Resources
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -25,7 +23,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.wake_app.BottomBarScreen
 import com.example.wake_app.R
 import kotlin.random.Random
-import kotlin.random.nextInt
 
 @Composable
 fun SequenceMiniGameScreen(navController: NavHostController) {
