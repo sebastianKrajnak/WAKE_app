@@ -4,8 +4,5 @@ School team project at BUT from TAMa, mobile applications, class. WAKE app is an
 
 TODO:
 - write README.md (later, unnecassary now)
-- create alarm list
-- create a single alarm
-- add 3-4 games
-- statistics
-- settings (until last workshop)
+- add more games
+- make an alarm notification

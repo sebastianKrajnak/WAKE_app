@@ -1,5 +1,6 @@
 package com.example.wake_app.screens
 
+import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -9,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -22,8 +24,8 @@ import com.example.wake_app.model.Game
 
 @Composable
 fun GameScreen(game: Game) {
-    val navController = rememberNavController()
     var result by remember { mutableStateOf("") }
+    val activity = (LocalContext.current as? Activity)
     Column(
         Modifier
             .fillMaxSize()
@@ -32,7 +34,6 @@ fun GameScreen(game: Game) {
 
     ) {
 
-        // Load Game
 
             Text(text = game.title,
                 fontSize = 30.sp,
@@ -67,7 +68,8 @@ fun GameScreen(game: Game) {
             )
 
             Button(onClick = {
-                checkResult(result, game.result, navController)
+
+                checkResult(result, game.result, activity!!)
 
             }
             ) {
@@ -78,11 +80,10 @@ fun GameScreen(game: Game) {
     }
 }
 
-
-fun checkResult(result: String, gameResult: String, navController: NavHostController){
+fun checkResult(result: String, gameResult: String, activity: Activity){
     if (result.equals(gameResult)) {
         System.out.println("Correct")
-        navController.popBackStack()
+        activity.finish()
     } else {
         System.out.println("Incorrect")
     }

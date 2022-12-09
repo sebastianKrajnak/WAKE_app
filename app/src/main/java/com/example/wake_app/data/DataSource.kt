@@ -1,13 +1,12 @@
 package com.example.wake_app.data
 
 import com.example.wake_app.R
-import com.example.wake_app.model.Alarm
 import com.example.wake_app.model.GameButton
 import com.example.wake_app.model.WeekdayButton
 
 object DataSource {
 
-    val alarms = listOf(
+    /*val alarms = listOf(
         Alarm(R.string.alarm_time_1, R.string.alarm_description_1, true),
         Alarm(R.string.alarm_time_2, R.string.alarm_description_2, false),
         Alarm(R.string.alarm_time_3, R.string.alarm_description_3, true),
@@ -20,7 +19,7 @@ object DataSource {
         Alarm(R.string.alarm_time_1, R.string.alarm_description_1, true),
         Alarm(R.string.alarm_time_2, R.string.alarm_description_2, false),
         Alarm(R.string.alarm_time_3, R.string.alarm_description_3, false),
-    )
+    )*/
 
     val languages = listOf(
         R.string.language_english,
@@ -39,11 +38,11 @@ object DataSource {
     )
 
     val gameButtons = listOf(
-        GameButton(R.string.game_connect, R.drawable.connect),
-        GameButton(R.string.game_equation, R.drawable.equation),
-        GameButton(R.string.game_memory, R.drawable.brain),
-        GameButton(R.string.game_sorting, R.drawable.sequence),
-        GameButton(R.string.game_typo, R.drawable.typo)
+        GameButton(0, R.string.game_connect, R.drawable.connect),
+        GameButton(1, R.string.game_equation, R.drawable.equation),
+        GameButton(2, R.string.game_memory, R.drawable.brain),
+        GameButton(3, R.string.game_sorting, R.drawable.sequence),
+        GameButton(4, R.string.game_typo, R.drawable.typo)
     )
 
     val weekdayButtons = listOf(

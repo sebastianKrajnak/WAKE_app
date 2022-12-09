@@ -4,14 +4,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.ui.graphics.vector.ImageVector
+
 
 sealed class BottomBarScreen(
     val route: String,
     val tittle: String,
     val icon: ImageVector
 ) {
+    // Bottom bar screens
     object Home: BottomBarScreen (
         route = "home",
         tittle = "Alarms",
@@ -21,7 +22,7 @@ sealed class BottomBarScreen(
     object Statistics: BottomBarScreen (
         route = "statistics",
         tittle = "Statistics",
-        icon = Icons.Default.Star
+        icon = Icons.Default.Info
     )
 
     object Settings: BottomBarScreen (
@@ -30,9 +31,23 @@ sealed class BottomBarScreen(
         icon = Icons.Default.Settings
     )
 
+    // Pop-up screens
     object AlarmCreation: BottomBarScreen (
         route = "alarmcreation",
         tittle = "Alarm Creation",
+        icon = Icons.Default.Info
+    )
+
+    object AlarmEdit: BottomBarScreen (
+        route = "alarmedit",
+        tittle = "Alarm Edit",
+        icon = Icons.Default.Info
+    )
+
+    // Minigames
+    object SequenceGame: BottomBarScreen (
+        route = "sequenceGame",
+        tittle = "Sequence minigame",
         icon = Icons.Default.Info
     )
 }

@@ -30,12 +30,10 @@ fun StatisticsScreen() {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun PageContent(modifier: Modifier = Modifier) {
-    val col = colorResource(R.color.background_dark)
     Column(
         Modifier
             .fillMaxSize()
             .background(colorResource(R.color.background_light)),
-//            .background(colorResource(R.color.background)),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
         ) {

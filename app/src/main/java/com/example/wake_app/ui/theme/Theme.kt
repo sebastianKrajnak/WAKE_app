@@ -7,6 +7,7 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
+//TODO change palettes according to material theme and implement mode switch
 private val DarkColorPalette = darkColors(
     primary = MainAccent,
     primaryVariant = Color.Red,
@@ -33,7 +34,8 @@ fun WAKE_appTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composab
     val colors = if (darkTheme) {
         DarkColorPalette
     } else {
-        LightColorPalette
+        DarkColorPalette
+
     }
 
     MaterialTheme(

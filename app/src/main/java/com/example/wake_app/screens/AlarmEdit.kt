@@ -1,23 +1,9 @@
 package com.example.wake_app.screens
 
-import android.annotation.SuppressLint
-import android.app.AlarmManager
-import android.app.PendingIntent
 import android.app.TimePickerDialog
-import android.content.Context
-import android.content.Intent
-import android.os.Build
-import android.os.Bundle
-import android.widget.Toast
-import androidx.annotation.RequiresApi
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -26,35 +12,26 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.wake_app.R
 import com.example.wake_app.data.DataSource.gameButtons
 import com.example.wake_app.data.DataSource.weekdayButtons
 import com.example.wake_app.model.*
-import org.apache.commons.lang3.SerializationUtils
-import java.io.Serializable
-import java.text.SimpleDateFormat
+
 import java.util.*
 
-
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun AlarmCreationScreen(navController: NavHostController) {
-    val alarm = Alarm()
-
+fun AlarmEditScreen(navController: NavHostController, sharedViewModel: SharedViewModel) {
+    val alarm = sharedViewModel.alarm
+    var newAlarm = Alarm()
     var alarmName by remember { mutableStateOf("") }
     var ringTone by remember { mutableStateOf("") }
 
@@ -68,7 +45,10 @@ fun AlarmCreationScreen(navController: NavHostController) {
 
     // Value for storing time as a string
     val time = remember { mutableStateOf("") }
-    time.value = SimpleDateFormat("HH:mm").format(Date())
+    if (alarm != null) {
+        time.value = alarm.time
+        alarmName = alarm.name
+    }
 
     // Creating a TimePicker dialog
     val timePickerDialog = TimePickerDialog(
@@ -80,10 +60,9 @@ fun AlarmCreationScreen(navController: NavHostController) {
 
     val focusManager = LocalFocusManager.current
 
-
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Create alarm") },
+            TopAppBar(title = { Text("Edit alarm") },
                 navigationIcon = if (navController.previousBackStackEntry != null) {
                 {
                     IconButton(onClick = { navController.navigateUp() }) {
@@ -113,14 +92,13 @@ fun AlarmCreationScreen(navController: NavHostController) {
                     verticalArrangement = Arrangement.spacedBy(5.dp)
 
                 ) {
-                    TextButton(onClick = {
-                        timePickerDialog.show()
-                    }) {
+                    TextButton(onClick = { timePickerDialog.show() }) {
                         Text(
                             text = time.value,
                             fontSize = 90.sp,
                             )
                     }
+                    newAlarm.time = time.value
 
                     Text(
                         text = "Games",
@@ -137,7 +115,10 @@ fun AlarmCreationScreen(navController: NavHostController) {
                         color = colorResource(R.color.text_color_white)
                     )
 
-                    GameList(gameList = gameButtons, alarm)
+                    if (alarm != null) {
+                        newAlarm.games = alarm.games
+                        GameList(gameList = gameButtons, newAlarm)
+                    }
 
 
                     Text(
@@ -160,7 +141,10 @@ fun AlarmCreationScreen(navController: NavHostController) {
                         modifier = Modifier.fillMaxWidth()
                     ){
                         for(button in weekdayButtons){
-                            Weekday(weekdayButton = button, alarm)
+                            if (alarm != null) {
+                                newAlarm.weekdays = alarm.weekdays
+                                Weekday(weekdayButton = button, newAlarm)
+                            }
                         }
                     }
 
@@ -169,9 +153,10 @@ fun AlarmCreationScreen(navController: NavHostController) {
 
                     OutlinedTextField(
                         value = alarmName,
-                        onValueChange = { if (it.length <= 15) {
+                        onValueChange = { if (it.length <= 15)
                             alarmName = it
-                            alarm.name = alarmName}},
+                            newAlarm.name = alarmName
+                                        },
                         label = { Text(text = "Alarm name", fontSize = 20.sp,
                                     color = colorResource(R.color.text_color_white))
                                 },
@@ -239,35 +224,37 @@ fun AlarmCreationScreen(navController: NavHostController) {
                             )
                             .align(Alignment.Start)
                     )
-                    val checkedState = remember { mutableStateOf(true) }
+                    if (alarm != null) {
+                        newAlarm.vibrate = alarm.vibrate
+                    }
+                    var checkedState = remember { mutableStateOf(newAlarm.vibrate) }
                         Checkbox(
                             checked = checkedState.value,
                             onCheckedChange = {
-                                checkedState.value = it
+                                checkedState.value = !checkedState.value
                                               },
                             modifier = Modifier
                                 .padding(start = 30.dp)
                                 .align(Alignment.Start)
                         )
+                    newAlarm.vibrate = checkedState.value
 
-                    alarm.vibrate = checkedState.value
-                    alarm.time = time.value
                     Button(
-
                         onClick = {
                             try {
-                                repo.addAlarm(alarm)
-                                setAlarm(mContext, alarm)
+                                if (alarm != null) {
+                                    repo.updateAlarm(alarm, Alarm(time.value, newAlarm.games, newAlarm.weekdays, alarmName, newAlarm.vibrate, true))
+                                }
                             } catch (e: Exception) {
                                 e.printStackTrace()
                             }
                             navController.navigateUp()
                         },
-                     shape = CircleShape,
+                        shape = CircleShape,
                         colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(R.color.main_accent_dark))
                     )
                     {
-                        Text(text = "Set alarm",
+                        Text(text = "Save alarm",
                             fontSize = 15.sp,
                             color = colorResource(R.color.text_color_white)
                         )
@@ -277,136 +264,4 @@ fun AlarmCreationScreen(navController: NavHostController) {
             }
         }
     )
-}
-
-@Composable
-fun GameList(gameList : List<GameButton>, alarm: Alarm) {
-    // in the below line, we are creating a
-    // lazy row for displaying a horizontal list view.
-    LazyRow (horizontalArrangement = Arrangement.Start) {
-        // in the below line, we are setting data for each item of our listview.
-        itemsIndexed(gameList) { _, item ->
-            GameItem(gameBtn = item, alarm)
-        }
-    }
-}
-
-@Composable
-fun GameItem(gameBtn: GameButton, alarm: Alarm) {
-    var selected by remember { mutableStateOf(false) }
-    selected = alarm.games[gameBtn.index]
-    val color = if (selected) colorResource(R.color.main_accent) else Color(152,152,152)
-
-    Column (modifier = Modifier
-        .padding(
-            start = 25.dp,
-            top = 0.dp,
-            end = 0.dp,
-            bottom = 25.dp
-        )
-        .clip(RoundedCornerShape(10.dp))
-        .background(color)
-    ) {
-        Button(
-            onClick = {
-                selected = !selected
-                alarm.games[gameBtn.index] = selected
-                      },
-            colors = ButtonDefaults.buttonColors(backgroundColor = color),
-            modifier = Modifier
-                .size(60.dp, 60.dp)
-        ) {
-            Image(
-            painter = painterResource(gameBtn.iconResourceId),
-            contentDescription = null,
-            modifier = Modifier.size(60.dp, 60.dp)
-            )
-        }
-    }
-}
-
-
-@Composable
-fun Weekday(weekdayButton: WeekdayButton, alarm: Alarm) {
-    var selected by remember { mutableStateOf(false) }
-    selected = alarm.weekdays[weekdayButton.index]
-    val color = if (selected) colorResource(R.color.main_accent) else colorResource(R.color.background_light)
-
-    OutlinedButton(
-        onClick = {
-            selected = !selected
-            alarm.weekdays[weekdayButton.index] = selected
-
-                  },
-        shape = CircleShape,
-        contentPadding = PaddingValues(6.dp),
-        modifier = Modifier.size(40.dp),
-        border = BorderStroke(1.dp, colorResource(R.color.main_accent_dark)),
-        colors =  ButtonDefaults.buttonColors(
-            backgroundColor = color
-        )
-    ){
-        Text(text = weekdayButton.day, color = colorResource(R.color.text_color_white))
-    }
-}
-
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-@Preview
-fun AlarmCreationPreview() {
-    val navController = rememberNavController()
-    AlarmCreationScreen(navController)
-}
-
-
-@RequiresApi(Build.VERSION_CODES.O)
-fun setAlarm(context: Context, alarm: Alarm) {
-    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    val intent = Intent(context, AlarmNotification::class.java)
-
-    intent.putExtra("alarm", SerializationUtils.serialize(alarm))
-
-
-    val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-
-    val calendar: Calendar = Calendar.getInstance()
-    val hours = alarm.time.split(":").get(0).toInt()
-    val minutes = alarm.time.split(":").get(1).toInt()
-    calendar.set(
-        calendar.get(Calendar.YEAR),
-        calendar.get(Calendar.MONTH),
-        calendar.get(Calendar.DAY_OF_MONTH),
-        hours,
-        minutes,
-        0
-    )
-
-    val repeating: Boolean = alarm.weekdays.contains(true)
-    if (repeating) {
-        val intervalDay : Long = 1000 * 60 * 24
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, intervalDay, pendingIntent)
-    } else {
-        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
-    }
-
-    Toast.makeText(context, "Alarm is set for" + calculateTimeTillAlarm(alarm, hours, minutes) + " from now", Toast.LENGTH_LONG).show()
-}
-
-
-@SuppressLint("NewApi")
-fun calculateTimeTillAlarm(alarm: Alarm, hours: Int, minutes: Int) : String {
-    val c = Calendar.getInstance()
-    val day = c[Calendar.DAY_OF_MONTH]
-    val month = c[Calendar.MONTH]
-    val dayOfWeek = c[Calendar.DAY_OF_WEEK]
-
-
-    if (alarm.weekdays.contains(true)){
-        alarm.weekdays // find next day for alarm if set
-        return "TODO get time till alarm"
-    } else {
-        return "TODO get time till alarm"
-    }
-
 }

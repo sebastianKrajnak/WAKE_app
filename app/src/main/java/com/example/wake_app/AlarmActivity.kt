@@ -1,31 +1,32 @@
 package com.example.wake_app
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
-import androidx.room.Room
+import com.example.wake_app.model.Alarm
 import com.example.wake_app.model.Game
 import com.example.wake_app.screens.GameScreen
+import org.apache.commons.lang3.SerializationUtils
 
 
 class AlarmActivity : ComponentActivity() {
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent) // never called
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        System.out.println("Show lock screen here")
         setContent {
-            MessageCard()
+            GameScreen (
+                generateRandomGame()
+            )
         }
     }
+
 }
 
-@Composable
-fun MessageCard() {
-    GameScreen (
-        generateRandomGame()
-    )
-}
 
 
 fun generateRandomGame() : Game {
