@@ -3,12 +3,12 @@ package com.example.wake_app.screens
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -22,7 +22,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -34,14 +33,13 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.wake_app.BottomBarScreen
-import com.example.wake_app.R
 import com.example.wake_app.model.Alarm
 import com.example.wake_app.data.DataSource.gameButtons
 import com.example.wake_app.data.DataSource.weekdayButtons
 import com.example.wake_app.model.AlarmRepository
 import com.example.wake_app.model.ExternalAlarmRepository
 import com.example.wake_app.model.SharedViewModel
-import com.example.wake_app.ui.theme.inter
+import com.example.wake_app.ui.theme.*
 
 
 @Composable
@@ -53,7 +51,12 @@ fun HomeScreen(navController: NavHostController, sharedViewModel: SharedViewMode
     Scaffold(
 
         topBar = {
-            TopAppBar(title = { Text("Alarms") }, backgroundColor = colorResource(R.color.background_light))
+            TopAppBar(
+                title = { Text("Alarms") },
+                backgroundColor =
+                    if (isSystemInDarkTheme()) md_theme_dark_background
+                    else md_theme_light_background
+            )
         },
         floatingActionButton = {
             FloatingActionButton(
@@ -61,18 +64,17 @@ fun HomeScreen(navController: NavHostController, sharedViewModel: SharedViewMode
                     popUpTo(navController.graph.findStartDestination().id)
                     launchSingleTop = true
                 }},
-                backgroundColor = colorResource(R.color.main_accent_dark),
                 content = {
                         Icon(Icons.Filled.Add,"")
                 },
-                modifier = Modifier.padding(bottom = 30.dp, end = 15.dp)
+                modifier = Modifier.padding(bottom = 30.dp, end = 15.dp),
+                shape = RoundedCornerShape(19.dp)
             )
         },
         content = {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(colorResource(R.color.background_light)),
             ) {
                 LazyColumn {
                     items(alarmList) {
@@ -89,17 +91,28 @@ fun HomeScreen(navController: NavHostController, sharedViewModel: SharedViewMode
 fun AlarmItem(alarm: Alarm, NavController: NavHostController, repo: AlarmRepository, sharedViewModel: SharedViewModel) {
     var expanded by remember { mutableStateOf(false) }
     val checkedState = remember { mutableStateOf(alarm.active) }
-    val textColor = if (checkedState.value) colorResource(R.color.text_color_white) else Color.DarkGray
+    val textColor = if (checkedState.value) {
+        if (isSystemInDarkTheme())
+            md_theme_dark_onSurface
+        else
+            md_theme_light_onSurface
+        } else Color.Gray
+
     val iconColorFilter = if (checkedState.value)
-        ColorFilter.tint(colorResource(R.color.main_accent))
-    else
-        ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0F) })
+        ColorFilter.tint(
+            if (isSystemInDarkTheme())
+                md_theme_dark_primary
+            else
+                md_theme_light_primary
+        )
+        else
+            ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0F) })
 
     Card(
         onClick = { expanded = !expanded},
         modifier = Modifier
             .fillMaxWidth()
-            .padding(4.dp)
+            .padding(start = 15.dp, end = 15.dp, top = 8.dp, bottom = 8.dp)
             .animateContentSize(
                 animationSpec = tween(
                     durationMillis = 300,
@@ -107,7 +120,7 @@ fun AlarmItem(alarm: Alarm, NavController: NavHostController, repo: AlarmReposit
                 )
             ),
         elevation = 1.dp,
-        border = BorderStroke(0.dp, colorResource(R.color.background_light ))
+        shape = RoundedCornerShape(18.dp)
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
             Row(
@@ -122,10 +135,7 @@ fun AlarmItem(alarm: Alarm, NavController: NavHostController, repo: AlarmReposit
                         repo.updateAlarm(alarm, Alarm(alarm.time, alarm.games, alarm.weekdays, alarm.name, !alarm.active))
                     },
                     colors = SwitchDefaults.colors(
-                        checkedThumbColor = colorResource(id = R.color.main_accent),
-                        uncheckedThumbColor = Color.LightGray,
-                        checkedTrackColor = colorResource(id = R.color.main_accent_dark),
-                        uncheckedTrackColor = Color.DarkGray,
+                        uncheckedThumbColor = md_theme_switch_unchecked_thumb
                     ),
                     modifier = Modifier.size(55.dp)
                 )
@@ -168,7 +178,11 @@ fun AlarmItem(alarm: Alarm, NavController: NavHostController, repo: AlarmReposit
                             Icon(
                                 imageVector = Icons.Default.Delete,
                                 contentDescription = null,
-                                tint = colorResource(R.color.main_accent)
+                                tint =
+                                    if (isSystemInDarkTheme())
+                                        md_theme_dark_secondary
+                                    else
+                                        md_theme_light_secondary
                             )
                         }
 
@@ -183,7 +197,10 @@ fun AlarmItem(alarm: Alarm, NavController: NavHostController, repo: AlarmReposit
                                 Icon(
                                     imageVector = Icons.Default.Edit,
                                     contentDescription = null,
-                                    tint = colorResource(R.color.main_accent)
+                                    tint = if (isSystemInDarkTheme())
+                                        md_theme_dark_secondary
+                                    else
+                                        md_theme_light_secondary
                                 )
                         }
                         
@@ -196,7 +213,12 @@ fun AlarmItem(alarm: Alarm, NavController: NavHostController, repo: AlarmReposit
 
 @Composable
 fun AlarmInformation(alarm: Alarm, modifier: Modifier = Modifier, checkedState: Boolean) {
-    val textColor = if (checkedState) colorResource(R.color.text_color_white) else Color.DarkGray
+    val textColor = if (checkedState) {
+        if (isSystemInDarkTheme())
+            md_theme_dark_onSurface
+        else
+            md_theme_light_onSurface
+    } else Color.Gray
 
     Column {
         Row (
@@ -235,10 +257,15 @@ fun AlarmInformation(alarm: Alarm, modifier: Modifier = Modifier, checkedState: 
                     fontSize = 12.sp,
                     color =
                         if (checkedState and alarm.weekdays[day.index])
-                            colorResource(R.color.main_accent)
+                        {
+                            if (isSystemInDarkTheme())
+                                md_theme_dark_primary
+                            else
+                                md_theme_light_primary
+                        }
                         else
-                            Color.DarkGray,
-                                    modifier = Modifier.padding(start = 12.dp)
+                            Color.Gray,
+                    modifier = Modifier.padding(start = 12.dp, bottom = 3.dp)
                 )
             }
         }

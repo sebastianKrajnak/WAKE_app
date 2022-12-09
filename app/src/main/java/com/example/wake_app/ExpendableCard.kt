@@ -54,7 +54,7 @@ fun ExpandableCard(
                 )
             )
             .padding(15.dp),
-        shape =  RoundedCornerShape(4.dp),
+        shape =  RoundedCornerShape(18.dp),
 
     ){
         Column(modifier = Modifier

@@ -4,6 +4,7 @@ import android.app.TimePickerDialog
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -19,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
@@ -35,6 +37,7 @@ import com.example.wake_app.R
 import com.example.wake_app.data.DataSource.gameButtons
 import com.example.wake_app.data.DataSource.weekdayButtons
 import com.example.wake_app.model.*
+import com.example.wake_app.ui.theme.*
 import java.text.SimpleDateFormat
 
 import java.util.*
@@ -84,14 +87,15 @@ fun AlarmCreationScreen(navController: NavHostController) {
             } else {
                 null
             },
-                backgroundColor = colorResource(R.color.background_light)
+                backgroundColor =
+                    if (isSystemInDarkTheme()) md_theme_dark_background
+                    else md_theme_light_background
             )
         },
         content = {
             Box (
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(colorResource(R.color.background_light))
             ) {
 
                 Column(
@@ -122,7 +126,6 @@ fun AlarmCreationScreen(navController: NavHostController) {
                                 bottom = 0.dp
                             )
                             .align(Alignment.Start),
-                        color = colorResource(R.color.text_color_white)
                     )
 
                     GameList(gameList = gameButtons, alarm)
@@ -140,7 +143,6 @@ fun AlarmCreationScreen(navController: NavHostController) {
                                 bottom = 0.dp
                             )
                             .align(Alignment.Start),
-                        color = colorResource(R.color.text_color_white)
                     )
 
                     Row(
@@ -160,9 +162,7 @@ fun AlarmCreationScreen(navController: NavHostController) {
                         onValueChange = { if (it.length <= 15) {
                             alarmName = it
                             alarm.name = alarmName}},
-                        label = { Text(text = "Alarm name", fontSize = 20.sp,
-                                    color = colorResource(R.color.text_color_white))
-                                },
+                        label = { Text(text = "Alarm name", fontSize = 20.sp) },
                         modifier = Modifier
                             .padding(
                                 start = 25.dp,
@@ -171,11 +171,6 @@ fun AlarmCreationScreen(navController: NavHostController) {
                                 bottom = 0.dp
                             )
                             .align(Alignment.Start),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            textColor = colorResource(R.color.text_color_white),
-                            focusedBorderColor = colorResource(R.color.main_accent),
-                            unfocusedBorderColor = colorResource(R.color.main_accent_dark)
-                        ),
                         shape = CircleShape,
                         maxLines = 1,
                         keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
@@ -188,9 +183,7 @@ fun AlarmCreationScreen(navController: NavHostController) {
                     OutlinedTextField(
                         value = ringTone,
                         onValueChange = {ringTone = it},
-                        label = { Text(text = "Choose ringtone", fontSize = 20.sp,
-                            color = colorResource(R.color.text_color_white))
-                        },
+                        label = { Text(text = "Choose ringtone", fontSize = 20.sp) },
                         modifier = Modifier
                             .padding(
                                 start = 25.dp,
@@ -199,11 +192,6 @@ fun AlarmCreationScreen(navController: NavHostController) {
                                 bottom = 0.dp
                             )
                             .align(Alignment.Start),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            textColor = colorResource(R.color.text_color_white),
-                            focusedBorderColor = colorResource(R.color.main_accent),
-                            unfocusedBorderColor = colorResource(R.color.main_accent_dark)
-                        ),
                         shape = CircleShape,
                         maxLines = 1,
                         keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
@@ -216,7 +204,6 @@ fun AlarmCreationScreen(navController: NavHostController) {
                     Text(
                         text = "Vibrate",
                         fontSize = 20.sp,
-                        color = colorResource(R.color.text_color_white),
                         textAlign = TextAlign.Left,
                         modifier = Modifier
                             .padding(
@@ -250,13 +237,9 @@ fun AlarmCreationScreen(navController: NavHostController) {
                             navController.navigateUp()
                         },
                         shape = CircleShape,
-                        colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(R.color.main_accent_dark))
                     )
                     {
-                        Text(text = "Set alarm",
-                            fontSize = 15.sp,
-                            color = colorResource(R.color.text_color_white)
-                        )
+                        Text(text = "Set alarm", fontSize = 15.sp)
                     }
 
                 }
@@ -281,7 +264,35 @@ fun GameList(gameList : List<GameButton>, alarm: Alarm) {
 fun GameItem(gameBtn: GameButton, alarm: Alarm) {
     var selected by remember { mutableStateOf(false) }
     selected = alarm.games[gameBtn.index]
-    val color = if (selected) colorResource(R.color.main_accent) else Color(152,152,152)
+    val color =
+        if (selected) {
+            if (isSystemInDarkTheme())
+                md_theme_dark_secondary
+            else
+                md_theme_light_secondary
+        }
+        else {
+            if (isSystemInDarkTheme())
+                md_theme_dark_background
+            else
+                md_theme_light_background
+        }
+
+    val iconColorFilter =
+        if (selected)
+            ColorFilter.tint(
+                if (isSystemInDarkTheme())
+                    md_theme_dark_onSecondary
+                else
+                    md_theme_light_onSecondary
+            )
+        else
+            ColorFilter.tint(
+                if (isSystemInDarkTheme())
+                    md_theme_dark_onBackground
+                else
+                    md_theme_light_onBackground
+            )
 
     Column (modifier = Modifier
         .padding(
@@ -293,19 +304,22 @@ fun GameItem(gameBtn: GameButton, alarm: Alarm) {
         .clip(RoundedCornerShape(10.dp))
         .background(color)
     ) {
-        Button(
+        OutlinedButton(
             onClick = {
                 selected = !selected
                 alarm.games[gameBtn.index] = selected
                       },
             colors = ButtonDefaults.buttonColors(backgroundColor = color),
+            shape = RoundedCornerShape(10.dp),
             modifier = Modifier
-                .size(60.dp, 60.dp)
+                .size(60.dp, 60.dp),
+            border = BorderStroke(1.dp, md_theme_dark_secondary)
         ) {
             Image(
-            painter = painterResource(gameBtn.iconResourceId),
-            contentDescription = null,
-            modifier = Modifier.size(60.dp, 60.dp)
+                painter = painterResource(gameBtn.iconResourceId),
+                contentDescription = null,
+                modifier = Modifier.size(60.dp, 60.dp),
+                colorFilter = iconColorFilter
             )
         }
     }
@@ -316,7 +330,19 @@ fun GameItem(gameBtn: GameButton, alarm: Alarm) {
 fun Weekday(weekdayButton: WeekdayButton, alarm: Alarm) {
     var selected by remember { mutableStateOf(false) }
     selected = alarm.weekdays[weekdayButton.index]
-    val color = if (selected) colorResource(R.color.main_accent) else colorResource(R.color.background_light)
+    val color =
+        if (selected) {
+            if (isSystemInDarkTheme())
+                md_theme_dark_secondary
+            else
+                md_theme_light_secondary
+        }
+        else {
+            if (isSystemInDarkTheme())
+                md_theme_dark_background
+            else
+                md_theme_light_background
+        }
 
     OutlinedButton(
         onClick = {
@@ -326,12 +352,17 @@ fun Weekday(weekdayButton: WeekdayButton, alarm: Alarm) {
         shape = CircleShape,
         contentPadding = PaddingValues(6.dp),
         modifier = Modifier.size(40.dp),
-        border = BorderStroke(1.dp, colorResource(R.color.main_accent_dark)),
+        border = BorderStroke(1.dp,
+            if (isSystemInDarkTheme())
+                md_theme_dark_secondary
+            else
+                md_theme_light_secondary
+        ),
         colors =  ButtonDefaults.buttonColors(
             backgroundColor = color
         )
     ){
-        Text(text = weekdayButton.day, color = colorResource(R.color.text_color_white))
+        Text(text = weekdayButton.day)
     }
 }
 

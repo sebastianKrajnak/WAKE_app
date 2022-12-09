@@ -2,6 +2,7 @@ package com.example.wake_app.screens
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -26,12 +27,20 @@ import com.example.wake_app.BottomBarScreen
 import com.example.wake_app.R
 import com.example.wake_app.data.DataSource.alarmSounds
 import com.example.wake_app.data.DataSource.languages
+import com.example.wake_app.ui.theme.md_theme_dark_background
+import com.example.wake_app.ui.theme.md_theme_light_background
+import com.example.wake_app.ui.theme.md_theme_switch_unchecked_thumb
 
 @Composable
 fun SettingsScreen(navController: NavHostController) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Settings") }, backgroundColor = colorResource(R.color.background_light))
+            TopAppBar(
+                title = { Text("Settings") },
+                backgroundColor =
+                if (isSystemInDarkTheme()) md_theme_dark_background
+                else md_theme_light_background
+            )
         },
         content =  { PageContent(navController = navController) }
     )
@@ -43,7 +52,6 @@ private fun PageContent(modifier: Modifier = Modifier, navController: NavHostCon
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(colorResource(R.color.background_light)),
     ) {
         DropdownRow(Text = "Language", DropdownItems = languages)
         DropdownRow(Text = "Default alarm sound", DropdownItems = alarmSounds)
@@ -62,7 +70,6 @@ fun DropdownRow(Text: String, @StringRes DropdownItems: List<Int>, modifier: Mod
             modifier = modifier
                 .fillMaxWidth()
                 .padding(8.dp)
-                //.background(colorResource(R.color.background_dark))
                 .height(45.dp)
     ) {
 
@@ -79,7 +86,6 @@ fun DropdownRow(Text: String, @StringRes DropdownItems: List<Int>, modifier: Mod
             text = Text,
             modifier = modifier.padding(start = 8.dp),
             fontSize = 25.sp,
-            color = colorResource(R.color.text_color_white),
         )
         Spacer(
             modifier
@@ -116,14 +122,12 @@ fun SwitcherRow(Text: String, modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
-            //.background(colorResource(R.color.background_dark))
             .height(45.dp)
     ) {
         Text(
             text = Text,
             modifier = modifier.padding(start = 8.dp),
             fontSize = 25.sp,
-            color = colorResource(R.color.text_color_white),
         )
         Spacer(
             modifier
@@ -135,10 +139,7 @@ fun SwitcherRow(Text: String, modifier: Modifier = Modifier) {
             onCheckedChange = { checkedState.value = it },
             modifier = modifier.size(55.dp),
             colors = SwitchDefaults.colors(
-                checkedThumbColor = colorResource(id = R.color.main_accent),
-                uncheckedThumbColor = Color.LightGray,
-                checkedTrackColor = colorResource(id = R.color.main_accent_dark),
-                uncheckedTrackColor = Color.DarkGray,
+                uncheckedThumbColor = md_theme_switch_unchecked_thumb
             )
         )
     }
@@ -151,14 +152,12 @@ fun AboutRow(Text: String, modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
-            //.background(colorResource(R.color.background_dark))
             .height(45.dp)
     ) {
         Text(
             text = Text,
             modifier = modifier.padding(start = 8.dp),
             fontSize = 25.sp,
-            color = colorResource(R.color.text_color_white),
         )
         Spacer(
             modifier

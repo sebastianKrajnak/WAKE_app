@@ -1,6 +1,7 @@
 package com.example.wake_app.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
@@ -16,12 +17,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.wake_app.ExpandableCard
 import com.example.wake_app.R
+import com.example.wake_app.ui.theme.md_theme_dark_background
+import com.example.wake_app.ui.theme.md_theme_light_background
 
 @Composable
 fun StatisticsScreen() {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Statistics") }, backgroundColor = colorResource(R.color.background_light))
+            TopAppBar(
+                title = { Text("Statistics") },
+                backgroundColor =
+                    if (isSystemInDarkTheme()) md_theme_dark_background
+                    else md_theme_light_background
+            )
         },
         content = { PageContent() }
     )
@@ -32,8 +40,7 @@ fun StatisticsScreen() {
 private fun PageContent(modifier: Modifier = Modifier) {
     Column(
         Modifier
-            .fillMaxSize()
-            .background(colorResource(R.color.background_light)),
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
         ) {
@@ -42,7 +49,6 @@ private fun PageContent(modifier: Modifier = Modifier) {
             text = "Early bird streak\n 4 days",
             fontSize = 28.sp,
             textAlign = TextAlign.Center,
-            color = colorResource(R.color.text_color_white),
             maxLines = 2
         )
         LazyColumn (modifier = Modifier.weight(5f)) {

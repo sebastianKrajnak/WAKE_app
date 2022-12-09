@@ -43,6 +43,7 @@ fun ConstructWordMiniGameScreen(cw: ConstructWord) {
                 .align(alignment = Alignment.CenterHorizontally)
             ,
             color = colorResource(R.color.text_color_white),
+            textAlign = TextAlign.Center
         )
         Card(backgroundColor = colorResource(R.color.background_dark),
             modifier = Modifier
@@ -66,9 +67,13 @@ fun ConstructWordMiniGameScreen(cw: ConstructWord) {
         ) {
             Text(text = "Re-generate")
         }
+        Spacer(Modifier.height(30.dp))
 
         LazyVerticalGrid(
-            cells = GridCells.Adaptive(minSize = 75.dp)
+            cells = GridCells.Adaptive(minSize = 75.dp),
+            modifier = Modifier.padding(10.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalArrangement = Arrangement.Center
         ) {
             itemsIndexed(cw.letters) { index, item ->
                 GameLetterBtn(cw,item,index)

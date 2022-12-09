@@ -44,7 +44,7 @@ fun EquationMiniGameScreen(expr: Expression) {
         Card(backgroundColor = colorResource(R.color.background_dark),
             modifier = Modifier
                 .padding(8.dp) // margin
-                .border(2.dp, colorResource(R.color.text_color_white)) // outer border
+                //.border(2.dp, colorResource(R.color.text_color_white)) // outer border
                 .padding(16.dp), // space between the borders
             elevation = 18.dp
         ) {

@@ -72,6 +72,7 @@ fun SortSequenceMiGameScreen(ss: SortSequence) {
 
         LazyVerticalGrid(
             cells = GridCells.Adaptive(minSize = 100.dp),
+            modifier = Modifier.padding(10.dp),
             horizontalArrangement = Arrangement.SpaceAround,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
