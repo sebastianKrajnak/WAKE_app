@@ -35,9 +35,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.wake_app.BottomBarScreen
 import com.example.wake_app.R
-import com.example.wake_app.model.Alarm
 import com.example.wake_app.data.DataSource.gameButtons
 import com.example.wake_app.data.DataSource.weekdayButtons
+import com.example.wake_app.model.Alarm
 import com.example.wake_app.model.AlarmRepository
 import com.example.wake_app.model.ExternalAlarmRepository
 import com.example.wake_app.model.SharedViewModel

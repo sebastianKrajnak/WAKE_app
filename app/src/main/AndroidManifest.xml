@@ -41,13 +41,24 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity android:name="com.example.wake_app.AlarmActivity"
+        <activity android:name="com.example.wake_app.activity.ConstructWordGameActivity"
             android:showForAllUsers="true"
             android:showOnLockScreen="true"
             android:showWhenLocked="true"
             android:turnScreenOn="true"
-            android:launchMode="singleTop"
-            />
+            android:launchMode="singleTop"/>
+        <activity android:name="com.example.wake_app.activity.EquationMiniGameActivity"
+            android:showForAllUsers="true"
+            android:showOnLockScreen="true"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true"
+            android:launchMode="singleTop"/>
+        <activity android:name="com.example.wake_app.activity.SequenceGameActivity"
+            android:showForAllUsers="true"
+            android:showOnLockScreen="true"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true"
+            android:launchMode="singleTop"/>
 
         <meta-data
             android:name="preloaded_fonts"

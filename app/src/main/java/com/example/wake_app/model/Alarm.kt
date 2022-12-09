@@ -2,7 +2,7 @@ package com.example.wake_app.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import java.io.*
+import java.io.Serializable
 
 @Parcelize
 data class Alarm(

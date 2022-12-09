@@ -1,14 +1,10 @@
 package com.example.wake_app
 
+
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.primarySurface
-import androidx.compose.ui.res.colorResource
 import androidx.core.content.ContextCompat
-
-
 import com.example.wake_app.ui.theme.WAKE_appTheme
 
 class MainActivity : ComponentActivity() {

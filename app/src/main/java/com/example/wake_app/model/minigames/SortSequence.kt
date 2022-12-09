@@ -3,10 +3,7 @@ package com.example.wake_app.model.minigames
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
-import com.example.wake_app.data.CommonWords
-import com.example.wake_app.data.ConstructWordMiniGameLetter
 import com.example.wake_app.data.SequenceNumber
-import kotlin.math.max
 import kotlin.random.Random
 import kotlin.random.nextInt
 

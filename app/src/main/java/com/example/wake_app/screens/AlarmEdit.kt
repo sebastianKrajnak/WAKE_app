@@ -24,8 +24,10 @@ import androidx.navigation.NavHostController
 import com.example.wake_app.R
 import com.example.wake_app.data.DataSource.gameButtons
 import com.example.wake_app.data.DataSource.weekdayButtons
-import com.example.wake_app.model.*
-
+import com.example.wake_app.model.Alarm
+import com.example.wake_app.model.AlarmRepository
+import com.example.wake_app.model.ExternalAlarmRepository
+import com.example.wake_app.model.SharedViewModel
 import java.util.*
 
 @Composable

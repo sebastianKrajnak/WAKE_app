@@ -7,7 +7,6 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.os.Bundle
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
@@ -45,7 +44,6 @@ import com.example.wake_app.data.DataSource.gameButtons
 import com.example.wake_app.data.DataSource.weekdayButtons
 import com.example.wake_app.model.*
 import org.apache.commons.lang3.SerializationUtils
-import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.*
 

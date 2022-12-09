@@ -2,7 +2,6 @@ package com.example.wake_app.model
 
 import android.content.Context
 import android.os.Environment
-import android.util.Log
 import java.io.*
 
 class ExternalAlarmRepository(var context: Context) : AlarmRepository {
