@@ -27,6 +27,7 @@ fun Context.showNotificationWithFullScreenIntent(
         .addAction(R.drawable.sequence, "Dismiss",
             getFullScreenIntent(alarm, true))
         .setAutoCancel(true)
+        .setOngoing(true)
 
 
     val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -34,7 +35,7 @@ fun Context.showNotificationWithFullScreenIntent(
     with(notificationManager) {
         buildChannel(alarm)
         val notification = builder.build()
-        notify(0, notification)
+        notify(NOTIFICATION_CHANNEL_ID, notification)
     }
 }
 
@@ -58,7 +59,6 @@ private fun Context.getFullScreenIntent(alarm: Alarm, cancelNotification: Boolea
     val intent = Intent(this, destination)
 
 
-
     return PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 }
 
@@ -75,4 +75,5 @@ private fun decideGameActivity(alarm: Alarm): Class<*> {
     }
 }
 
-private const val CHANNEL_ID = "channelId"
+const val NOTIFICATION_CHANNEL_ID = 1597
+private const val CHANNEL_ID = "channelId-wake"

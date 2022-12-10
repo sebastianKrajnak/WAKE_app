@@ -364,7 +364,7 @@ fun setAlarm(context: Context, alarm: Alarm) {
 
     intent.putExtra("alarm", SerializationUtils.serialize(alarm))
     intent.action = alarm.id.toString()
-    val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+    val pendingIntent = PendingIntent.getBroadcast(context, 1597, intent, PendingIntent.FLAG_IMMUTABLE)
 
     val calendar: Calendar = Calendar.getInstance()
     val hours = alarm.time.split(":").get(0).toInt()
@@ -387,11 +387,12 @@ fun setAlarm(context: Context, alarm: Alarm) {
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
     }
 
+    // Todo make pretty toast message
     Toast.makeText(context, "Alarm is set for " + calculateTimeTillAlarm(alarm, calendar.timeInMillis) + " from now", Toast.LENGTH_LONG).show()
 }
 
 private fun calculateRepeatingTime(alarm: Alarm, calendar: Calendar): Long {
-    val hashMap: HashMap<Int, Int> = hashMapOf(
+    val calendarToWeekdaysMapping: HashMap<Int, Int> = hashMapOf(
         2 to 0,
         3 to 1,
         4 to 2,
@@ -400,39 +401,30 @@ private fun calculateRepeatingTime(alarm: Alarm, calendar: Calendar): Long {
         7 to 5,
         1 to 6,
     )
-    var days: Int = 0
-    var currentIdx = hashMap.get(calendar[Calendar.DAY_OF_WEEK])!!
-    if (alarm.weekdays.get(currentIdx)) {
-        if (calendar.timeInMillis <= System.currentTimeMillis()){
-            if (currentIdx == 6) {
-                currentIdx = 0
-                days++
-            } else {
-                currentIdx++
-                days++
-            }
-            while (!alarm.weekdays.get(currentIdx)) {
-                if (currentIdx == 6) {
-                    currentIdx = 0
-                    days++
-                } else {
-                    currentIdx++
-                    days++
-                }
-            }
-        }
-    } else {
-        while (!alarm.weekdays.get(currentIdx)) {
-            if (currentIdx == 6) {
-                currentIdx = 0
-                days++
-            } else {
-                currentIdx++
-                days++
-            }
+    var days = 0
+    var currentIdx = calendarToWeekdaysMapping.get(calendar[Calendar.DAY_OF_WEEK])!!
+
+
+    if (alarm.weekdays.get(currentIdx) && calendar.timeInMillis <= System.currentTimeMillis()) {
+        if (currentIdx == 6) {
+            currentIdx = 0
+            days++
+        } else {
+            currentIdx++
+            days++
         }
     }
-    System.out.println("Calculate time for repeating")
+
+    while (!alarm.weekdays.get(currentIdx)) {
+        if (currentIdx == 6) {
+            currentIdx = 0
+            days++
+        } else {
+            currentIdx++
+            days++
+        }
+    }
+
     calendar.add(Calendar.DAY_OF_YEAR, days)
     return calendar.timeInMillis
 }
