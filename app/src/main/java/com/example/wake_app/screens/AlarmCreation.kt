@@ -1,10 +1,16 @@
 package com.example.wake_app.screens
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.app.TimePickerDialog
+import android.content.Context
+import android.content.Intent
+import android.os.Build
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -33,15 +39,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.wake_app.BROADCAST_REQUEST_CODE
 import com.example.wake_app.R
 import com.example.wake_app.data.DataSource.gameButtons
 import com.example.wake_app.data.DataSource.weekdayButtons
 import com.example.wake_app.model.*
+import org.apache.commons.lang3.SerializationUtils
 import com.example.wake_app.ui.theme.*
 import java.text.SimpleDateFormat
-
 import java.util.*
 
+
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AlarmCreationScreen(navController: NavHostController) {
     val alarm = Alarm()
@@ -231,6 +240,7 @@ fun AlarmCreationScreen(navController: NavHostController) {
                         onClick = {
                             try {
                                 repo.addAlarm(alarm)
+                                setAlarm(mContext, alarm)
                             } catch (e: Exception) {
                                 e.printStackTrace()
                             }
@@ -367,9 +377,105 @@ fun Weekday(weekdayButton: WeekdayButton, alarm: Alarm) {
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview
 fun AlarmCreationPreview() {
     val navController = rememberNavController()
     AlarmCreationScreen(navController)
+}
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun setAlarm(context: Context, alarm: Alarm) {
+    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    val intent = Intent(context, AlarmNotification::class.java)
+
+    intent.putExtra("alarm", SerializationUtils.serialize(alarm))
+    intent.action = alarm.id.toString()
+    val pendingIntent = PendingIntent.getBroadcast(context, BROADCAST_REQUEST_CODE, intent, PendingIntent.FLAG_IMMUTABLE)
+
+    val calendar: Calendar = Calendar.getInstance()
+    val hours = alarm.time.split(":").get(0).toInt()
+    val minutes = alarm.time.split(":").get(1).toInt()
+    calendar.set(
+        calendar.get(Calendar.YEAR),
+        calendar.get(Calendar.MONTH),
+        calendar.get(Calendar.DAY_OF_MONTH),
+        hours,
+        minutes,
+        0
+    )
+
+    val repeating: Boolean = alarm.weekdays.contains(true)
+    if (repeating) {
+        val timeTillNextTrigger = calculateRepeatingTime(alarm, calendar)
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeTillNextTrigger, pendingIntent)
+    } else {
+        if (calendar.timeInMillis <= System.currentTimeMillis()) calendar.add(Calendar.DAY_OF_YEAR, 1)
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+    }
+
+    // Todo make pretty toast message
+    Toast.makeText(context, "Alarm is set for " + calculateTimeTillAlarm(alarm, calendar.timeInMillis) + " from now", Toast.LENGTH_LONG).show()
+}
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun cancelAlarm(context: Context, alarm: Alarm) {
+    val intent = Intent(context, AlarmNotification::class.java)
+    intent.action = alarm.id.toString()
+    PendingIntent.getBroadcast(context, BROADCAST_REQUEST_CODE, intent, PendingIntent.FLAG_IMMUTABLE).cancel()
+}
+
+
+private fun calculateRepeatingTime(alarm: Alarm, calendar: Calendar): Long {
+    val calendarToWeekdaysMapping: HashMap<Int, Int> = hashMapOf(
+        2 to 0,
+        3 to 1,
+        4 to 2,
+        5 to 3,
+        6 to 4,
+        7 to 5,
+        1 to 6,
+    )
+    var days = 0
+    var currentIdx = calendarToWeekdaysMapping.get(calendar[Calendar.DAY_OF_WEEK])!!
+
+
+    if (alarm.weekdays.get(currentIdx) && calendar.timeInMillis <= System.currentTimeMillis()) {
+        if (currentIdx == 6) {
+            currentIdx = 0
+            days++
+        } else {
+            currentIdx++
+            days++
+        }
+    }
+
+    while (!alarm.weekdays.get(currentIdx)) {
+        if (currentIdx == 6) {
+            currentIdx = 0
+            days++
+        } else {
+            currentIdx++
+            days++
+        }
+    }
+
+    calendar.add(Calendar.DAY_OF_YEAR, days)
+    return calendar.timeInMillis
+}
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun calculateTimeTillAlarm(alarm: Alarm, triggerTime: Long) : String {
+    if (alarm.weekdays.contains(true)){
+        alarm.weekdays // find next day for alarm if set
+        return "TODO get time till alarm - can be a few days"
+    } else {
+        val unit = "minutes"
+        return unit + ((triggerTime - System.currentTimeMillis()) / 1000 / 60 )
+    }
+
 }

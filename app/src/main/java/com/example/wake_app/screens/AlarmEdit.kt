@@ -1,6 +1,8 @@
 package com.example.wake_app.screens
 
 import android.app.TimePickerDialog
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -24,10 +26,13 @@ import androidx.navigation.NavHostController
 import com.example.wake_app.R
 import com.example.wake_app.data.DataSource.gameButtons
 import com.example.wake_app.data.DataSource.weekdayButtons
-import com.example.wake_app.model.*
-
+import com.example.wake_app.model.Alarm
+import com.example.wake_app.model.AlarmRepository
+import com.example.wake_app.model.ExternalAlarmRepository
+import com.example.wake_app.model.SharedViewModel
 import java.util.*
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AlarmEditScreen(navController: NavHostController, sharedViewModel: SharedViewModel) {
     val alarm = sharedViewModel.alarm
@@ -243,7 +248,9 @@ fun AlarmEditScreen(navController: NavHostController, sharedViewModel: SharedVie
                         onClick = {
                             try {
                                 if (alarm != null) {
-                                    repo.updateAlarm(alarm, Alarm(time.value, newAlarm.games, newAlarm.weekdays, alarmName, newAlarm.vibrate, true))
+                                    val newAlarmTmp = Alarm(time.value, newAlarm.games, newAlarm.weekdays, alarmName, newAlarm.vibrate, true, alarm.id)
+                                    repo.updateAlarm(alarm, newAlarmTmp)
+                                    setAlarm(mContext, newAlarmTmp)
                                 }
                             } catch (e: Exception) {
                                 e.printStackTrace()

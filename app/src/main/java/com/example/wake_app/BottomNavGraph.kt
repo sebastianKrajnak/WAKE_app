@@ -1,5 +1,7 @@
 package com.example.wake_app
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -9,6 +11,7 @@ import com.example.wake_app.model.SharedViewModel
 import com.example.wake_app.screens.*
 import com.example.wake_app.screens.minigames.ClickSequenceMiniGameScreen
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun BottomNavGraph(navController: NavHostController) {
     val sharedViewModel: SharedViewModel = viewModel()

@@ -2,8 +2,8 @@ package com.example.wake_app.model
 
 import android.content.Context
 import android.os.Environment
-import android.util.Log
 import java.io.*
+import java.util.*
 
 class ExternalAlarmRepository(var context: Context) : AlarmRepository {
 
@@ -45,7 +45,7 @@ class ExternalAlarmRepository(var context: Context) : AlarmRepository {
         var newAlarmList =  emptyList<Alarm>()
 
         alarmList.forEach {
-            if (!(it.name == alarm.name && it.time == alarm.time))
+            if (!(it.id == alarm.id))
                 newAlarmList += it
         }
 
@@ -58,14 +58,43 @@ class ExternalAlarmRepository(var context: Context) : AlarmRepository {
         }
     }
 
+    override fun findAlarmByID(id: UUID) : Alarm? {
+        var alarmList = getAlarmList()
+        var alarm: Alarm? = null
+        alarmList.forEach {
+            if (it.id == id)
+                alarm = it
+        }
+        return alarm
+    }
+
     override fun updateAlarm(old: Alarm, new: Alarm) {
         var alarmList = getAlarmList()
-
         var newAlarmList =  emptyList<Alarm>()
 
         alarmList.forEach {
-            if (it.name == old.name && it.time == old.time)
+            if (it.id == old.id)
                 newAlarmList += new
+            else
+                newAlarmList += it
+        }
+
+        if (isExternalStorageWritable()) {
+            FileOutputStream(noteFile(fileName)).use{ output ->
+                val oos = ObjectOutputStream(output)
+                oos.writeObject(newAlarmList)
+                oos.close()
+            }
+        }
+    }
+
+    override fun updateAlarm(alarm: Alarm) {
+        var alarmList = getAlarmList()
+        var newAlarmList =  emptyList<Alarm>()
+
+        alarmList.forEach {
+            if (it.id == alarm.id)
+                newAlarmList += alarm
             else
                 newAlarmList += it
         }

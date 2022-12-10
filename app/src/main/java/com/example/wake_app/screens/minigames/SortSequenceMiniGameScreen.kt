@@ -1,5 +1,6 @@
 package com.example.wake_app.screens.minigames
 
+import android.app.Activity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -14,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,11 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
 import com.example.wake_app.R
-import com.example.wake_app.data.ConstructWordMiniGameLetter
 import com.example.wake_app.data.SequenceNumber
-import com.example.wake_app.model.minigames.ConstructWord
 import com.example.wake_app.model.minigames.SortSequence
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -88,7 +87,7 @@ fun SortSequenceMiGameScreen(ss: SortSequence) {
 @Composable
 fun GameNumberBtn(ss: SortSequence, sn : SequenceNumber, index : Int) {
     val color = if (sn.selected) colorResource(R.color.main_accent) else Color(152,152,152)
-
+    val activity = (LocalContext.current as? Activity)
     Column (modifier = Modifier
         .padding(5.dp)
         .clip(RoundedCornerShape(10.dp))
@@ -100,7 +99,7 @@ fun GameNumberBtn(ss: SortSequence, sn : SequenceNumber, index : Int) {
 
                 System.out.println(ss.result)
                 System.out.println(ss.seq)
-                if (ss.isCorrect()) System.out.println("CORRECT")
+                if (ss.isCorrect()) activity!!.finish()
             },
             colors = ButtonDefaults.buttonColors(backgroundColor = color),
         ) {

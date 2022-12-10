@@ -1,6 +1,5 @@
 package com.example.wake_app.model.minigames
 
-import kotlin.math.exp
 import kotlin.random.Random
 
 class Expression(val minVal : Int, val maxMal : Int) {

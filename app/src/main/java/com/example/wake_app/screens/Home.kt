@@ -1,5 +1,7 @@
 package com.example.wake_app.screens
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -34,14 +36,17 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.wake_app.BottomBarScreen
 import com.example.wake_app.model.Alarm
+import com.example.wake_app.R
 import com.example.wake_app.data.DataSource.gameButtons
 import com.example.wake_app.data.DataSource.weekdayButtons
+import com.example.wake_app.model.Alarm
 import com.example.wake_app.model.AlarmRepository
 import com.example.wake_app.model.ExternalAlarmRepository
 import com.example.wake_app.model.SharedViewModel
 import com.example.wake_app.ui.theme.*
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(navController: NavHostController, sharedViewModel: SharedViewModel) {
     val context = LocalContext.current
@@ -86,6 +91,7 @@ fun HomeScreen(navController: NavHostController, sharedViewModel: SharedViewMode
     )
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun AlarmItem(alarm: Alarm, NavController: NavHostController, repo: AlarmRepository, sharedViewModel: SharedViewModel) {
@@ -98,7 +104,8 @@ fun AlarmItem(alarm: Alarm, NavController: NavHostController, repo: AlarmReposit
             md_theme_light_onSurface
         } else Color.Gray
 
-    val iconColorFilter = if (checkedState.value)
+    val context = LocalContext.current
+   val iconColorFilter = if (checkedState.value)
         ColorFilter.tint(
             if (isSystemInDarkTheme())
                 md_theme_dark_primary
@@ -132,7 +139,14 @@ fun AlarmItem(alarm: Alarm, NavController: NavHostController, repo: AlarmReposit
                     checked = checkedState.value,
                     onCheckedChange = {
                         checkedState.value = it
-                        repo.updateAlarm(alarm, Alarm(alarm.time, alarm.games, alarm.weekdays, alarm.name, !alarm.active))
+                        val newAlarm = Alarm(alarm.time, alarm.games, alarm.weekdays, alarm.name, alarm.vibrate, !alarm.active, alarm.id)
+                        repo.updateAlarm(alarm, newAlarm)
+
+                        if (!alarm.active) {
+                            setAlarm(context, newAlarm)
+                        } else {
+                            cancelAlarm(context, newAlarm)
+                        }
                     },
                     colors = SwitchDefaults.colors(
                         uncheckedThumbColor = md_theme_switch_unchecked_thumb
@@ -273,6 +287,7 @@ fun AlarmInformation(alarm: Alarm, modifier: Modifier = Modifier, checkedState: 
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview
 fun HomeScreenPreview() {
