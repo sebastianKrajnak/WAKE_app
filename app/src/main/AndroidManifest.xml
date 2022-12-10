@@ -59,6 +59,12 @@
             android:showWhenLocked="true"
             android:turnScreenOn="true"
             android:launchMode="singleTop"/>
+        <activity android:name="com.example.wake_app.activity.ClickSequenceGameActivity"
+            android:showForAllUsers="true"
+            android:showOnLockScreen="true"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true"
+            android:launchMode="singleTop"/>
 
         <meta-data
             android:name="preloaded_fonts"

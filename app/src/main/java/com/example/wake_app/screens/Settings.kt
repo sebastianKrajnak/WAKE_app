@@ -53,7 +53,7 @@ private fun PageContent(modifier: Modifier = Modifier, navController: NavHostCon
     ) {
         DropdownRow(Text = "Language", DropdownItems = languages)
         DropdownRow(Text = "Default alarm sound", DropdownItems = alarmSounds)
-        SwitcherRow(Text = "Dark mode")
+        SwitcherRow(Text = "Dark mode", switchOn = isSystemInDarkTheme())
         AboutRow(Text = "About")
     }
 }
@@ -110,8 +110,8 @@ fun DropdownRow(Text: String, @StringRes DropdownItems: List<Int>, modifier: Mod
 }
 
 @Composable
-fun SwitcherRow(Text: String, modifier: Modifier = Modifier) {
-    val checkedState = remember { mutableStateOf(true) }
+fun SwitcherRow(Text: String, modifier: Modifier = Modifier, switchOn: Boolean = true) {
+    val checkedState = remember { mutableStateOf(switchOn) }
     Row(
         modifier = modifier
             .fillMaxWidth()
