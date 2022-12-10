@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import com.example.wake_app.NOTIFICATION_CHANNEL_ID
 import com.example.wake_app.model.minigames.ConstructWord
 import com.example.wake_app.screens.minigames.ConstructWordMiniGameScreen
-
+import com.example.wake_app.ui.theme.WAKE_appTheme
 
 
 class ConstructWordGameActivity : ComponentActivity() {
@@ -22,7 +22,9 @@ class ConstructWordGameActivity : ComponentActivity() {
         notificationManager.cancel(NOTIFICATION_CHANNEL_ID)
 
         setContent {
-            GenerateRandomGame()
+            WAKE_appTheme{
+                GenerateRandomGame()
+            }
         }
     }
 

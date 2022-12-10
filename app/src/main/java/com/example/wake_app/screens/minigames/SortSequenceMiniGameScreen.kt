@@ -4,6 +4,7 @@ import android.app.Activity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
@@ -25,6 +26,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.wake_app.R
 import com.example.wake_app.data.SequenceNumber
 import com.example.wake_app.model.minigames.SortSequence
+import com.example.wake_app.ui.theme.*
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -34,7 +36,7 @@ fun SortSequenceMiGameScreen(ss: SortSequence) {
     Column(
         Modifier
             .fillMaxSize()
-            .background(colorResource(R.color.background_light)),
+            .background(if (isSystemInDarkTheme()) md_theme_dark_background else md_theme_light_background),
         horizontalAlignment = Alignment.CenterHorizontally,
 
         ) {
@@ -42,21 +44,19 @@ fun SortSequenceMiGameScreen(ss: SortSequence) {
             fontSize = 30.sp,
             modifier = Modifier
                 .padding(16.dp)
-                .align(alignment = Alignment.CenterHorizontally)
-            ,
-            color = colorResource(R.color.text_color_white),
+                .align(alignment = Alignment.CenterHorizontally),
+            color = if (isSystemInDarkTheme()) md_theme_dark_onBackground else md_theme_light_onBackground
+
         )
-        Card(backgroundColor = colorResource(R.color.background_dark),
+        Card(
             modifier = Modifier
                 .padding(8.dp) // margin
-                .border(2.dp, colorResource(R.color.text_color_white)) // outer border
                 .padding(16.dp), // space between the borders
             elevation = 18.dp
         ) {
             Text(
                 text = ss.result.value,
                 fontSize = 35.sp,
-                color = colorResource(R.color.text_color_white),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.width((ss.numbers!!.size*35).dp)
             )
@@ -68,6 +68,7 @@ fun SortSequenceMiGameScreen(ss: SortSequence) {
         ) {
             Text(text = "Re-generate")
         }
+        Spacer(Modifier.height(30.dp))
 
         LazyVerticalGrid(
             cells = GridCells.Adaptive(minSize = 100.dp),
@@ -86,31 +87,33 @@ fun SortSequenceMiGameScreen(ss: SortSequence) {
 
 @Composable
 fun GameNumberBtn(ss: SortSequence, sn : SequenceNumber, index : Int) {
-    val color = if (sn.selected) colorResource(R.color.main_accent) else Color(152,152,152)
-    val activity = (LocalContext.current as? Activity)
-    Column (modifier = Modifier
-        .padding(5.dp)
-        .clip(RoundedCornerShape(10.dp))
-        .background(color)
-    ) {
-        Button(
-            onClick = {
-                ss.handleUpdate(sn)
+    val color = if (sn.selected) {
+        if (isSystemInDarkTheme())
+            md_theme_dark_primary
+        else
+            md_theme_light_primary
+    } else Color.Gray
 
-                System.out.println(ss.result)
-                System.out.println(ss.seq)
-                if (ss.isCorrect()) activity!!.finish()
-            },
-            colors = ButtonDefaults.buttonColors(backgroundColor = color),
-        ) {
-            Text(
-                text = sn.number.toString(),
-                fontSize = 50.sp,
-                color = colorResource(R.color.text_color_white),
-                modifier = Modifier.fillMaxSize(),
-                textAlign = TextAlign.Center,
-            )
-        }
+    val activity = (LocalContext.current as? Activity)
+
+    Button(
+        onClick = {
+            ss.handleUpdate(sn)
+
+            System.out.println(ss.result)
+            System.out.println(ss.seq)
+            if (ss.isCorrect()) activity!!.finish()
+        },
+        colors = ButtonDefaults.buttonColors(backgroundColor = color),
+        shape = RoundedCornerShape(19.dp),
+        modifier = Modifier.padding(5.dp),
+    ) {
+        Text(
+            text = sn.number.toString(),
+            fontSize = 50.sp,
+            modifier = Modifier.fillMaxSize(),
+            textAlign = TextAlign.Center,
+        )
     }
 
 }
@@ -119,6 +122,6 @@ fun GameNumberBtn(ss: SortSequence, sn : SequenceNumber, index : Int) {
 @Preview
 fun SortSequenceMiGameScreenPreview() {
     SortSequenceMiGameScreen (
-        SortSequence(1,100,10)
+        SortSequence(1,99,10)
     )
 }

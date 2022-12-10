@@ -38,10 +38,10 @@ object DataSource {
     )
 
     val gameButtons = listOf(
-        GameButton(0, R.string.game_connect, R.drawable.connect),
+        GameButton(0, R.string.game_connect, R.drawable.sequence),
         GameButton(1, R.string.game_equation, R.drawable.equation),
         GameButton(2, R.string.game_memory, R.drawable.brain),
-        GameButton(3, R.string.game_sorting, R.drawable.sequence),
+        GameButton(3, R.string.game_sorting, R.drawable.hilo),
         GameButton(4, R.string.game_typo, R.drawable.typo)
     )
 

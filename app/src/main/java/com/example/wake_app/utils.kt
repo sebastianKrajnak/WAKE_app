@@ -8,6 +8,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import com.example.wake_app.activity.ClickSequenceGameActivity
 import com.example.wake_app.activity.ConstructWordGameActivity
 import com.example.wake_app.activity.EquationMiniGameActivity
 import com.example.wake_app.activity.SequenceGameActivity
@@ -71,16 +72,22 @@ private fun decideGameActivity(alarm: Alarm): Class<*> {
     }
     val chosenGame = gameIndex[Math.floor(Math.random() * gameIndex.size).toInt()]
 
-    if (chosenGame == 0) {
-        return EquationMiniGameActivity::class.java
-    } else if (chosenGame == 1) {
-        return EquationMiniGameActivity::class.java
-    } else if (chosenGame == 2) {
-        return EquationMiniGameActivity::class.java
-    } else if (chosenGame == 3) {
-        return SequenceGameActivity::class.java
-    } else {
-        return ConstructWordGameActivity::class.java
+    when (chosenGame) {
+        0 -> {
+            return ClickSequenceGameActivity::class.java
+        }
+        1 -> {
+            return EquationMiniGameActivity::class.java
+        }
+        2 -> {
+            return EquationMiniGameActivity::class.java //change to the new game
+        }
+        3 -> {
+            return SequenceGameActivity::class.java
+        }
+        else -> {
+            return ConstructWordGameActivity::class.java
+        }
     }
 }
 

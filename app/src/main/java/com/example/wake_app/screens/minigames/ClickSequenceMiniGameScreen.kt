@@ -3,6 +3,7 @@ package com.example.wake_app.screens.minigames
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -25,10 +26,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.wake_app.BottomBarScreen
 import com.example.wake_app.R
+import com.example.wake_app.ui.theme.*
 import kotlin.random.Random
 
 @Composable
-fun ClickSequenceMiniGameScreen(navController: NavHostController) {
+fun ClickSequenceMiniGameScreen() {
     val context = LocalContext.current
     val listNums = mutableListOf(1,2,3,4,5)
     val checker = mutableListOf(
@@ -43,20 +45,25 @@ fun ClickSequenceMiniGameScreen(navController: NavHostController) {
     Column(
         Modifier
             .fillMaxSize()
-            .background(colorResource(R.color.background_light))
             .padding(15.dp)
+            .background(if (isSystemInDarkTheme()) md_theme_dark_background else md_theme_light_background)
     ) {
         Text(text = "Click the buttons in the correct order",
             fontSize = 30.sp,
             modifier = Modifier.padding(16.dp),
-            color = colorResource(R.color.text_color_white),
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            color = if (isSystemInDarkTheme()) md_theme_dark_onBackground else md_theme_light_onBackground
         )
         Spacer(modifier = Modifier.height(60.dp))
 
         // Add the buttons to the screen
        for (num in listNums) {
-           val color = if(!checker[num-1].value) colorResource(R.color.main_accent) else Color(152,152,152)
+           val color = if(!checker[num-1].value) {
+               if (isSystemInDarkTheme())
+                   md_theme_dark_primary
+               else
+                   md_theme_light_primary
+           } else Color.Gray
            Spacer(modifier = Modifier.height(Random.nextInt(0, 30).dp))
            Row(modifier = Modifier
                .align(Alignment.CenterHorizontally)
@@ -64,7 +71,7 @@ fun ClickSequenceMiniGameScreen(navController: NavHostController) {
            ) {
                Button(
                    onClick = {
-                       checkSequence(num, checker, context, navController)
+                       checkSequence(num, checker, context)
                    },
                    modifier = Modifier
                        .size(85.dp)
@@ -80,7 +87,7 @@ fun ClickSequenceMiniGameScreen(navController: NavHostController) {
     }
 }
 
-fun checkSequence(num: Int, checker: MutableList<MutableState<Boolean>>, context: Context, navController: NavHostController) {
+fun checkSequence(num: Int, checker: MutableList<MutableState<Boolean>>, context: Context) {
     if (num == 1) {
         checker[0].value = true
     }
@@ -88,7 +95,7 @@ fun checkSequence(num: Int, checker: MutableList<MutableState<Boolean>>, context
         checker[num-1].value = true
         if (num == 5) {
             Toast.makeText(context, "Correct! Good morning", Toast.LENGTH_SHORT).show()
-            navController.navigate(BottomBarScreen.Home.route)
+            //navController.navigate(BottomBarScreen.Home.route)
         }
     }
     else {
@@ -99,6 +106,5 @@ fun checkSequence(num: Int, checker: MutableList<MutableState<Boolean>>, context
 @Preview
 @Composable
 fun PreviewSequenceMiniGameScreen() {
-    val navController = rememberNavController()
-    ClickSequenceMiniGameScreen(navController)
+    ClickSequenceMiniGameScreen()
 }

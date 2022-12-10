@@ -21,8 +21,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.wake_app.BottomBarScreen
 import com.example.wake_app.R
+import com.example.wake_app.activity.ClickSequenceGameActivity
 import com.example.wake_app.data.DataSource.alarmSounds
 import com.example.wake_app.data.DataSource.languages
+import com.example.wake_app.model.minigames.ConstructWord
 import com.example.wake_app.ui.theme.md_theme_dark_background
 import com.example.wake_app.ui.theme.md_theme_light_background
 import com.example.wake_app.ui.theme.md_theme_switch_unchecked_thumb
@@ -51,12 +53,8 @@ private fun PageContent(modifier: Modifier = Modifier, navController: NavHostCon
     ) {
         DropdownRow(Text = "Language", DropdownItems = languages)
         DropdownRow(Text = "Default alarm sound", DropdownItems = alarmSounds)
-        SwitcherRow(Text = "Push notifications")
         SwitcherRow(Text = "Dark mode")
         AboutRow(Text = "About")
-        Button(onClick = { navController.navigate(BottomBarScreen.SequenceGame.route) }, modifier = Modifier.padding(start = 10.dp)) {
-            Text(text="Try sequence")
-        }
     }
 }
 

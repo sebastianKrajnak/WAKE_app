@@ -44,10 +44,4 @@ sealed class BottomBarScreen(
         icon = Icons.Default.Info
     )
 
-    // Minigames
-    object SequenceGame: BottomBarScreen (
-        route = "sequenceGame",
-        tittle = "Sequence minigame",
-        icon = Icons.Default.Info
-    )
 }

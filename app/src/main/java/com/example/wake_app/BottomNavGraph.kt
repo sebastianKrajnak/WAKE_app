@@ -35,8 +35,6 @@ fun BottomNavGraph(navController: NavHostController) {
         composable( route = BottomBarScreen.AlarmEdit.route) {
             AlarmEditScreen(navController, sharedViewModel)
         }
-        composable( route = BottomBarScreen.SequenceGame.route) {
-            ClickSequenceMiniGameScreen(navController)
-        }
+
     }
 }

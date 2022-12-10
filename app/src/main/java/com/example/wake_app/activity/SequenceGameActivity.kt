@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import com.example.wake_app.model.minigames.SortSequence
 import com.example.wake_app.NOTIFICATION_CHANNEL_ID
 import com.example.wake_app.screens.minigames.SortSequenceMiGameScreen
+import com.example.wake_app.ui.theme.WAKE_appTheme
 
 
 class SequenceGameActivity : ComponentActivity() {
@@ -19,8 +20,11 @@ class SequenceGameActivity : ComponentActivity() {
         notificationManager.cancel(NOTIFICATION_CHANNEL_ID)
 
         setContent {
-            GenerateRandomGame()
+            WAKE_appTheme {
+                GenerateRandomGame()
+            }
         }
+
     }
 
 }
@@ -28,7 +32,7 @@ class SequenceGameActivity : ComponentActivity() {
 @Composable
 private fun GenerateRandomGame() {
     return SortSequenceMiGameScreen (
-        SortSequence(1,100,10)
+        SortSequence(1,99,10)
     )
 }
 

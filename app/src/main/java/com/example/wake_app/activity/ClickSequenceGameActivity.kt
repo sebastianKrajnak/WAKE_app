@@ -2,17 +2,15 @@ package com.example.wake_app.activity
 
 import android.app.NotificationManager
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.example.wake_app.NOTIFICATION_CHANNEL_ID
-import com.example.wake_app.model.minigames.Expression
-import com.example.wake_app.screens.minigames.EquationMiniGameScreen
+import com.example.wake_app.screens.minigames.ClickSequenceMiniGameScreen
 import com.example.wake_app.ui.theme.WAKE_appTheme
 
 
-class EquationMiniGameActivity : ComponentActivity() {
+class ClickSequenceGameActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +20,7 @@ class EquationMiniGameActivity : ComponentActivity() {
 
         setContent {
             WAKE_appTheme {
-                EquationMiniGameScreen(Expression(1,10))
+                ClickSequenceMiniGameScreen()
             }
         }
 

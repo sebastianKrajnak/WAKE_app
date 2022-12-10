@@ -95,6 +95,7 @@ fun HomeScreen(navController: NavHostController, sharedViewModel: SharedViewMode
 fun AlarmItem(alarm: Alarm, NavController: NavHostController, repo: AlarmRepository, sharedViewModel: SharedViewModel) {
     var expanded by remember { mutableStateOf(false) }
     val checkedState = remember { mutableStateOf(alarm.active) }
+    val context = LocalContext.current
     val textColor = if (checkedState.value) {
         if (isSystemInDarkTheme())
             md_theme_dark_onSurface
@@ -102,7 +103,6 @@ fun AlarmItem(alarm: Alarm, NavController: NavHostController, repo: AlarmReposit
             md_theme_light_onSurface
         } else Color.Gray
 
-    val context = LocalContext.current
    val iconColorFilter = if (checkedState.value)
         ColorFilter.tint(
             if (isSystemInDarkTheme())
@@ -111,7 +111,7 @@ fun AlarmItem(alarm: Alarm, NavController: NavHostController, repo: AlarmReposit
                 md_theme_light_primary
         )
         else
-            ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0F) })
+            ColorFilter.tint(Color.Gray)
 
     Card(
         onClick = { expanded = !expanded},
@@ -129,7 +129,7 @@ fun AlarmItem(alarm: Alarm, NavController: NavHostController, repo: AlarmReposit
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(top = 3.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 AlarmInformation(alarm, checkedState = checkedState.value)

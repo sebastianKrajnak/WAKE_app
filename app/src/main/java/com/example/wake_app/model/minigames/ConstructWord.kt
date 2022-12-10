@@ -7,7 +7,7 @@ import com.example.wake_app.data.CommonWords
 import com.example.wake_app.data.ConstructWordMiniGameLetter
 
 class ConstructWord {
-    val title = "Construct words using given letters"
+    val title = "Construct a word using given letters"
 
     var result = mutableStateOf("")
     var word = mutableStateOf("")
