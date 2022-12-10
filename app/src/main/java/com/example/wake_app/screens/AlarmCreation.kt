@@ -11,6 +11,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -323,7 +324,7 @@ fun GameItem(gameBtn: GameButton, alarm: Alarm) {
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
                 .size(60.dp, 60.dp),
-            border = BorderStroke(1.dp, md_theme_dark_secondary)
+            border = BorderStroke(1.dp, if (isSystemInDarkTheme()) md_theme_dark_secondary else md_theme_light_secondary)
         ) {
             Image(
                 painter = painterResource(gameBtn.iconResourceId),

@@ -36,10 +36,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.wake_app.BottomBarScreen
 import com.example.wake_app.model.Alarm
-import com.example.wake_app.R
 import com.example.wake_app.data.DataSource.gameButtons
 import com.example.wake_app.data.DataSource.weekdayButtons
-import com.example.wake_app.model.Alarm
 import com.example.wake_app.model.AlarmRepository
 import com.example.wake_app.model.ExternalAlarmRepository
 import com.example.wake_app.model.SharedViewModel
@@ -245,7 +243,6 @@ fun AlarmInformation(alarm: Alarm, modifier: Modifier = Modifier, checkedState: 
                 text = alarm.time,
                 fontSize = 35.sp,
                 fontWeight = FontWeight.Bold,
-                fontFamily = inter,
                 color = textColor,
                 modifier = Modifier.padding(bottom = 0.dp),
                 style = TextStyle(
@@ -256,7 +253,6 @@ fun AlarmInformation(alarm: Alarm, modifier: Modifier = Modifier, checkedState: 
                 text = alarm.name,
                 modifier = modifier.padding(start = 9.dp),
                 fontSize = 20.sp,
-                fontFamily = inter,
                 color = textColor
             )
         }
