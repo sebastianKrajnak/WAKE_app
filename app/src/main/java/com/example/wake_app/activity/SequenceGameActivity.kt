@@ -18,7 +18,6 @@ class SequenceGameActivity : ComponentActivity() {
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.cancel(NOTIFICATION_CHANNEL_ID)
 
-
         setContent {
             GenerateRandomGame()
         }

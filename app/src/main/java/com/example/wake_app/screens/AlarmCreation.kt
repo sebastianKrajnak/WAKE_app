@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.wake_app.BROADCAST_REQUEST_CODE
 import com.example.wake_app.R
 import com.example.wake_app.data.DataSource.gameButtons
 import com.example.wake_app.data.DataSource.weekdayButtons
@@ -364,7 +365,7 @@ fun setAlarm(context: Context, alarm: Alarm) {
 
     intent.putExtra("alarm", SerializationUtils.serialize(alarm))
     intent.action = alarm.id.toString()
-    val pendingIntent = PendingIntent.getBroadcast(context, 1597, intent, PendingIntent.FLAG_IMMUTABLE)
+    val pendingIntent = PendingIntent.getBroadcast(context, BROADCAST_REQUEST_CODE, intent, PendingIntent.FLAG_IMMUTABLE)
 
     val calendar: Calendar = Calendar.getInstance()
     val hours = alarm.time.split(":").get(0).toInt()
@@ -390,6 +391,15 @@ fun setAlarm(context: Context, alarm: Alarm) {
     // Todo make pretty toast message
     Toast.makeText(context, "Alarm is set for " + calculateTimeTillAlarm(alarm, calendar.timeInMillis) + " from now", Toast.LENGTH_LONG).show()
 }
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun cancelAlarm(context: Context, alarm: Alarm) {
+    val intent = Intent(context, AlarmNotification::class.java)
+    intent.action = alarm.id.toString()
+    PendingIntent.getBroadcast(context, BROADCAST_REQUEST_CODE, intent, PendingIntent.FLAG_IMMUTABLE).cancel()
+}
+
 
 private fun calculateRepeatingTime(alarm: Alarm, calendar: Calendar): Long {
     val calendarToWeekdaysMapping: HashMap<Int, Int> = hashMapOf(

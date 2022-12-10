@@ -17,8 +17,8 @@ class AlarmNotification : BroadcastReceiver() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onReceive(context: Context, intent: Intent) {
-        val repo: AlarmRepository by lazy { ExternalAlarmRepository(context) }
         val alarm : Alarm = SerializationUtils.deserialize(intent.getByteArrayExtra("alarm"))
+        val repo: AlarmRepository = ExternalAlarmRepository(context)
 
         if (repo.findAlarmByID(alarm.id!!) != null ) {
             val alarmFromRepo = repo.findAlarmByID(alarm.id!!)!!
@@ -33,9 +33,8 @@ class AlarmNotification : BroadcastReceiver() {
 
             if (isSingleUserAlarm(alarmFromRepo)) {
                 context.showNotificationWithFullScreenIntent(alarm = alarmFromRepo)
-                val newAlarm = alarmFromRepo
-                newAlarm.active = false
-                repo.updateAlarm(alarmFromRepo, newAlarm)
+                alarmFromRepo.active = false
+                repo.updateAlarm(alarmFromRepo)
             }
         }
     }

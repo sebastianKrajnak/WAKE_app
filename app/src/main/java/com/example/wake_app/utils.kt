@@ -75,5 +75,6 @@ private fun decideGameActivity(alarm: Alarm): Class<*> {
     }
 }
 
+const val BROADCAST_REQUEST_CODE = 1597
 const val NOTIFICATION_CHANNEL_ID = 1597
 private const val CHANNEL_ID = "channelId-wake"

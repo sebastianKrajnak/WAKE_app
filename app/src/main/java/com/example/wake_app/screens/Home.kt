@@ -124,11 +124,14 @@ fun AlarmItem(alarm: Alarm, NavController: NavHostController, repo: AlarmReposit
                     checked = checkedState.value,
                     onCheckedChange = {
                         checkedState.value = it
-                        val activeAlarm = Alarm(alarm.time, alarm.games, alarm.weekdays, alarm.name, !alarm.active)
-                        activeAlarm.active = !alarm.active
-                        repo.updateAlarm(alarm, activeAlarm)
-                        if (!alarm.active) setAlarm(context, activeAlarm)
+                        val newAlarm = Alarm(alarm.time, alarm.games, alarm.weekdays, alarm.name, alarm.vibrate, !alarm.active, alarm.id)
+                        repo.updateAlarm(alarm, newAlarm)
 
+                        if (!alarm.active) {
+                            setAlarm(context, newAlarm)
+                        } else {
+                            cancelAlarm(context, newAlarm)
+                        }
                     },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = colorResource(id = R.color.main_accent),
