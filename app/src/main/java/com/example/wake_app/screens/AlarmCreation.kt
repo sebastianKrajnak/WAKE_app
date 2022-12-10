@@ -49,6 +49,7 @@ import org.apache.commons.lang3.SerializationUtils
 import com.example.wake_app.ui.theme.*
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -418,7 +419,7 @@ fun setAlarm(context: Context, alarm: Alarm) {
     }
 
     // Todo make pretty toast message
-    Toast.makeText(context, "Alarm is set for " + calculateTimeTillAlarm(alarm, calendar.timeInMillis) + " from now", Toast.LENGTH_LONG).show()
+    Toast.makeText(context, calculateTimeTillAlarm(alarm, calendar), Toast.LENGTH_LONG).show()
 }
 
 
@@ -468,15 +469,46 @@ private fun calculateRepeatingTime(alarm: Alarm, calendar: Calendar): Long {
     return calendar.timeInMillis
 }
 
-
 @RequiresApi(Build.VERSION_CODES.O)
-fun calculateTimeTillAlarm(alarm: Alarm, triggerTime: Long) : String {
-    if (alarm.weekdays.contains(true)){
-        alarm.weekdays // find next day for alarm if set
-        return "TODO get time till alarm - can be a few days"
+fun calculateTimeTillAlarm(alarm: Alarm, calendar: Calendar) : String {
+    if (alarm.weekdays.contains(true)) {
+        val timeTillRun = calculateRepeatingTime(alarm, calendar)
+        calendar.timeInMillis = timeTillRun
     } else {
-        val unit = "minutes"
-        return unit + ((triggerTime - System.currentTimeMillis()) / 1000 / 60 )
-    }
+        calendar.timeInMillis = calendar.timeInMillis - System.currentTimeMillis()
 
+
+    }
+    if (TimeUnit.DAYS.convert(calendar.timeInMillis, TimeUnit.MILLISECONDS) != 0L) {
+        return "Alarm is set for " + TimeUnit.DAYS.convert(calendar.timeInMillis, TimeUnit.MILLISECONDS) + " days from now"
+    } else if(TimeUnit.HOURS.convert(calendar.timeInMillis, TimeUnit.MILLISECONDS) != 0L) {
+        return "Alarm is set for " + TimeUnit.HOURS.convert(calendar.timeInMillis, TimeUnit.MILLISECONDS) + " hours from now"
+    } else if(TimeUnit.MINUTES.convert(calendar.timeInMillis, TimeUnit.MILLISECONDS) != 0L) {
+        return "Alarm is set for " + TimeUnit.MINUTES.convert(calendar.timeInMillis, TimeUnit.MILLISECONDS) + " minutes from now"
+    } else if(TimeUnit.SECONDS.convert(calendar.timeInMillis, TimeUnit.MILLISECONDS) != 0L) {
+        return "Alarm is set for 1 minute from now"
+    } else {
+        return "Alarm is set!"
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
