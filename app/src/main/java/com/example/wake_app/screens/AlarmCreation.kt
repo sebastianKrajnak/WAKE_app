@@ -1,6 +1,5 @@
 package com.example.wake_app.screens
 
-import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.app.TimePickerDialog
@@ -364,8 +363,7 @@ fun setAlarm(context: Context, alarm: Alarm) {
     val intent = Intent(context, AlarmNotification::class.java)
 
     intent.putExtra("alarm", SerializationUtils.serialize(alarm))
-
-
+    intent.action = alarm.id.toString()
     val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
     val calendar: Calendar = Calendar.getInstance()
@@ -382,29 +380,72 @@ fun setAlarm(context: Context, alarm: Alarm) {
 
     val repeating: Boolean = alarm.weekdays.contains(true)
     if (repeating) {
-        val intervalDay : Long = 1000 * 60 * 24
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, intervalDay, pendingIntent)
+        val timeTillNextTrigger = calculateRepeatingTime(alarm, calendar)
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeTillNextTrigger, pendingIntent)
     } else {
-        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+        if (calendar.timeInMillis <= System.currentTimeMillis()) calendar.add(Calendar.DAY_OF_YEAR, 1)
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
     }
 
-    Toast.makeText(context, "Alarm is set for" + calculateTimeTillAlarm(alarm, hours, minutes) + " from now", Toast.LENGTH_LONG).show()
+    Toast.makeText(context, "Alarm is set for " + calculateTimeTillAlarm(alarm, calendar.timeInMillis) + " from now", Toast.LENGTH_LONG).show()
+}
+
+private fun calculateRepeatingTime(alarm: Alarm, calendar: Calendar): Long {
+    val hashMap: HashMap<Int, Int> = hashMapOf(
+        2 to 0,
+        3 to 1,
+        4 to 2,
+        5 to 3,
+        6 to 4,
+        7 to 5,
+        1 to 6,
+    )
+    var days: Int = 0
+    var currentIdx = hashMap.get(calendar[Calendar.DAY_OF_WEEK])!!
+    if (alarm.weekdays.get(currentIdx)) {
+        if (calendar.timeInMillis <= System.currentTimeMillis()){
+            if (currentIdx == 6) {
+                currentIdx = 0
+                days++
+            } else {
+                currentIdx++
+                days++
+            }
+            while (!alarm.weekdays.get(currentIdx)) {
+                if (currentIdx == 6) {
+                    currentIdx = 0
+                    days++
+                } else {
+                    currentIdx++
+                    days++
+                }
+            }
+        }
+    } else {
+        while (!alarm.weekdays.get(currentIdx)) {
+            if (currentIdx == 6) {
+                currentIdx = 0
+                days++
+            } else {
+                currentIdx++
+                days++
+            }
+        }
+    }
+    System.out.println("Calculate time for repeating")
+    calendar.add(Calendar.DAY_OF_YEAR, days)
+    return calendar.timeInMillis
 }
 
 
-@SuppressLint("NewApi")
-fun calculateTimeTillAlarm(alarm: Alarm, hours: Int, minutes: Int) : String {
-    val c = Calendar.getInstance()
-    val day = c[Calendar.DAY_OF_MONTH]
-    val month = c[Calendar.MONTH]
-    val dayOfWeek = c[Calendar.DAY_OF_WEEK]
-
-
+@RequiresApi(Build.VERSION_CODES.O)
+fun calculateTimeTillAlarm(alarm: Alarm, triggerTime: Long) : String {
     if (alarm.weekdays.contains(true)){
         alarm.weekdays // find next day for alarm if set
-        return "TODO get time till alarm"
+        return "TODO get time till alarm - can be a few days"
     } else {
-        return "TODO get time till alarm"
+        val unit = "minutes"
+        return unit + ((triggerTime - System.currentTimeMillis()) / 1000 / 60 )
     }
 
 }

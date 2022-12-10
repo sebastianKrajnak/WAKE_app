@@ -23,18 +23,22 @@ fun Context.showNotificationWithFullScreenIntent(
         .setSmallIcon(android.R.drawable.arrow_up_float)
         .setContentTitle(alarm.name)
         .setPriority(NotificationCompat.PRIORITY_HIGH)
-        .setFullScreenIntent(getFullScreenIntent(alarm), true)
+        .setFullScreenIntent(getFullScreenIntent(alarm, false), true)
+        .addAction(R.drawable.sequence, "Dismiss",
+            getFullScreenIntent(alarm, true))
+        .setAutoCancel(true)
+
 
     val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
     with(notificationManager) {
-        buildChannel()
+        buildChannel(alarm)
         val notification = builder.build()
         notify(0, notification)
     }
 }
 
-private fun NotificationManager.buildChannel() {
+private fun NotificationManager.buildChannel(alarm: Alarm) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         val name = "WAKE Alarm Channel"
         val descriptionText = "Full Screen Intent for alarm"
@@ -42,21 +46,24 @@ private fun NotificationManager.buildChannel() {
         val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
             description = descriptionText
         }
-
+        channel.enableVibration(alarm.vibrate)
+//        channel.setSound() // TODO get sound
         createNotificationChannel(channel)
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.M)
-private fun Context.getFullScreenIntent(alarm: Alarm): PendingIntent {
+private fun Context.getFullScreenIntent(alarm: Alarm, cancelNotification: Boolean): PendingIntent {
     val destination = decideGameActivity(alarm)
     val intent = Intent(this, destination)
+
+
 
     return PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 }
 
 private fun decideGameActivity(alarm: Alarm): Class<*> {
-    // Todo get games from array and choose random
+    // Todo get games from array and choose random by index
 
 
     if (alarm.games[0]) {

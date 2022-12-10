@@ -3,6 +3,7 @@ package com.example.wake_app.model
 import android.content.Context
 import android.os.Environment
 import java.io.*
+import java.util.*
 
 class ExternalAlarmRepository(var context: Context) : AlarmRepository {
 
@@ -55,6 +56,16 @@ class ExternalAlarmRepository(var context: Context) : AlarmRepository {
                 oos.close()
             }
         }
+    }
+
+    override fun findAlarmByID(id: UUID) : Alarm? {
+        var alarmList = getAlarmList()
+        var alarm: Alarm? = null
+        alarmList.forEach {
+            if (it.id == id)
+                alarm = it
+        }
+        return alarm
     }
 
     override fun updateAlarm(old: Alarm, new: Alarm) {

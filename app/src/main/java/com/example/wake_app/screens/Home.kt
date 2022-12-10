@@ -1,5 +1,7 @@
 package com.example.wake_app.screens
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -44,6 +46,7 @@ import com.example.wake_app.model.SharedViewModel
 import com.example.wake_app.ui.theme.inter
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(navController: NavHostController, sharedViewModel: SharedViewModel) {
     val context = LocalContext.current
@@ -84,11 +87,13 @@ fun HomeScreen(navController: NavHostController, sharedViewModel: SharedViewMode
     )
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun AlarmItem(alarm: Alarm, NavController: NavHostController, repo: AlarmRepository, sharedViewModel: SharedViewModel) {
     var expanded by remember { mutableStateOf(false) }
     val checkedState = remember { mutableStateOf(alarm.active) }
+    val context = LocalContext.current
     val textColor = if (checkedState.value) colorResource(R.color.text_color_white) else Color.DarkGray
     val iconColorFilter = if (checkedState.value)
         ColorFilter.tint(colorResource(R.color.main_accent))
@@ -119,7 +124,11 @@ fun AlarmItem(alarm: Alarm, NavController: NavHostController, repo: AlarmReposit
                     checked = checkedState.value,
                     onCheckedChange = {
                         checkedState.value = it
-                        repo.updateAlarm(alarm, Alarm(alarm.time, alarm.games, alarm.weekdays, alarm.name, !alarm.active))
+                        val activeAlarm = Alarm(alarm.time, alarm.games, alarm.weekdays, alarm.name, !alarm.active)
+                        activeAlarm.active = !alarm.active
+                        repo.updateAlarm(alarm, activeAlarm)
+                        if (!alarm.active) setAlarm(context, activeAlarm)
+
                     },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = colorResource(id = R.color.main_accent),
@@ -246,6 +255,7 @@ fun AlarmInformation(alarm: Alarm, modifier: Modifier = Modifier, checkedState: 
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview
 fun HomeScreenPreview() {
