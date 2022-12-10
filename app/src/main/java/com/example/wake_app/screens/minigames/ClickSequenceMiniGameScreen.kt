@@ -1,5 +1,6 @@
 package com.example.wake_app.screens.minigames
 
+import android.app.Activity
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -32,6 +33,8 @@ import kotlin.random.Random
 @Composable
 fun ClickSequenceMiniGameScreen() {
     val context = LocalContext.current
+    val activity = (LocalContext.current as? Activity)
+
     val listNums = mutableListOf(1,2,3,4,5)
     val checker = mutableListOf(
         remember { mutableStateOf(false) },
@@ -71,7 +74,7 @@ fun ClickSequenceMiniGameScreen() {
            ) {
                Button(
                    onClick = {
-                       checkSequence(num, checker, context)
+                       if (checkSequence(num, checker, context) ) activity!!.finish()
                    },
                    modifier = Modifier
                        .size(85.dp)
@@ -87,7 +90,7 @@ fun ClickSequenceMiniGameScreen() {
     }
 }
 
-fun checkSequence(num: Int, checker: MutableList<MutableState<Boolean>>, context: Context) {
+fun checkSequence(num: Int, checker: MutableList<MutableState<Boolean>>, context: Context): Boolean {
     if (num == 1) {
         checker[0].value = true
     }
@@ -95,12 +98,14 @@ fun checkSequence(num: Int, checker: MutableList<MutableState<Boolean>>, context
         checker[num-1].value = true
         if (num == 5) {
             Toast.makeText(context, "Correct! Good morning", Toast.LENGTH_SHORT).show()
-            //navController.navigate(BottomBarScreen.Home.route)
+            return true
         }
     }
     else {
         Toast.makeText(context, "Incorrect order try again!", Toast.LENGTH_SHORT).show()
+        return false
     }
+    return false
 }
 
 @Preview
