@@ -13,7 +13,7 @@ import com.example.wake_app.screens.minigames.ConstructWordMiniGameScreen
 import com.example.wake_app.ui.theme.WAKE_appTheme
 
 
-class ConstructWordGameActivity : ComponentActivity() {
+class ConstructWordGameActivity : SoundAndVibration() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

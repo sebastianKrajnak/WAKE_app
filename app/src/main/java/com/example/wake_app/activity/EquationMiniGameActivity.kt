@@ -2,18 +2,19 @@ package com.example.wake_app.activity
 
 import android.app.NotificationManager
 import android.content.Context
-import android.content.Intent
-import android.os.Bundle
-import androidx.activity.ComponentActivity
+import android.os.*
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
+import com.example.wake_app.CHANNEL_ID
 import com.example.wake_app.NOTIFICATION_CHANNEL_ID
 import com.example.wake_app.model.minigames.Expression
 import com.example.wake_app.screens.minigames.EquationMiniGameScreen
 import com.example.wake_app.ui.theme.WAKE_appTheme
 
 
-class EquationMiniGameActivity : ComponentActivity() {
+class EquationMiniGameActivity : SoundAndVibration() {
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Cancel notification
@@ -27,5 +28,7 @@ class EquationMiniGameActivity : ComponentActivity() {
         }
 
     }
+
+
 }
 

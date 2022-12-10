@@ -12,7 +12,7 @@ import com.example.wake_app.screens.minigames.SortSequenceMiGameScreen
 import com.example.wake_app.ui.theme.WAKE_appTheme
 
 
-class SequenceGameActivity : ComponentActivity() {
+class SequenceGameActivity : SoundAndVibration() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Cancel notification

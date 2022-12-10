@@ -10,7 +10,7 @@ import com.example.wake_app.screens.minigames.ClickSequenceMiniGameScreen
 import com.example.wake_app.ui.theme.WAKE_appTheme
 
 
-class ClickSequenceGameActivity : ComponentActivity() {
+class ClickSequenceGameActivity : SoundAndVibration() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
