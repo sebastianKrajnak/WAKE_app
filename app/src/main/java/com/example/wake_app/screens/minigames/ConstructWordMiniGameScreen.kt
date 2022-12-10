@@ -1,5 +1,6 @@
 package com.example.wake_app.screens.minigames
 
+import android.app.Activity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -14,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -87,6 +89,7 @@ fun ConstructWordMiniGameScreen(cw: ConstructWord) {
 @Composable
 fun GameLetterBtn(cw: ConstructWord, cwLetter : ConstructWordMiniGameLetter, index : Int) {
     val color = if (cwLetter.selected) colorResource(R.color.main_accent) else Color(152,152,152)
+    val activity = (LocalContext.current as? Activity)
 
     Column (modifier = Modifier
         .padding(5.dp)
@@ -99,7 +102,7 @@ fun GameLetterBtn(cw: ConstructWord, cwLetter : ConstructWordMiniGameLetter, ind
 
                 System.out.println(cw.result)
                 System.out.println(cw.word)
-                if (cw.isCorrect()) System.out.println("CORRECT")
+                if (cw.isCorrect()) activity!!.finish()
             },
             colors = ButtonDefaults.buttonColors(backgroundColor = color),
         ) {
