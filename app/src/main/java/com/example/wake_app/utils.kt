@@ -12,6 +12,7 @@ import com.example.wake_app.activity.ConstructWordGameActivity
 import com.example.wake_app.activity.EquationMiniGameActivity
 import com.example.wake_app.activity.SequenceGameActivity
 import com.example.wake_app.model.Alarm
+import kotlin.random.Random
 
 
 @RequiresApi(Build.VERSION_CODES.M)
@@ -63,15 +64,23 @@ private fun Context.getFullScreenIntent(alarm: Alarm, cancelNotification: Boolea
 }
 
 private fun decideGameActivity(alarm: Alarm): Class<*> {
-    // Todo get games from array and choose random by index
+    val gameIndex = ArrayList<Int>()
+    alarm.games.forEachIndexed{ index, element ->
+        if (element)
+            gameIndex += index
+    }
+    val chosenGame = gameIndex[Math.floor(Math.random() * gameIndex.size).toInt()]
 
-
-    if (alarm.games[0]) {
-        return ConstructWordGameActivity::class.java
-    } else if (alarm.games[1]) {
+    if (chosenGame == 0) {
         return EquationMiniGameActivity::class.java
-    } else {
+    } else if (chosenGame == 1) {
+        return EquationMiniGameActivity::class.java
+    } else if (chosenGame == 2) {
+        return EquationMiniGameActivity::class.java
+    } else if (chosenGame == 3) {
         return SequenceGameActivity::class.java
+    } else {
+        return ConstructWordGameActivity::class.java
     }
 }
 

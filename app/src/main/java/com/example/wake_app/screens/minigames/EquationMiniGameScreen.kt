@@ -1,5 +1,6 @@
 package com.example.wake_app.screens.minigames
 
+import android.app.Activity
 import android.view.KeyEvent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -33,6 +35,7 @@ fun EquationMiniGameScreen(expr: Expression) {
     var result by remember { mutableStateOf("") }
     var strExpr by remember { mutableStateOf(expr.toString()) }
     val focusManager = LocalFocusManager.current
+    val activity = (LocalContext.current as? Activity)
     Column(
         Modifier
             .fillMaxSize()
@@ -80,7 +83,7 @@ fun EquationMiniGameScreen(expr: Expression) {
                     if (it.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_ENTER){
                         //result.dropLast(1); //remove whitespace
                         System.out.println("result $result")
-                        checkResult(result, expr.getResult(), navController)
+//                        if (checkResult(result, expr.getResult(), navController)) activity!!.finish()
                         focusManager.clearFocus()
                         result=result.trim()
                         true
@@ -90,8 +93,7 @@ fun EquationMiniGameScreen(expr: Expression) {
         )
 
         Button(onClick = {
-            checkResult(result, expr.getResult(), navController)
-
+            if (checkResult(result, expr.getResult(), navController)) activity!!.finish()
         }
         ) {
             Text(text = "Submit")
@@ -102,17 +104,10 @@ fun EquationMiniGameScreen(expr: Expression) {
 }
 
 
-fun checkResult(result: String, gameResult: Int, navController: NavHostController){
+fun checkResult(result: String, gameResult: Int, navController: NavHostController): Boolean {
     val result = result.trim()
-    if (result == "") return
-
-    if (result.toInt().equals(gameResult)) {
-        println("Correct")
-//        navController.navigate(BottomBarScreen.Statistics.route)
-        // TODO navigate to Home screen
-    } else {
-        println("Incorrect")
-    }
+    if (result == "") return false
+    return result.toInt().equals(gameResult)
 }
 
 
