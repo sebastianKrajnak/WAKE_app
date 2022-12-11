@@ -3,10 +3,11 @@ package com.example.wake_app.model.minigames
 import kotlin.random.Random
 
 class Expression(val minVal : Int, val maxMal : Int) {
-    private val _MAX_TERMS = 4;
-    private val _MIN_TERMS = 2;
+    private val _MAX_TERMS = 4
+    private val _MIN_TERMS = 2
+    private val _MAX_MUL = 2
 
-    private var _expr: String = "";
+    private var _expr: String = ""
 
     val title = "Solve the expression"
     val expr: String?
@@ -81,10 +82,18 @@ class Expression(val minVal : Int, val maxMal : Int) {
         s.addFirst(TERMINAL)
 
         var termCnt = 1;
+        var mulCnt = 0
+        if (s[1] == "*") mulCnt++ //first rule was E->E*E
 
         while (termCnt != _MAX_TERMS) {
-            val randRule = Random.nextInt(0,3);
+            val randRule =
+                if (mulCnt == _MAX_MUL)
+                    Random.nextInt(1,3) //max multiplication terms reached, generate rules without mul
+                else
+                    Random.nextInt(0,3)
+
             if (randRule == 3) break; //can break at random to generate <1,_MAX_TERMS> expression
+            else if (randRule == 0) mulCnt++
 
             s.addFirst(operators[randRule]);
             s.addFirst(TERMINAL);
