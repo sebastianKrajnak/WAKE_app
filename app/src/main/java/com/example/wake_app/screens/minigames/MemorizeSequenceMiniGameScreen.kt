@@ -1,5 +1,6 @@
 package com.example.wake_app.screens.minigames
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -12,32 +13,31 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.wake_app.R
 import com.example.wake_app.model.minigames.MemorizeSequence
-import com.example.wake_app.ui.theme.md_theme_dark_background
-import com.example.wake_app.ui.theme.md_theme_dark_onBackground
-import com.example.wake_app.ui.theme.md_theme_light_background
-import com.example.wake_app.ui.theme.md_theme_light_onBackground
+import com.example.wake_app.ui.theme.*
 import kotlinx.coroutines.launch
 
 @Composable
 fun MemorizeSequenceScreen(ms: MemorizeSequence) {
     val context = LocalContext.current
     val btnSize = 90.dp
+
     Column(
         Modifier
             .fillMaxSize()
             .background(if (isSystemInDarkTheme()) md_theme_dark_background else md_theme_light_background),
         horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+    ) {
         Text(text = ms.title,
             fontSize = 30.sp,
             modifier = Modifier
@@ -72,65 +72,28 @@ fun MemorizeSequenceScreen(ms: MemorizeSequence) {
         }
 
         Spacer(Modifier.height(20.dp))
+
         Row(modifier = Modifier
             .align(Alignment.CenterHorizontally)
             .fillMaxWidth()
             .padding(start = 20.dp, end = 20.dp)
         ) {
-            Button(
-                onClick = {
-                    ms.addToSolution(0, context)
-                },
-                enabled = ms.symbolsDisabled.value,
-                modifier = Modifier
-                    .size(btnSize),
-                shape = RoundedCornerShape(25.dp),
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor =
-                    if (ms.symbols[0].selected)
-                        colorResource(R.color.main_accent)
-                    else
-                        Color(152,152,152),
-                    disabledBackgroundColor =
-                    if (ms.symbols[0].selected)
-                        colorResource(R.color.main_accent)
-                    else
-                        Color(152,152,152)
-            )) {
-                Image(
-                    painter = painterResource(R.drawable.triangle),
-                    contentDescription = null
-                )
-            }
+            IconButton(
+                index = 0,
+                ms = ms,
+                context = context,
+                btnSize = btnSize,
+                icon = painterResource(R.drawable.triangle)
+            )
 
             Spacer(Modifier.weight(1f))
 
-            Button(
-                onClick = {
-                    ms.addToSolution(1, context)
-                },
-                enabled = ms.symbolsDisabled.value,
-                modifier = Modifier
-                    .size(btnSize),
-                shape = RoundedCornerShape(25.dp),
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor =
-                    if (ms.symbols[1].selected)
-                        colorResource(R.color.main_accent)
-                    else
-                        Color(152,152,152),
-                    disabledBackgroundColor =
-                    if (ms.symbols[1].selected)
-                        colorResource(R.color.main_accent)
-                    else
-                        Color(152,152,152)
-                ),
-                content = {
-                    Image(
-                        painter = painterResource(R.drawable.circle),
-                        contentDescription = null
-                    )
-                }
+            IconButton(
+                index = 1,
+                ms = ms,
+                context = context,
+                btnSize = btnSize,
+                icon = painterResource(R.drawable.circle)
             )
         }
 
@@ -139,31 +102,13 @@ fun MemorizeSequenceScreen(ms: MemorizeSequence) {
             .fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
-            Button(
-                onClick = {
-                    ms.addToSolution(2, context)
-                },
-                enabled = ms.symbolsDisabled.value,
-                modifier = Modifier
-                    .size(btnSize),
-                shape = RoundedCornerShape(25.dp),
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor =
-                    if (ms.symbols[2].selected)
-                        colorResource(R.color.main_accent)
-                    else
-                        Color(152,152,152),
-                    disabledBackgroundColor =
-                    if (ms.symbols[2].selected)
-                        colorResource(R.color.main_accent)
-                    else
-                        Color(152,152,152)
-                )) {
-                Image(
-                    painter = painterResource(R.drawable.star),
-                    contentDescription = null
-                )
-            }
+            IconButton(
+                index = 2,
+                ms = ms,
+                context = context,
+                btnSize = btnSize,
+                icon = painterResource(R.drawable.star)
+            )
         }
 
 
@@ -172,64 +117,66 @@ fun MemorizeSequenceScreen(ms: MemorizeSequence) {
             .fillMaxWidth()
             .padding(start = 20.dp, end = 20.dp)
         ) {
-            Button(
-                onClick = {
-                    ms.addToSolution(3, context)
-                },
-                enabled = ms.symbolsDisabled.value,
-                modifier = Modifier
-                    .size(btnSize),
-                shape = RoundedCornerShape(25.dp),
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor =
-                    if (ms.symbols[3].selected)
-                        colorResource(R.color.main_accent)
-                    else
-                        Color(152,152,152),
-                    disabledBackgroundColor =
-                    if (ms.symbols[3].selected)
-                        colorResource(R.color.main_accent)
-                    else
-                        Color(152,152,152)
-                )) {
-                Image(
-                    painter = painterResource(R.drawable.cross),
-                    contentDescription = null
-                )
-            }
+            IconButton(
+                index = 3,
+                ms = ms,
+                context = context,
+                btnSize = btnSize,
+                icon = painterResource(R.drawable.cross)
+            )
 
             Spacer(Modifier.weight(1f))
 
-            Button(
-                onClick = {
-                    ms.addToSolution(4, context)
-                },
-                enabled = ms.symbolsDisabled.value,
-                modifier = Modifier
-                    .size(btnSize),
-                shape = RoundedCornerShape(25.dp),
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor =
-                    if (ms.symbols[4].selected)
-                        colorResource(R.color.main_accent)
-                    else
-                        Color(152,152,152),
-                    disabledBackgroundColor =
-                        if (ms.symbols[4].selected)
-                            colorResource(R.color.main_accent)
-                        else
-                            Color(152,152,152)
-                )) {
-                Image(
-                    painter = painterResource(R.drawable.square),
-                    contentDescription = null
-                )
-            }
+            IconButton(
+                index = 4,
+                ms = ms,
+                context = context,
+                btnSize = btnSize,
+                icon = painterResource(R.drawable.square)
+            )
         }
 
     }
+
 }
 
+@Composable
+fun IconButton(
+    index: Int,
+    ms: MemorizeSequence,
+    context: Context,
+    btnSize: Dp,
+    icon: Painter
+) {
+    val colorEnabled = if (isSystemInDarkTheme()) md_theme_dark_primary else md_theme_light_primary
+    val colorDisabled = if (isSystemInDarkTheme()) md_theme_dark_surface else md_theme_light_surface
+    val colorIcon = ColorFilter.tint(
+        if (isSystemInDarkTheme()) md_theme_dark_onSurface
+        else md_theme_light_onSurface
+    )
+
+    Button(
+        onClick = {
+            ms.addToSolution(index, context)
+        },
+        enabled = ms.symbolsDisabled.value,
+        modifier = Modifier
+            .size(btnSize),
+        shape = RoundedCornerShape(25.dp),
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor =
+                if (ms.symbols[index].selected) colorEnabled else colorDisabled,
+            disabledBackgroundColor =
+                if (ms.symbols[index].selected) colorEnabled else colorDisabled
+        )
+    ) {
+        Image(
+            painter = icon,
+            contentDescription = null,
+            colorFilter = colorIcon
+        )
+    }
+}
 
 @Preview
 @Composable
