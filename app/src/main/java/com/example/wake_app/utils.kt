@@ -8,10 +8,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import com.example.wake_app.activity.ClickSequenceGameActivity
-import com.example.wake_app.activity.ConstructWordGameActivity
-import com.example.wake_app.activity.EquationMiniGameActivity
-import com.example.wake_app.activity.SequenceGameActivity
+import com.example.wake_app.activity.*
 import com.example.wake_app.model.Alarm
 import kotlin.random.Random
 
@@ -80,7 +77,7 @@ private fun decideGameActivity(alarm: Alarm): Class<*> {
             return EquationMiniGameActivity::class.java
         }
         2 -> {
-            return EquationMiniGameActivity::class.java //change to the new game
+            return MemorizeSequenceActivity::class.java //change to the new game
         }
         3 -> {
             return SequenceGameActivity::class.java

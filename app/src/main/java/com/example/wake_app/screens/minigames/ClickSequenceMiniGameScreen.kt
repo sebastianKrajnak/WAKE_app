@@ -48,7 +48,7 @@ fun ClickSequenceMiniGameScreen() {
     Column(
         Modifier
             .fillMaxSize()
-            .padding(15.dp)
+            //.padding(15.dp)
             .background(if (isSystemInDarkTheme()) md_theme_dark_background else md_theme_light_background)
     ) {
         Text(text = "Click the buttons in the correct order",

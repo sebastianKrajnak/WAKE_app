@@ -1,5 +1,8 @@
 package com.example.wake_app.model.minigames
 
+import android.app.Activity
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
@@ -8,7 +11,8 @@ import kotlinx.coroutines.delay
 import kotlin.random.Random
 import kotlin.random.nextInt
 
-class MemorizeSequence(val length: Int, val showDelay: Long) {
+
+class MemorizeSequence(val length: Int, val showDelay: Long = 300) {
     private val _SYMBOL_LEN = 5
     private val _SUSPEND_TIME = 10 //seconds
 
@@ -61,14 +65,19 @@ class MemorizeSequence(val length: Int, val showDelay: Long) {
         }
     }
 
-    fun addToSolution(index: Int) {
+    fun addToSolution(index: Int, context: Context) {
+        val activity = (context as? Activity)
+
         seqSolution.add(index)
         if (seqSolution.size != seq.size) return
 
         if (seqSolution == seq) {
-            System.out.println("CORRECT")
+            println("CORRECT")
+            Toast.makeText(context, "Correct! Good morning", Toast.LENGTH_SHORT).show()
+            activity!!.finish()
         } else {
-            System.out.println("inCORRECT")
+            println("inCORRECT")
+            Toast.makeText(context, "Incorrect, try again!", Toast.LENGTH_SHORT).show()
             seqSolution.clear()
         }
     }

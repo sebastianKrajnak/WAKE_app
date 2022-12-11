@@ -1,6 +1,7 @@
 package com.example.wake_app.screens.minigames
 
 import android.app.Activity
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -62,9 +63,9 @@ fun SortSequenceMiGameScreen(ss: SortSequence) {
             )
         }
 
-        Button(onClick = {
-            ss.newSequence()
-        }
+        Button(
+            onClick = { ss.newSequence() },
+            shape = RoundedCornerShape(19.dp)
         ) {
             Text(text = "Re-generate")
         }
@@ -95,14 +96,20 @@ fun GameNumberBtn(ss: SortSequence, sn : SequenceNumber, index : Int) {
     } else Color.Gray
 
     val activity = (LocalContext.current as? Activity)
+    val context = LocalContext.current
 
     Button(
         onClick = {
             ss.handleUpdate(sn)
 
-            System.out.println(ss.result)
-            System.out.println(ss.seq)
-            if (ss.isCorrect()) activity!!.finish()
+            println(ss.result)
+            println(ss.seq)
+            if (ss.isCorrect()) {
+                activity!!.finish()
+                Toast.makeText(context, "Correct! Good morning", Toast.LENGTH_SHORT).show()
+            }
+
+
         },
         colors = ButtonDefaults.buttonColors(backgroundColor = color),
         shape = RoundedCornerShape(19.dp),

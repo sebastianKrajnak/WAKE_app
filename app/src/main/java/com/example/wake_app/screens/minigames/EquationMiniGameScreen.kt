@@ -2,6 +2,7 @@ package com.example.wake_app.screens.minigames
 
 import android.app.Activity
 import android.view.KeyEvent
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
@@ -35,6 +36,7 @@ fun EquationMiniGameScreen(expr: Expression) {
     var strExpr by remember { mutableStateOf(expr.toString()) }
     val focusManager = LocalFocusManager.current
     val activity = (LocalContext.current as? Activity)
+    val context = LocalContext.current
 
     Column(
         Modifier
@@ -91,12 +93,21 @@ fun EquationMiniGameScreen(expr: Expression) {
                         true
                     }
                     false
-            }
+            },
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                textColor = if (isSystemInDarkTheme()) md_theme_dark_onBackground else md_theme_light_onBackground
+            )
         )
 
         Button(
             onClick = {
-                if (checkResult(result, expr.getResult(), navController)) activity!!.finish()
+                if (checkResult(result, expr.getResult(), navController)) {
+                    activity!!.finish()
+                    Toast.makeText(context, "Correct! Good morning", Toast.LENGTH_SHORT).show()
+                }
+                else
+                    Toast.makeText(context, "Incorrect, try again!", Toast.LENGTH_SHORT).show()
+
             },
             shape = RoundedCornerShape(19.dp)
         ) {

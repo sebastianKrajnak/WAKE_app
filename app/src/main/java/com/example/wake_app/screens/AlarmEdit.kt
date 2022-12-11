@@ -4,6 +4,7 @@ import android.app.TimePickerDialog
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -30,6 +31,8 @@ import com.example.wake_app.model.Alarm
 import com.example.wake_app.model.AlarmRepository
 import com.example.wake_app.model.ExternalAlarmRepository
 import com.example.wake_app.model.SharedViewModel
+import com.example.wake_app.ui.theme.md_theme_dark_background
+import com.example.wake_app.ui.theme.md_theme_light_background
 import java.util.*
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -77,17 +80,18 @@ fun AlarmEditScreen(navController: NavHostController, sharedViewModel: SharedVie
                         )
                     }
                 }
-            } else {
-                null
-            },
-                backgroundColor = colorResource(R.color.background_light)
+                } else {
+                    null
+                },
+                backgroundColor =
+                    if (isSystemInDarkTheme()) md_theme_dark_background
+                    else md_theme_light_background
             )
         },
         content = {
             Box (
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(colorResource(R.color.background_light))
             ) {
 
                 Column(
@@ -117,7 +121,6 @@ fun AlarmEditScreen(navController: NavHostController, sharedViewModel: SharedVie
                                 bottom = 0.dp
                             )
                             .align(Alignment.Start),
-                        color = colorResource(R.color.text_color_white)
                     )
 
                     if (alarm != null) {
@@ -138,7 +141,6 @@ fun AlarmEditScreen(navController: NavHostController, sharedViewModel: SharedVie
                                 bottom = 0.dp
                             )
                             .align(Alignment.Start),
-                        color = colorResource(R.color.text_color_white)
                     )
 
                     Row(
@@ -162,9 +164,7 @@ fun AlarmEditScreen(navController: NavHostController, sharedViewModel: SharedVie
                             alarmName = it
                             newAlarm.name = alarmName
                                         },
-                        label = { Text(text = "Alarm name", fontSize = 20.sp,
-                                    color = colorResource(R.color.text_color_white))
-                                },
+                        label = { Text(text = "Alarm name", fontSize = 20.sp) },
                         modifier = Modifier
                             .padding(
                                 start = 25.dp,
@@ -173,11 +173,6 @@ fun AlarmEditScreen(navController: NavHostController, sharedViewModel: SharedVie
                                 bottom = 0.dp
                             )
                             .align(Alignment.Start),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            textColor = colorResource(R.color.text_color_white),
-                            focusedBorderColor = colorResource(R.color.main_accent),
-                            unfocusedBorderColor = colorResource(R.color.main_accent_dark)
-                        ),
                         shape = CircleShape,
                         maxLines = 1,
                         keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
@@ -190,9 +185,7 @@ fun AlarmEditScreen(navController: NavHostController, sharedViewModel: SharedVie
                     OutlinedTextField(
                         value = ringTone,
                         onValueChange = {ringTone = it},
-                        label = { Text(text = "Choose ringtone", fontSize = 20.sp,
-                            color = colorResource(R.color.text_color_white))
-                        },
+                        label = { Text(text = "Choose ringtone", fontSize = 20.sp) },
                         modifier = Modifier
                             .padding(
                                 start = 25.dp,
@@ -201,11 +194,6 @@ fun AlarmEditScreen(navController: NavHostController, sharedViewModel: SharedVie
                                 bottom = 0.dp
                             )
                             .align(Alignment.Start),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            textColor = colorResource(R.color.text_color_white),
-                            focusedBorderColor = colorResource(R.color.main_accent),
-                            unfocusedBorderColor = colorResource(R.color.main_accent_dark)
-                        ),
                         shape = CircleShape,
                         maxLines = 1,
                         keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
@@ -218,7 +206,6 @@ fun AlarmEditScreen(navController: NavHostController, sharedViewModel: SharedVie
                     Text(
                         text = "Vibrate",
                         fontSize = 20.sp,
-                        color = colorResource(R.color.text_color_white),
                         textAlign = TextAlign.Left,
                         modifier = Modifier
                             .padding(
@@ -258,13 +245,10 @@ fun AlarmEditScreen(navController: NavHostController, sharedViewModel: SharedVie
                             navController.navigateUp()
                         },
                         shape = CircleShape,
-                        colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(R.color.main_accent_dark))
+                        //colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(R.color.main_accent_dark))
                     )
                     {
-                        Text(text = "Save alarm",
-                            fontSize = 15.sp,
-                            color = colorResource(R.color.text_color_white)
-                        )
+                        Text(text = "Save alarm", fontSize = 15.sp)
                     }
 
                 }

@@ -13,8 +13,10 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.wake_app.model.minigames.ConstructWord
-import com.example.wake_app.screens.minigames.ClickSequenceMiniGameScreen
-import com.example.wake_app.screens.minigames.ConstructWordMiniGameScreen
+import com.example.wake_app.model.minigames.Expression
+import com.example.wake_app.model.minigames.MemorizeSequence
+import com.example.wake_app.model.minigames.SortSequence
+import com.example.wake_app.screens.minigames.*
 import com.example.wake_app.ui.theme.WAKE_appTheme
 
 class MainActivity : ComponentActivity() {
@@ -25,8 +27,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             WAKE_appTheme {
                 MainScreen()
-                //ConstructWordMiniGameScreen(cw = ConstructWord())
-                //ClickSequenceMiniGameScreen()
+                //ConstructWordMiniGameScreen(cw = ConstructWord()) // toast works
+                //ClickSequenceMiniGameScreen() //toast works // toast works
+                //MemorizeSequenceScreen(MemorizeSequence(5,300)) //toast works
+                //EquationMiniGameScreen(expr = Expression(1,9)) // toast works
+                //SortSequenceMiGameScreen(ss = SortSequence(1,99,9)) //toast works
             }
         }
     }
