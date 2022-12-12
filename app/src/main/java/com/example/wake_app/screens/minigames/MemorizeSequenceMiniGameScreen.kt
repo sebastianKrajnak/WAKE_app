@@ -107,7 +107,7 @@ fun MemorizeSequenceScreen(ms: MemorizeSequence) {
                 ms = ms,
                 context = context,
                 btnSize = btnSize,
-                icon = painterResource(R.drawable.star)
+                icon = painterResource(R.drawable.pentagon)
             )
         }
 
