@@ -473,7 +473,7 @@ private fun calculateRepeatingTime(alarm: Alarm, calendar: Calendar): Long {
 fun calculateTimeTillAlarm(alarm: Alarm, calendar: Calendar) : String {
     if (alarm.weekdays.contains(true)) {
         val timeTillRun = calculateRepeatingTime(alarm, calendar)
-        calendar.timeInMillis = timeTillRun
+        calendar.timeInMillis = timeTillRun - System.currentTimeMillis()
     } else {
         calendar.timeInMillis = calendar.timeInMillis - System.currentTimeMillis()
 
