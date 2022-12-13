@@ -25,7 +25,7 @@ open class SoundAndVibration : ComponentActivity() {
 
         val res = notification.description.split(",")
         if (res[0].toBoolean()) vibrate()
-        if ("false" != res[1]) playSound()
+        playSound()
 
     }
 
@@ -44,11 +44,6 @@ open class SoundAndVibration : ComponentActivity() {
             @Suppress("DEPRECATION")
             getSystemService(VIBRATOR_SERVICE) as Vibrator
         }
-
-
-
-
-
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             vibrator.vibrate(VibrationEffect.createWaveform(vibratePattern, START));

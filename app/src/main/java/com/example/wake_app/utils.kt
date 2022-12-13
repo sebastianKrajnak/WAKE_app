@@ -7,7 +7,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.media.AudioAttributes
-import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -21,7 +20,7 @@ fun Context.showNotificationWithFullScreenIntent(
     channelId: String = CHANNEL_ID,
     alarm: Alarm,
 ) {
-    val alarmSound : Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+    val alarmSound : Uri = Uri.parse("android.resource://"+ this.getPackageName()+"/"+R.raw.smash_mouth)
     val pattern = longArrayOf(500, 500, 500, 500, 500, 500, 500, 500, 500)
     val builder = NotificationCompat.Builder(this, channelId)
         .setSmallIcon(android.R.drawable.arrow_up_float)
@@ -39,14 +38,14 @@ fun Context.showNotificationWithFullScreenIntent(
     val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
     with(notificationManager) {
-        buildChannel(alarm)
+        buildChannel(alarm, alarmSound)
         val notification = builder.build()
         notification.flags = Notification.FLAG_INSISTENT
         notify(NOTIFICATION_CHANNEL_ID, notification)
     }
 }
 
-private fun NotificationManager.buildChannel(alarm: Alarm) {
+private fun NotificationManager.buildChannel(alarm: Alarm, alarmSound: Uri) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         val name = "WAKE Alarm Channel"
         val descriptionText = ""  + alarm.vibrate + "," + false
@@ -55,7 +54,6 @@ private fun NotificationManager.buildChannel(alarm: Alarm) {
             description = descriptionText
         }
         channel.enableVibration(alarm.vibrate)
-        val alarmSound : Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val attributes = AudioAttributes.Builder()
             .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
             .setUsage(AudioAttributes.USAGE_ALARM)
