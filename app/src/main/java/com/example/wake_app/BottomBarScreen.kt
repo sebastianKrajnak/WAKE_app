@@ -1,6 +1,7 @@
 package com.example.wake_app
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
@@ -22,7 +23,7 @@ sealed class BottomBarScreen(
     object Statistics: BottomBarScreen (
         route = "statistics",
         tittle = "Statistics",
-        icon = Icons.Default.Info
+        icon = Icons.Default.BarChart
     )
 
     object Settings: BottomBarScreen (

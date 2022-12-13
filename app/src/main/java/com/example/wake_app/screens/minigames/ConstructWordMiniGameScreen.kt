@@ -1,6 +1,7 @@
 package com.example.wake_app.screens.minigames
 
 import android.app.Activity
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 
@@ -85,6 +86,7 @@ fun ConstructWordMiniGameScreen(cw: ConstructWord) {
 
 @Composable
 fun GameLetterBtn(cw: ConstructWord, cwLetter : ConstructWordMiniGameLetter, index : Int) {
+    val context = LocalContext.current
     val color = if (cwLetter.selected) {
         if (isSystemInDarkTheme())
             md_theme_dark_primary
@@ -99,7 +101,10 @@ fun GameLetterBtn(cw: ConstructWord, cwLetter : ConstructWordMiniGameLetter, ind
 
             println(cw.result)
             println(cw.word)
-            if (cw.isCorrect()) activity!!.finish()
+            if (cw.isCorrect()) {
+                Toast.makeText(context, "Correct! Good morning", Toast.LENGTH_SHORT).show()
+                activity!!.finish()
+            }
         },
         shape = RoundedCornerShape(19.dp),
         modifier = Modifier.padding(5.dp),
