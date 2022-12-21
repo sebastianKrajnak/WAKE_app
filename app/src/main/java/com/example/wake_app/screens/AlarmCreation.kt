@@ -58,7 +58,7 @@ fun AlarmCreationScreen(navController: NavHostController) {
     val alarm = Alarm()
 
     var alarmName by remember { mutableStateOf("") }
-    var ringTone by remember { mutableStateOf("") }
+    var ringTone by remember { mutableStateOf("All Star") }
 
     val mContext = LocalContext.current
     val repo: AlarmRepository by lazy { ExternalAlarmRepository(mContext) }
@@ -194,7 +194,9 @@ fun AlarmCreationScreen(navController: NavHostController) {
                     OutlinedTextField(
                         value = ringTone,
                         onValueChange = {ringTone = it},
-                        label = { Text(text = "Choose ringtone", fontSize = 20.sp) },
+                        label = { Text(text = "Ringtone", fontSize = 20.sp) },
+                        placeholder = { Text(text = "All Star") },
+                        readOnly = true,
                         modifier = Modifier
                             .padding(
                                 start = 25.dp,

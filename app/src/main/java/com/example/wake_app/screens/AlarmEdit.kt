@@ -41,7 +41,7 @@ fun AlarmEditScreen(navController: NavHostController, sharedViewModel: SharedVie
     val alarm = sharedViewModel.alarm
     var newAlarm = Alarm()
     var alarmName by remember { mutableStateOf("") }
-    var ringTone by remember { mutableStateOf("") }
+    var ringTone by remember { mutableStateOf("All Star") }
 
     val mContext = LocalContext.current
     val repo: AlarmRepository by lazy { ExternalAlarmRepository(mContext) }
